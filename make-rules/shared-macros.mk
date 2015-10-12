@@ -345,6 +345,15 @@ export PARFAIT_NATIVESUNCXX=$(SPRO_VROOT)/bin/CC
 export PARFAIT_NATIVEGCC=$(GCC_ROOT)/bin/gcc
 export PARFAIT_NATIVEGXX=$(GCC_ROOT)/bin/g++
 
+# This should evaluate to empty string or a pathname like /usr/bin/ccache
+# depending on current PATH value and "which" implementation.
+# The assignment via ":=" is important, to only do this once in a Makefile,
+# and not on every reference to the value as "=" assignment would result in.
+# Review `man ccache` for optional configuration tuning, like cache size etc.
+# For production builds or suspected errors you can disable this feature by
+# setting CCACHE_DISABLE=true (as an environment or makefile variable value).
+export CCACHE := $(shell if test -n "$(CCACHE)" ; then echo "$(CCACHE)"; else test x"$${CCACHE_DISABLE-}" = xtrue -o x"$(CCACHE_DISABLE)" = xtrue || for F in "$$CCACHE" `which ccache 2>/dev/null | egrep '^/'` /usr/bin/ccache; do test -x "$$F" && echo "$$F" && echo "USING CCACHE FOR OI-USERLAND: $$F" >&2 && break; done; fi)
+
 GCC_ROOT =	/usr/gcc/4.9
 
 CC.studio.32 =	$(SPRO_VROOT)/bin/cc
@@ -367,6 +376,17 @@ CXX.gcc.64 =	$(GCC_ROOT)/bin/g++
 F77.gcc.64 =	$(GCC_ROOT)/bin/gfortran
 FC.gcc.64 =	$(GCC_ROOT)/bin/gfortran
 
+ifneq ($(strip $(CCACHE)),)
+CCACHE_WRAP_ROOT   =	$(WS_TOOLS)/ccache-wrap
+export CC_gcc_32  :=	$(CC.gcc.32)
+export CC_gcc_64  :=	$(CC.gcc.64)
+export CXX_gcc_32 :=	$(CXX.gcc.32)
+export CXX_gcc_64 :=	$(CXX.gcc.64)
+CC.gcc.32  :=	$(CCACHE_WRAP_ROOT)/CC.gcc.32
+CC.gcc.64  :=	$(CCACHE_WRAP_ROOT)/CC.gcc.64
+CXX.gcc.32 :=	$(CCACHE_WRAP_ROOT)/CXX.gcc.32
+CXX.gcc.64 :=	$(CCACHE_WRAP_ROOT)/CXX.gcc.64
+endif
 
 lint.32 =	$(SPRO_VROOT)/bin/lint -m32
 lint.64 =	$(SPRO_VROOT)/bin/lint -m64
