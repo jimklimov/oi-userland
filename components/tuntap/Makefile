@@ -23,6 +23,14 @@ COMPONENT_ARCHIVE=	$(COMPONENT_SRC).tar.gz
 COMPONENT_ARCHIVE_HASH=	sha256:6ed84336b3eaf29aa227bfc0b5a6e7143431862b97113a31c20b05ba50c0ca44
 COMPONENT_PROJECT_URL=	http://www.whiteboard.ne.jp/~admin2/tuntap/
 COMPONENT_ARCHIVE_URL= 	https://codeload.github.com/kaizawa/tuntap/legacy.tar.gz/$(COMPONENT_GIT_REV)
+COMPONENT_DESCRIPTION=	tuntap is a Virtual Point-to-Point network device: \
+		a TAP driver for Solaris that can be used for \
+		OpenVPN, OpenConnect, and vpnc. The code is based on the \
+		Universal TUN/TAP driver. Some changes were made and code added \
+		for supporting Ethernet tunneling feature, since the Universal \
+		TUN/TAP driver for Solaris only supports IP tunneling known as \
+		TUN. Note: github checkout commit version 43816b1 / \
+		43816b1ac8b050e45a6f7882058755fe753a9992
 
 include $(WS_TOP)/make-rules/prep.mk
 include $(WS_TOP)/make-rules/configure.mk
