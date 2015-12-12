@@ -37,6 +37,7 @@ include ../../make-rules/ips.mk
 #CFLAGS +=       $(CPP_LARGEFILES)
 #LDFLAGS +=      $(LD_Z_DEFS) $(LD_Z_TEXT) -lpthread
 
+CFLAGS +=	  -I$(SOURCE_DIR) -I$(SOURCE_DIR)/include
 CONFIGURE_OPTIONS +=    --enable-large-files
 CONFIGURE_OPTIONS +=    --enable-sysvipc
 CONFIGURE_OPTIONS +=    --sysconfdir=/etc
@@ -45,14 +46,14 @@ CONFIGURE_OPTIONS +=    --libexecdir=/usr/lib
 PKGLINT=true
 
 PATH=/usr/gnu/bin:/usr/bin
-                       
-COMPONENT_PREP_ACTION =        ( cd $(@D) && \
-                                 aclocal-1.10 -I. && \
-                                 autoheader && \
-                                 libtoolize --force && \
-                                 intltoolize --force --automake && \
-                                 automake-1.10 -a -f -c &&\
-                                 autoconf )
+
+#COMPONENT_PREP_ACTION =        ( cd $(@D) && \
+#                                 aclocal -I. && \
+#                                 autoheader && \
+#                                 libtoolize --force && \
+#                                 intltoolize --force --automake && \
+#                                 automake -a -f -c &&\
+#                                 autoconf )
 
 # common targets
 build:          $(BUILD_32_and_64)
