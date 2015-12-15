@@ -38,8 +38,8 @@ include ../../make-rules/ips.mk
 #LDFLAGS +=      $(LD_Z_DEFS) $(LD_Z_TEXT) -lpthread
 
 CFLAGS +=	  -I$(SOURCE_DIR) -I$(SOURCE_DIR)/include
-CONFIGURE_OPTIONS +=    --enable-large-files
-CONFIGURE_OPTIONS +=    --enable-sysvipc
+#CONFIGURE_OPTIONS +=    --enable-large-files
+#CONFIGURE_OPTIONS +=    --enable-sysvipc
 CONFIGURE_OPTIONS +=    --sysconfdir=/etc
 CONFIGURE_OPTIONS +=    --libexecdir=/usr/lib
 
