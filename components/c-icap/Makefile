@@ -43,6 +43,9 @@ CONFIGURE_OPTIONS +=    --enable-sysvipc
 CONFIGURE_OPTIONS +=    --sysconfdir=/etc
 CONFIGURE_OPTIONS +=    --libexecdir=/usr/lib
 
+# Currently relies on openldap without any configure checks, discard for now
+CONFIGURE_OPTIONS +=    --without-ldap
+
 PKGLINT=true
 
 PATH=/usr/gnu/bin:/usr/bin
