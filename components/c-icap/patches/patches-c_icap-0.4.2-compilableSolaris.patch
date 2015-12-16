@@ -180,3 +180,32 @@ diff -Naur c_icap-0.4.2-orig/utils/c-icap-client.c c_icap-0.4.2/utils/c-icap-cli
                                req->i206_use_original_body);
                copy_data(fd_in, fd_out, req->i206_use_original_body);
  
+--- c_icap-0.4.2-orig/configure.ac	2015-09-27 13:04:51.000000000 +0200
++++ c_icap-0.4.2/configure.ac	2015-12-16 11:34:16.000000000 +0100
+@@ -349,7 +349,7 @@
+       LDFLAGS="$LDFLAGS"
+       OLDLIBS=$LIBS
+       LIBS="-ldb $OLDLIBS"
+-      echo -n "checking for Berkeley DB under standard directories... "
++      AC_MSG_CHECKING([Berkeley DB under standard directories])
+       AC_LINK_IFELSE(
+                      [
+                          #include <db.h>
+@@ -375,7 +375,7 @@
+       CFLAGS="-I$libdbpath/include $CFLAGS"
+       LDFLAGS="-L$libdbpath/lib $LDFLAGS"
+       LIBS="-ldb $OLDLIBS"
+-      echo -n "checking for Berkeley DB under $libdbpath... "
++      AC_MSG_CHECKING([checking for Berkeley DB under $libdbpath])
+       AC_LINK_IFELSE(
+                 [
+                     #include <db.h>
+@@ -411,7 +411,7 @@
+      LIBS="-ldb $OLDLIBS"
+      for DBVER in 54 53 52 51 50 49 48 47 46 45 44 43 42; do
+         if test -d $libdbpath/include/db$DBVER; then
+-           echo -n "checking for Berleley DB under $libdbpath/include/db$DBVER and $libdbpath/lib/db$DBVER... "
++           AC_MSG_CHECKING([checking for Berleley DB under $libdbpath/include/db$DBVER and $libdbpath/lib/db$DBVER])
+            CFLAGS="-I$libdbpath/include/db$DBVER $OLDCFLAGS"
+            LDFLAGS="-L$libdbpath/lib/db$DBVER $OLDLDFLAGS" 
+            AC_LINK_IFELSE(
