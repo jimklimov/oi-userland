@@ -1,0 +1,192 @@
+#
+# CDDL HEADER START
+#
+# The contents of this file are subject to the terms of the
+# Common Development and Distribution License (the "License").
+# You may not use this file except in compliance with the License.
+#
+# You can obtain a copy of the license at usr/src/OPENSOLARIS.LICENSE
+# or http://www.opensolaris.org/os/licensing.
+# See the License for the specific language governing permissions
+# and limitations under the License.
+#
+# When distributing Covered Code, include this CDDL HEADER in each
+# file and include the License file at usr/src/OPENSOLARIS.LICENSE.
+# If applicable, add the following below this CDDL HEADER, with the
+# fields enclosed by brackets "[]" replaced with your own identifying
+# information: Portions Copyright [yyyy] [name of copyright owner]
+#
+# CDDL HEADER END
+#
+# Copyright (c) 2016 Jim Klimov. All rights reserved.
+# Partially inspired by SFE manifest
+#   http://sfe.opencsw.org/localhostoi151a8/manifest/0/antivirus%2Fclamav@0.98,5.11-0.0.151.1.8%3A20131210T210011Z
+#
+
+# pull the manpages out of the component dir
+<transform file path=usr/share/man/(man3/.+$) -> set action.hash %<\1> >
+
+<transform file path=usr.*/man/.+ -> default mangler.man.stability uncommitted>
+set name=pkg.fmri \
+    value=pkg:/antivirus/$(COMPONENT_NAME)-core@$(IPS_COMPONENT_VERSION),$(BUILD_VERSION)
+set name=pkg.summary value="$(COMPONENT_SUMMARY), core pieces"
+set name=pkg.description value="$(COMPONENT_SUMMARY), core pieces"
+set name=info.classification value="org.opensolaris.category.2008:Applications/System Utilities"
+set name=info.source-url value=$(COMPONENT_ARCHIVE_URL)
+set name=info.upstream-url value=$(COMPONENT_PROJECT_URL)
+set name=org.opensolaris.consolidation value=$(CONSOLIDATION)
+
+license COPYING license="GPL2"
+
+#depend fmri=library/pcre type=require
+### Required by core since 0.98.x
+#depend fmri=library/security/openssl type=require
+
+group groupname=clamav
+user ftpuser=false gcos-field="ClamAV Reserved UID" group=clamav password=NP username=clamav
+
+dir group=clamav owner=clamav mode=0755 path=var/clamav
+dir group=clamav owner=clamav mode=0755 path=var/clamav/db
+dir group=clamav owner=clamav mode=0755 path=var/clamav/log
+dir group=clamav owner=clamav mode=0755 path=var/clamav/run
+
+file \
+    files/var/svc/manifest/site/clamav.xml \
+    path=var/svc/manifest/site/clamav.xml \
+    group=sys mode=0444 owner=root \
+    restart_fmri=svc:/system/manifest-import:default
+file \
+    files/var/svc/manifest/site/freshclam.xml \
+    path=var/svc/manifest/site/freshclam.xml \
+    group=sys mode=0444 owner=root \
+    restart_fmri=svc:/system/manifest-import:default
+
+file \
+    files/usr/bin/clamav-enable.sh \
+    path=usr/bin/clamav-enable.sh \
+    group=bin owner=root mode=0555
+file \
+    files/usr/bin/freshclam.sh \
+    path=usr/bin/freshclam.sh \
+    group=bin owner=root mode=0555
+
+file \
+    etc/clamd.conf.sample \
+    path=etc/clamd.conf.sample-v$(COMPONENT_VERSION) \
+    group=sys mode=0444 owner=root
+file \
+    files/etc/clamd.conf.sol \
+    path=etc/clamd.conf.sol \
+    group=sys mode=0444 owner=root
+file \
+    etc/freshclam.conf.sample \
+    path=etc/freshclam.conf.sample-v$(COMPONENT_VERSION) \
+    group=sys mode=0444 owner=root
+file \
+    files/etc/freshclam.conf.sol \
+    path=etc/freshclam.conf.sol \
+    group=sys mode=0444 owner=root
+
+file \
+    files/usr/share/clamav/clamav-test.tgz \
+    path=usr/share/clamav/clamav-test.tgz \
+    mode=0444 owner=root group=sys
+
+file \
+    files/var/clamav/log/clamd.log \
+    path=/var/clamav/log/clamd.log \
+    mode=0444 owner=clamav group=clamav preserve=custom
+file \
+    files/var/clamav/log/freshclam.log \
+    path=/var/clamav/log/freshclam.log \
+    mode=0444 owner=clamav group=clamav preserve=custom
+
+link path=var/log/clamd.log target=../clamav/log/clamd.log
+link path=var/log/freshclam.log target=../clamav/log/freshclam.log
+
+dir path=usr/share/clamav mode=0755 owner=root group=sys
+dir path=usr/include/libltdl mode=0755 owner=bin group=bin
+
+file path=usr/include/clamav.h mode=0444 owner=root group=sys
+file path=usr/include/ltdl.h mode=0444 owner=root group=sys
+file path=usr/include/libltdl/lt_error.h mode=0444 owner=root group=sys
+file path=usr/include/libltdl/lt_dlloader.h mode=0444 owner=root group=sys
+file path=usr/include/libltdl/lt_system.h mode=0444 owner=root group=sys
+file path=usr/share/man/man5/freshclam.conf.5 mode=0444 owner=root group=sys
+file path=usr/share/man/man5/clamd.conf.5 mode=0444 owner=root group=sys
+file path=usr/share/man/man8/clamd.8 mode=0444 owner=root group=sys
+file path=usr/share/man/man1/sigtool.1 mode=0444 owner=root group=sys
+file path=usr/share/man/man1/clamdscan.1 mode=0444 owner=root group=sys
+file path=usr/share/man/man1/freshclam.1 mode=0444 owner=root group=sys
+file path=usr/share/man/man1/clamscan.1 mode=0444 owner=root group=sys
+file path=usr/share/man/man1/clamsubmit.1 mode=0444 owner=root group=sys
+file path=usr/share/man/man1/clamconf.1 mode=0444 owner=root group=sys
+file path=usr/share/man/man1/clambc.1 mode=0444 owner=root group=sys
+
+file usr/bin/clamconf path=usr/bin/$(MACH32)/clamconf mode=0555 owner=root group=sys
+file usr/bin/clamscan path=usr/bin/$(MACH32)/clamscan mode=0555 owner=root group=sys
+file usr/bin/clamav-config path=usr/bin/$(MACH32)/clamav-config mode=0555 owner=root group=sys
+file usr/bin/clamsubmit path=usr/bin/$(MACH32)/clamsubmit mode=0555 owner=root group=sys
+file usr/bin/sigtool path=usr/bin/$(MACH32)/sigtool mode=0555 owner=root group=sys
+file usr/bin/clambc path=usr/bin/$(MACH32)/clambc mode=0555 owner=root group=sys
+file usr/bin/freshclam path=usr/bin/$(MACH32)/freshclam mode=0555 owner=root group=sys
+file usr/bin/clamdscan path=usr/bin/$(MACH32)/clamdscan mode=0555 owner=root group=sys
+file usr/sbin/clamd path=usr/sbin/$(MACH32)/clamd mode=0555 owner=root group=sys
+
+file path=usr/bin/$(MACH64)/clamconf mode=0555 owner=root group=sys
+file path=usr/bin/$(MACH64)/clamscan mode=0555 owner=root group=sys
+file path=usr/bin/$(MACH64)/clamav-config mode=0555 owner=root group=sys
+file path=usr/bin/$(MACH64)/clamsubmit mode=0555 owner=root group=sys
+file path=usr/bin/$(MACH64)/sigtool mode=0555 owner=root group=sys
+file path=usr/bin/$(MACH64)/clambc mode=0555 owner=root group=sys
+file path=usr/bin/$(MACH64)/freshclam mode=0555 owner=root group=sys
+file path=usr/bin/$(MACH64)/clamdscan mode=0555 owner=root group=sys
+file path=usr/sbin/$(MACH64)/clamd mode=0555 owner=root group=sys
+
+hardlink path=usr/bin/clamconf target=../lib/isaexec pkg.linted=true
+hardlink path=usr/bin/clamscan target=../lib/isaexec pkg.linted=true
+hardlink path=usr/bin/clamav-config target=../lib/isaexec pkg.linted=true
+hardlink path=usr/bin/clamsubmit target=../lib/isaexec pkg.linted=true
+hardlink path=usr/bin/sigtool target=../lib/isaexec pkg.linted=true
+hardlink path=usr/bin/clambc target=../lib/isaexec pkg.linted=true
+hardlink path=usr/bin/clamdscan target=../lib/isaexec pkg.linted=true
+hardlink path=usr/bin/freshclam target=../lib/isaexec pkg.linted=true
+hardlink path=usr/sbin/clamd target=../lib/isaexec pkg.linted=true
+
+file path=usr/lib/libclamunrar_iface.la mode=0555 owner=root group=sys
+file path=usr/lib/libclamav.la mode=0555 owner=root group=sys
+file path=usr/lib/libclamunrar.la mode=0555 owner=root group=sys
+file path=usr/lib/pkgconfig/libclamav.pc mode=0444 owner=root group=sys
+file path=usr/lib/libltdl.la mode=0555 owner=root group=sys
+
+file path=usr/lib/libclamunrar_iface.so.$(COMPONENT_VERSION_LIB_FULL) mode=0555 owner=root group=sys
+link path=usr/lib/libclamav.so.$(COMPONENT_VERSION_LIB_MAJOR) target=libclamav.so.$(COMPONENT_VERSION_LIB_FULL)
+link path=usr/lib/libclamunrar_iface.so target=libclamunrar_iface.so.$(COMPONENT_VERSION_LIB_FULL)
+file path=usr/lib/libclamunrar.so.$(COMPONENT_VERSION_LIB_FULL) mode=0555 owner=root group=sys
+link path=usr/lib/libclamunrar.so target=libclamunrar.so.$(COMPONENT_VERSION_LIB_FULL)
+file path=usr/lib/libclamav.so.$(COMPONENT_VERSION_LIB_FULL) mode=0555 owner=root group=sys
+link path=usr/lib/libclamunrar_iface.so.$(COMPONENT_VERSION_LIB_MAJOR) target=libclamunrar_iface.so.$(COMPONENT_VERSION_LIB_FULL)
+link path=usr/lib/libclamav.so target=libclamav.so.$(COMPONENT_VERSION_LIB_FULL)
+link path=usr/lib/libclamunrar.so.$(COMPONENT_VERSION_LIB_MAJOR) target=libclamunrar.so.$(COMPONENT_VERSION_LIB_FULL)
+file path=usr/lib/libltdl.so.$(COMPONENT_VERSION_LIB_TDL) mode=0555 owner=root group=sys
+link path=usr/lib/libltdl.so.$(COMPONENT_VERSION_LIB_MAJOR) target=libltdl.so.$(COMPONENT_VERSION_LIB_TDL)
+link path=usr/lib/libltdl.so target=libltdl.so.$(COMPONENT_VERSION_LIB_TDL)
+
+file path=usr/lib/$(MACH64)/libclamunrar_iface.la mode=0555 owner=root group=sys
+file path=usr/lib/$(MACH64)/libclamav.la mode=0555 owner=root group=sys
+file path=usr/lib/$(MACH64)/libclamunrar.la mode=0555 owner=root group=sys
+file path=usr/lib/$(MACH64)/pkgconfig/libclamav.pc mode=0444 owner=root group=sys
+file path=usr/lib/$(MACH64)/libltdl.la mode=0555 owner=root group=sys
+
+file path=usr/lib/$(MACH64)/libclamunrar_iface.so.$(COMPONENT_VERSION_LIB_FULL) mode=0555 owner=root group=sys
+link path=usr/lib/$(MACH64)/libclamav.so.$(COMPONENT_VERSION_LIB_MAJOR) target=libclamav.so.$(COMPONENT_VERSION_LIB_FULL)
+link path=usr/lib/$(MACH64)/libclamunrar_iface.so target=libclamunrar_iface.so.$(COMPONENT_VERSION_LIB_FULL)
+file path=usr/lib/$(MACH64)/libclamunrar.so.$(COMPONENT_VERSION_LIB_FULL) mode=0555 owner=root group=sys
+link path=usr/lib/$(MACH64)/libclamunrar.so target=libclamunrar.so.$(COMPONENT_VERSION_LIB_FULL)
+file path=usr/lib/$(MACH64)/libclamav.so.$(COMPONENT_VERSION_LIB_FULL) mode=0555 owner=root group=sys
+link path=usr/lib/$(MACH64)/libclamunrar_iface.so.$(COMPONENT_VERSION_LIB_MAJOR) target=libclamunrar_iface.so.$(COMPONENT_VERSION_LIB_FULL)
+link path=usr/lib/$(MACH64)/libclamav.so target=libclamav.so.$(COMPONENT_VERSION_LIB_FULL)
+link path=usr/lib/$(MACH64)/libclamunrar.so.$(COMPONENT_VERSION_LIB_MAJOR) target=libclamunrar.so.$(COMPONENT_VERSION_LIB_FULL)
+file path=usr/lib/$(MACH64)/libltdl.so.$(COMPONENT_VERSION_LIB_TDL) mode=0555 owner=root group=sys
+link path=usr/lib/$(MACH64)/libltdl.so.$(COMPONENT_VERSION_LIB_MAJOR) target=libltdl.so.$(COMPONENT_VERSION_LIB_TDL)
+link path=usr/lib/$(MACH64)/libltdl.so target=libltdl.so.$(COMPONENT_VERSION_LIB_TDL)
