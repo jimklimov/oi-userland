@@ -39,29 +39,27 @@ include $(WS_TOP)/make-rules/prep.mk
 include $(WS_TOP)/make-rules/configure.mk
 include $(WS_TOP)/make-rules/ips.mk
 
-PKG_OPTIONS += \
-	-D COMPONENT_VERSION_LIB_MAJOR="$(COMPONENT_VERSION_LIB_MAJOR)" \
-	-D COMPONENT_VERSION_LIB_FULL="$(COMPONENT_VERSION_LIB_FULL)"
+PKG_OPTIONS +=	-D COMPONENT_VERSION_LIB_MAJOR="$(COMPONENT_VERSION_LIB_MAJOR)"
+PKG_OPTIONS +=	-D COMPONENT_VERSION_LIB_FULL="$(COMPONENT_VERSION_LIB_FULL)"
 
-CONFIGURE_OPTIONS +=	--prefix=/usr --sysconfdir=/etc
-CONFIGURE_OPTIONS += \
-	--with-dbdir=/var/clamav/db \
-	--with-user=clamav --with-group=clamav \
-	--without-gnu-ld \
-	--enable-bigstack \
-	--enable-readdir_r \
-	--with-openssl=/usr \
-	--with-zlib=/usr \
-	--with-libbz2-prefix=/usr \
-	--with-libcurl=/usr \
-	--with-xml=/usr
+CONFIGURE_OPTIONS +=	--sysconfdir=/etc
+CONFIGURE_OPTIONS +=	--with-dbdir=/var/clamav/db
+CONFIGURE_OPTIONS +=	--with-user=clamav
+CONFIGURE_OPTIONS +=	--with-group=clamav
+CONFIGURE_OPTIONS +=	--without-gnu-ld
+CONFIGURE_OPTIONS +=	--enable-bigstack
+CONFIGURE_OPTIONS +=	--enable-readdir_r
+CONFIGURE_OPTIONS +=	--with-openssl=/usr
+CONFIGURE_OPTIONS +=	--with-zlib=/usr
+CONFIGURE_OPTIONS +=	--with-libbz2-prefix=/usr
+CONFIGURE_OPTIONS +=	--with-libcurl=/usr
+CONFIGURE_OPTIONS +=	--with-xml=/usr
 
 ### The clamav-milter requires that libmilter exists (in OI Hipster's
 ### sendmail-8.14.4, that is only present for 32-bits it seems...)
-CONFIGURE_OPTIONS.32 += \
-	--enable-milter \
-	--enable-clamdtop \
-	--with-libncurses-prefix=/usr
+CONFIGURE_OPTIONS.32 +=	--enable-milter
+CONFIGURE_OPTIONS.32 +=	--enable-clamdtop
+CONFIGURE_OPTIONS.32 +=	--with-libncurses-prefix=/usr
 
 build:		$(BUILD_32_and_64)
 
