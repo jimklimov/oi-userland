@@ -95,11 +95,11 @@ file \
 file \
     files/var/clamav/log/clamd.log \
     path=/var/clamav/log/clamd.log \
-    mode=0444 owner=clamav group=clamav preserve=custom
+    mode=0644 owner=clamav group=clamav preserve=custom
 file \
     files/var/clamav/log/freshclam.log \
     path=/var/clamav/log/freshclam.log \
-    mode=0444 owner=clamav group=clamav preserve=custom
+    mode=0644 owner=clamav group=clamav preserve=custom
 
 link path=var/log/clamd.log target=../clamav/log/clamd.log
 link path=var/log/freshclam.log target=../clamav/log/freshclam.log
@@ -152,7 +152,6 @@ file path=usr/lib/libclamunrar_iface.la mode=0555 owner=root group=sys
 file path=usr/lib/libclamav.la mode=0555 owner=root group=sys
 file path=usr/lib/libclamunrar.la mode=0555 owner=root group=sys
 file path=usr/lib/pkgconfig/libclamav.pc mode=0444 owner=root group=sys
-
 
 file path=usr/lib/libclamunrar_iface.so.$(COMPONENT_VERSION_LIB_FULL) mode=0555 owner=root group=sys
 link path=usr/lib/libclamav.so.$(COMPONENT_VERSION_LIB_MAJOR) target=libclamav.so.$(COMPONENT_VERSION_LIB_FULL)

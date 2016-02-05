@@ -69,7 +69,7 @@ file \
 file \
     files/var/clamav/log/clamav-milter.log \
     path=/var/clamav/log/clamav-milter.log \
-    mode=0444 owner=clamav group=clamav preserve=custom
+    mode=0644 owner=clamav group=clamav preserve=custom
 
 link path=var/log/clamav-milter.log target=../clamav/log/clamav-milter.log
 
