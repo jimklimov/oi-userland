@@ -46,24 +46,21 @@ depend fmri=antivirus/clamav-core type=require
 file \
     files/clamav-milter.xml \
     path=var/svc/manifest/site/clamav-milter.xml \
-    group=sys mode=0444 owner=root \
     restart_fmri=svc:/system/manifest-import:default
 
 file \
     etc/clamav-milter.conf.sample \
-    path=usr/share/clamav/clamav-milter.conf.sample-v$(COMPONENT_VERSION) \
-    group=sys mode=0444 owner=root
+    path=usr/share/clamav/clamav-milter.conf.sample-v$(COMPONENT_VERSION)
 file \
     files/clamav-milter.conf.sol \
-    path=usr/share/clamav/clamav-milter.conf.sol \
-    group=sys mode=0444 owner=root
+    path=usr/share/clamav/clamav-milter.conf.sol
 
-file path=usr/share/man/man5/clamav-milter.conf.5 mode=0444 owner=root group=sys
-file path=usr/share/man/man8/clamav-milter.8 mode=0444 owner=root group=sys
+file path=usr/share/man/man5/clamav-milter.conf.5
+file path=usr/share/man/man8/clamav-milter.8
 
 ### Reserved for the case we'd have a 64-bit libmilter later
-#file path=usr/sbin/$(MACH64)/clamav-milter mode=0555 owner=root group=sys
-#file path=usr/sbin/$(MACH32)/clamav-milter mode=0555 owner=root group=sys
+#file path=usr/sbin/$(MACH64)/clamav-milter
+#file path=usr/sbin/$(MACH32)/clamav-milter
 #hardlink path=usr/sbin/clamav-milter target=../lib/isaexec pkg.linted=true
 ### Currently we only ship a 32-bit build
-file path=usr/sbin/clamav-milter mode=0555 owner=root group=sys
+file path=usr/sbin/clamav-milter
