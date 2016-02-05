@@ -41,7 +41,7 @@ license COPYING license="GPL2"
 group groupname=clamav
 user ftpuser=false gcos-field="ClamAV Reserved UID" group=clamav password=NP username=clamav
 
-dir group=root owner=sys mode=0755 path=usr/share/clamav
+dir path=usr/share/clamav
 dir group=clamav owner=clamav mode=0755 path=var/clamav
 dir group=clamav owner=clamav mode=0755 path=var/clamav/db
 dir group=clamav owner=clamav mode=0755 path=var/clamav/log
@@ -51,77 +51,68 @@ link path=var/log/clamav target=../clamav/log
 file \
     files/clamav.xml \
     path=var/svc/manifest/site/clamav.xml \
-    group=sys mode=0444 owner=root \
     restart_fmri=svc:/system/manifest-import:default
 file \
     files/freshclam.xml \
     path=var/svc/manifest/site/freshclam.xml \
-    group=sys mode=0444 owner=root \
     restart_fmri=svc:/system/manifest-import:default
 
 file \
     files/clamav-enable.sh \
-    path=usr/bin/clamav-enable.sh \
-    group=bin owner=root mode=0555
+    path=usr/bin/clamav-enable.sh
 file \
     files/freshclam.sh \
-    path=usr/bin/freshclam.sh \
-    group=bin owner=root mode=0555
+    path=usr/bin/freshclam.sh
 
 file \
     etc/clamd.conf.sample \
-    path=usr/share/clamav/clamd.conf.sample-v$(COMPONENT_VERSION) \
-    group=sys mode=0444 owner=root
+    path=usr/share/clamav/clamd.conf.sample-v$(COMPONENT_VERSION)
 file \
     files/clamd.conf.sol \
-    path=usr/share/clamav/clamd.conf.sol \
-    group=sys mode=0444 owner=root
+    path=usr/share/clamav/clamd.conf.sol
 file \
     etc/freshclam.conf.sample \
-    path=usr/share/clamav/freshclam.conf.sample-v$(COMPONENT_VERSION) \
-    group=sys mode=0444 owner=root
+    path=usr/share/clamav/freshclam.conf.sample-v$(COMPONENT_VERSION)
 file \
     files/freshclam.conf.sol \
-    path=usr/share/clamav/freshclam.conf.sol \
-    group=sys mode=0444 owner=root
+    path=usr/share/clamav/freshclam.conf.sol
 
 file \
     files/clamav-test.tgz \
-    path=usr/share/clamav/clamav-test.tgz \
-    mode=0444 owner=root group=sys
+    path=usr/share/clamav/clamav-test.tgz
 
-file path=usr/include/clamav.h mode=0444 owner=root group=sys
+file path=usr/include/clamav.h
 
-file path=usr/share/man/man5/freshclam.conf.5 mode=0444 owner=root group=sys
-file path=usr/share/man/man5/clamd.conf.5 mode=0444 owner=root group=sys
-file path=usr/share/man/man8/clamd.8 mode=0444 owner=root group=sys
-file path=usr/share/man/man1/sigtool.1 mode=0444 owner=root group=sys
-file path=usr/share/man/man1/clamdscan.1 mode=0444 owner=root group=sys
-file path=usr/share/man/man1/freshclam.1 mode=0444 owner=root group=sys
-file path=usr/share/man/man1/clamscan.1 mode=0444 owner=root group=sys
-file path=usr/share/man/man1/clamsubmit.1 mode=0444 owner=root group=sys
-file path=usr/share/man/man1/clamconf.1 mode=0444 owner=root group=sys
-file path=usr/share/man/man1/clambc.1 mode=0444 owner=root group=sys
+file path=usr/share/man/man5/freshclam.conf.5
+file path=usr/share/man/man5/clamd.conf.5
+file path=usr/share/man/man8/clamd.8
+file path=usr/share/man/man1/sigtool.1
+file path=usr/share/man/man1/clamdscan.1
+file path=usr/share/man/man1/freshclam.1
+file path=usr/share/man/man1/clamscan.1
+file path=usr/share/man/man1/clamsubmit.1
+file path=usr/share/man/man1/clamconf.1
+file path=usr/share/man/man1/clambc.1
 
-file usr/bin/clamconf path=usr/bin/$(MACH32)/clamconf mode=0555 owner=root group=sys
-file usr/bin/clamscan path=usr/bin/$(MACH32)/clamscan mode=0555 owner=root group=sys
-file usr/bin/clamav-config path=usr/bin/$(MACH32)/clamav-config mode=0555 owner=root group=sys
-file usr/bin/clamsubmit path=usr/bin/$(MACH32)/clamsubmit mode=0555 owner=root group=sys
-file usr/bin/sigtool path=usr/bin/$(MACH32)/sigtool mode=0555 owner=root group=sys
-file usr/bin/clambc path=usr/bin/$(MACH32)/clambc mode=0555 owner=root group=sys
-file usr/bin/freshclam path=usr/bin/$(MACH32)/freshclam mode=0555 owner=root group=sys
-file usr/bin/clamdscan path=usr/bin/$(MACH32)/clamdscan mode=0555 owner=root group=sys
-file usr/sbin/clamd path=usr/sbin/$(MACH32)/clamd mode=0555 owner=root group=sys
+file usr/bin/clamconf path=usr/bin/$(MACH32)/clamconf
+file usr/bin/clamscan path=usr/bin/$(MACH32)/clamscan
+file usr/bin/clamav-config path=usr/bin/$(MACH32)/clamav-config
+file usr/bin/clamsubmit path=usr/bin/$(MACH32)/clamsubmit
+file usr/bin/sigtool path=usr/bin/$(MACH32)/sigtool
+file usr/bin/clambc path=usr/bin/$(MACH32)/clambc
+file usr/bin/freshclam path=usr/bin/$(MACH32)/freshclam
+file usr/bin/clamdscan path=usr/bin/$(MACH32)/clamdscan
+file usr/sbin/clamd path=usr/sbin/$(MACH32)/clamd
 
-file path=usr/bin/$(MACH64)/clamconf mode=0555 owner=root group=sys
-file path=usr/bin/$(MACH64)/clamscan mode=0555 owner=root group=sys
-file path=usr/bin/$(MACH64)/clamav-config mode=0555 owner=root group=sys
-file path=usr/bin/$(MACH64)/clamsubmit mode=0555 owner=root group=sys
-file path=usr/bin/$(MACH64)/sigtool mode=0555 owner=root group=sys
-file path=usr/bin/$(MACH64)/clambc mode=0555 owner=root group=sys
-file path=usr/bin/$(MACH64)/freshclam mode=0555 owner=root group=sys
-file path=usr/bin/$(MACH64)/clamdscan mode=0555 owner=root group=sys
-file path=usr/sbin/$(MACH64)/clamd mode=0555 owner=root group=sys
+file path=usr/bin/$(MACH64)/clamconf
+file path=usr/bin/$(MACH64)/clamscan
+file path=usr/bin/$(MACH64)/clamav-config
+file path=usr/bin/$(MACH64)/clamsubmit
+file path=usr/bin/$(MACH64)/sigtool
+file path=usr/bin/$(MACH64)/clambc
+file path=usr/bin/$(MACH64)/freshclam
+file path=usr/bin/$(MACH64)/clamdscan
+file path=usr/sbin/$(MACH64)/clamd
 
 hardlink path=usr/bin/clamconf target=../lib/isaexec pkg.linted=true
 hardlink path=usr/bin/clamscan target=../lib/isaexec pkg.linted=true
@@ -133,26 +124,26 @@ hardlink path=usr/bin/clamdscan target=../lib/isaexec pkg.linted=true
 hardlink path=usr/bin/freshclam target=../lib/isaexec pkg.linted=true
 hardlink path=usr/sbin/clamd target=../lib/isaexec pkg.linted=true
 
-file path=usr/lib/pkgconfig/libclamav.pc mode=0444 owner=root group=sys
+file path=usr/lib/pkgconfig/libclamav.pc
 
-file path=usr/lib/libclamunrar_iface.so.$(COMPONENT_VERSION_LIB_FULL) mode=0555 owner=root group=sys
+file path=usr/lib/libclamunrar_iface.so.$(COMPONENT_VERSION_LIB_FULL)
 link path=usr/lib/libclamav.so.$(COMPONENT_VERSION_LIB_MAJOR) target=libclamav.so.$(COMPONENT_VERSION_LIB_FULL)
 link path=usr/lib/libclamunrar_iface.so target=libclamunrar_iface.so.$(COMPONENT_VERSION_LIB_FULL)
-file path=usr/lib/libclamunrar.so.$(COMPONENT_VERSION_LIB_FULL) mode=0555 owner=root group=sys
+file path=usr/lib/libclamunrar.so.$(COMPONENT_VERSION_LIB_FULL)
 link path=usr/lib/libclamunrar.so target=libclamunrar.so.$(COMPONENT_VERSION_LIB_FULL)
-file path=usr/lib/libclamav.so.$(COMPONENT_VERSION_LIB_FULL) mode=0555 owner=root group=sys
+file path=usr/lib/libclamav.so.$(COMPONENT_VERSION_LIB_FULL)
 link path=usr/lib/libclamunrar_iface.so.$(COMPONENT_VERSION_LIB_MAJOR) target=libclamunrar_iface.so.$(COMPONENT_VERSION_LIB_FULL)
 link path=usr/lib/libclamav.so target=libclamav.so.$(COMPONENT_VERSION_LIB_FULL)
 link path=usr/lib/libclamunrar.so.$(COMPONENT_VERSION_LIB_MAJOR) target=libclamunrar.so.$(COMPONENT_VERSION_LIB_FULL)
 
-file path=usr/lib/$(MACH64)/pkgconfig/libclamav.pc mode=0444 owner=root group=sys
+file path=usr/lib/$(MACH64)/pkgconfig/libclamav.pc
 
-file path=usr/lib/$(MACH64)/libclamunrar_iface.so.$(COMPONENT_VERSION_LIB_FULL) mode=0555 owner=root group=sys
+file path=usr/lib/$(MACH64)/libclamunrar_iface.so.$(COMPONENT_VERSION_LIB_FULL)
 link path=usr/lib/$(MACH64)/libclamav.so.$(COMPONENT_VERSION_LIB_MAJOR) target=libclamav.so.$(COMPONENT_VERSION_LIB_FULL)
 link path=usr/lib/$(MACH64)/libclamunrar_iface.so target=libclamunrar_iface.so.$(COMPONENT_VERSION_LIB_FULL)
-file path=usr/lib/$(MACH64)/libclamunrar.so.$(COMPONENT_VERSION_LIB_FULL) mode=0555 owner=root group=sys
+file path=usr/lib/$(MACH64)/libclamunrar.so.$(COMPONENT_VERSION_LIB_FULL)
 link path=usr/lib/$(MACH64)/libclamunrar.so target=libclamunrar.so.$(COMPONENT_VERSION_LIB_FULL)
-file path=usr/lib/$(MACH64)/libclamav.so.$(COMPONENT_VERSION_LIB_FULL) mode=0555 owner=root group=sys
+file path=usr/lib/$(MACH64)/libclamav.so.$(COMPONENT_VERSION_LIB_FULL)
 link path=usr/lib/$(MACH64)/libclamunrar_iface.so.$(COMPONENT_VERSION_LIB_MAJOR) target=libclamunrar_iface.so.$(COMPONENT_VERSION_LIB_FULL)
 link path=usr/lib/$(MACH64)/libclamav.so target=libclamav.so.$(COMPONENT_VERSION_LIB_FULL)
 link path=usr/lib/$(MACH64)/libclamunrar.so.$(COMPONENT_VERSION_LIB_MAJOR) target=libclamunrar.so.$(COMPONENT_VERSION_LIB_FULL)

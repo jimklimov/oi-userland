@@ -43,11 +43,11 @@ depend fmri=antivirus/clamav-core type=require
 ### as well as "clamav" UID and GID
 ### The clamdtop client requires a curses library.
 
-file path=usr/share/man/man1/clamdtop.1 mode=0444 owner=root group=sys
+file path=usr/share/man/man1/clamdtop.1
 
 ### Reserved for the case we'd have a 64-bit ncurses (pdcurses) later
-#file path=usr/bin/$(MACH32)/clamdtop mode=0555 owner=root group=sys
-#file path=usr/bin/$(MACH64)/clamdtop mode=0555 owner=root group=sys
+#file path=usr/bin/$(MACH32)/clamdtop
+#file path=usr/bin/$(MACH64)/clamdtop
 #hardlink path=usr/bin/clamdtop target=../lib/isaexec pkg.linted=true
 ### Currently we only ship a 32-bit build
-file path=usr/bin/clamdtop mode=0555 owner=root group=sys
+file path=usr/bin/clamdtop
