@@ -58,13 +58,6 @@ file \
     path=etc/clamav-milter.conf.sol \
     group=sys mode=0444 owner=root
 
-file \
-    files/var/clamav/log/clamav-milter.log \
-    path=/var/clamav/log/clamav-milter.log \
-    mode=0644 owner=clamav group=clamav preserve=custom
-
-link path=var/log/clamav-milter.log target=../clamav/log/clamav-milter.log
-
 file path=usr/share/man/man5/clamav-milter.conf.5 mode=0444 owner=root group=sys
 file path=usr/share/man/man8/clamav-milter.8 mode=0444 owner=root group=sys
 
