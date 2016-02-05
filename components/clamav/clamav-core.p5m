@@ -133,9 +133,6 @@ hardlink path=usr/bin/clamdscan target=../lib/isaexec pkg.linted=true
 hardlink path=usr/bin/freshclam target=../lib/isaexec pkg.linted=true
 hardlink path=usr/sbin/clamd target=../lib/isaexec pkg.linted=true
 
-file path=usr/lib/libclamunrar_iface.la mode=0555 owner=root group=sys
-file path=usr/lib/libclamav.la mode=0555 owner=root group=sys
-file path=usr/lib/libclamunrar.la mode=0555 owner=root group=sys
 file path=usr/lib/pkgconfig/libclamav.pc mode=0444 owner=root group=sys
 
 file path=usr/lib/libclamunrar_iface.so.$(COMPONENT_VERSION_LIB_FULL) mode=0555 owner=root group=sys
@@ -148,9 +145,6 @@ link path=usr/lib/libclamunrar_iface.so.$(COMPONENT_VERSION_LIB_MAJOR) target=li
 link path=usr/lib/libclamav.so target=libclamav.so.$(COMPONENT_VERSION_LIB_FULL)
 link path=usr/lib/libclamunrar.so.$(COMPONENT_VERSION_LIB_MAJOR) target=libclamunrar.so.$(COMPONENT_VERSION_LIB_FULL)
 
-file path=usr/lib/$(MACH64)/libclamunrar_iface.la mode=0555 owner=root group=sys
-file path=usr/lib/$(MACH64)/libclamav.la mode=0555 owner=root group=sys
-file path=usr/lib/$(MACH64)/libclamunrar.la mode=0555 owner=root group=sys
 file path=usr/lib/$(MACH64)/pkgconfig/libclamav.pc mode=0444 owner=root group=sys
 
 file path=usr/lib/$(MACH64)/libclamunrar_iface.so.$(COMPONENT_VERSION_LIB_FULL) mode=0555 owner=root group=sys
