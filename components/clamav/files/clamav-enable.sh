@@ -12,11 +12,14 @@ FRESHCLAM_CONFFILE=/etc/freshclam.conf
 FRESHCLAM_RUNFILE="/usr/bin/freshclam.sh"
 
 for F in "$FRESHCLAM_CONFFILE" "$CLAMD_CONFFILE" "$CLAMMILT_CONFFILE" ; do
-	if [ ! -s "$F" ] && [ -s "$F.sol" ] ; then
-		echo "INFO: Copying default config '$F'" >&2
-		cp -pf "$F.sol" "$F"
+	S="/usr/share/clamav/`basename "$F"`.sol"
+	if [ ! -s "$F" ] && [ -s "$S" ] ; then
+		echo "INFO: Copying default config '$S' into active config '$F'" >&2
+		cp -pf "$S" "$F"
 		chown root:root "$F"
 		chmod 644 "$F"
+	else
+		echo "INFO: Nothing to change about active config '$F'" >&2
 	fi
 	case "$F" in
 		"$FRESHCLAM_CONFFILE")

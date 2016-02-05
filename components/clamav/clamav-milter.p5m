@@ -44,18 +44,18 @@ depend fmri=antivirus/clamav-core type=require
 ### Sendmail AND its libmilter are needed for clamav-milter.
 
 file \
-    files/var/svc/manifest/site/clamav-milter.xml \
+    files/clamav-milter.xml \
     path=var/svc/manifest/site/clamav-milter.xml \
     group=sys mode=0444 owner=root \
     restart_fmri=svc:/system/manifest-import:default
 
 file \
     etc/clamav-milter.conf.sample \
-    path=etc/clamav-milter.conf.sample-v$(COMPONENT_VERSION) \
+    path=usr/share/clamav/clamav-milter.conf.sample-v$(COMPONENT_VERSION) \
     group=sys mode=0444 owner=root
 file \
-    files/etc/clamav-milter.conf.sol \
-    path=etc/clamav-milter.conf.sol \
+    files/clamav-milter.conf.sol \
+    path=usr/share/clamav/clamav-milter.conf.sol \
     group=sys mode=0444 owner=root
 
 file path=usr/share/man/man5/clamav-milter.conf.5 mode=0444 owner=root group=sys
