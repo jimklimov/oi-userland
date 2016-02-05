@@ -38,10 +38,6 @@ set name=org.opensolaris.consolidation value=$(CONSOLIDATION)
 
 license COPYING license="GPL2"
 
-#depend fmri=library/pcre type=require
-### Required by core since 0.98.x
-#depend fmri=library/security/openssl type=require
-
 group groupname=clamav
 user ftpuser=false gcos-field="ClamAV Reserved UID" group=clamav password=NP username=clamav
 
