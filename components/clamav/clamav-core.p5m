@@ -177,20 +177,3 @@ file path=usr/lib/$(MACH64)/libclamav.so.$(COMPONENT_VERSION_LIB_FULL) mode=0555
 link path=usr/lib/$(MACH64)/libclamunrar_iface.so.$(COMPONENT_VERSION_LIB_MAJOR) target=libclamunrar_iface.so.$(COMPONENT_VERSION_LIB_FULL)
 link path=usr/lib/$(MACH64)/libclamav.so target=libclamav.so.$(COMPONENT_VERSION_LIB_FULL)
 link path=usr/lib/$(MACH64)/libclamunrar.so.$(COMPONENT_VERSION_LIB_MAJOR) target=libclamunrar.so.$(COMPONENT_VERSION_LIB_FULL)
-
-### If --enable-libltdl-install, conflicts with libtool
-#dir path=usr/include/libltdl mode=0755 owner=bin group=bin
-#file path=usr/include/ltdl.h mode=0444 owner=root group=sys
-#file path=usr/include/libltdl/lt_error.h mode=0444 owner=root group=sys
-#file path=usr/include/libltdl/lt_dlloader.h mode=0444 owner=root group=sys
-#file path=usr/include/libltdl/lt_system.h mode=0444 owner=root group=sys
-
-#file path=usr/lib/libltdl.la mode=0555 owner=root group=sys
-#file path=usr/lib/$(MACH64)/libltdl.la mode=0555 owner=root group=sys
-#file path=usr/lib/libltdl.so.$(COMPONENT_VERSION_LIB_TDL) mode=0555 owner=root group=sys
-#link path=usr/lib/libltdl.so.$(COMPONENT_VERSION_LIB_MAJOR) target=libltdl.so.$(COMPONENT_VERSION_LIB_TDL)
-#link path=usr/lib/libltdl.so target=libltdl.so.$(COMPONENT_VERSION_LIB_TDL)
-
-#file path=usr/lib/$(MACH64)/libltdl.so.$(COMPONENT_VERSION_LIB_TDL) mode=0555 owner=root group=sys
-#link path=usr/lib/$(MACH64)/libltdl.so.$(COMPONENT_VERSION_LIB_MAJOR) target=libltdl.so.$(COMPONENT_VERSION_LIB_TDL)
-#link path=usr/lib/$(MACH64)/libltdl.so target=libltdl.so.$(COMPONENT_VERSION_LIB_TDL)

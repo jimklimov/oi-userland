@@ -26,8 +26,6 @@ endif
 ### Library files are tagged with unique per-version numbers
 COMPONENT_VERSION_LIB_MAJOR=	7
 COMPONENT_VERSION_LIB_FULL=	$(COMPONENT_VERSION_LIB_MAJOR).1.1
-### Some libtdl thinks it is special ;)
-COMPONENT_VERSION_LIB_TDL=	$(COMPONENT_VERSION_LIB_MAJOR).3.0
 COMPONENT_SUMMARY=	ClamAV $(COMPONENT_VERSION) - opensource antivirus toolkit
 COMPONENT_SRC=		$(COMPONENT_NAME)-$(COMPONENT_VERSION_DIR)
 COMPONENT_ARCHIVE=	$(COMPONENT_SRC).tar.gz
@@ -43,8 +41,7 @@ include $(WS_TOP)/make-rules/ips.mk
 
 PKG_OPTIONS += \
 	-D COMPONENT_VERSION_LIB_MAJOR="$(COMPONENT_VERSION_LIB_MAJOR)" \
-	-D COMPONENT_VERSION_LIB_FULL="$(COMPONENT_VERSION_LIB_FULL)" \
-	-D COMPONENT_VERSION_LIB_TDL="$(COMPONENT_VERSION_LIB_TDL)"
+	-D COMPONENT_VERSION_LIB_FULL="$(COMPONENT_VERSION_LIB_FULL)"
 
 CONFIGURE_OPTIONS +=	--prefix=/usr --sysconfdir=/etc
 CONFIGURE_OPTIONS += \
@@ -58,9 +55,6 @@ CONFIGURE_OPTIONS += \
 	--with-libbz2-prefix=/usr \
 	--with-libcurl=/usr \
 	--with-xml=/usr
-
-#	--with-ltdl-include=/usr \
-#	--with-ltdl-lib=/usr \
 
 ### The clamav-milter requires that libmilter exists (in OI Hipster's
 ### sendmail-8.14.4, that is only present for 32-bits it seems...)
