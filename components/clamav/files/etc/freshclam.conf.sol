@@ -47,7 +47,7 @@ LogFileMaxSize 0
 # This option allows you to save the process identifier of the daemon
 # Default: disabled
 #PidFile /var/run/freshclam.pid
-PidFile /var/clammav/run/freshclam.pid
+PidFile /var/clamav/run/freshclam.pid
 
 # By default when started freshclam drops privileges and switches to the
 # "clamav" user. This directive allows you to change the database owner.
