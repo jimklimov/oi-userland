@@ -12,7 +12,7 @@
     <instance name='default' enabled='false'>
       <exec_method type='method'
                    name='start'
-                   exec='while true ; do /usr/bin/freshclam.sh && echo OK || echo FAILED ; sleep 900; echo Refreshing ClamAV database; done'
+                   exec='while true ; do /usr/bin/freshclam.sh &amp;&amp; echo OK || echo FAILED ; sleep 900; echo Refreshing ClamAV database; done'
                    timeout_seconds='0'>
         <method_context>
           <method_credential user='clamav' group='other' />
