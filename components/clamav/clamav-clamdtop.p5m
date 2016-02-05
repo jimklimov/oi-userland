@@ -41,15 +41,7 @@ license COPYING license="GPL2"
 depend fmri=antivirus/clamav-core type=require
 ### The above line should ensure common ClamAV dependencies du-jour
 ### as well as "clamav" UID and GID
-
-#depend fmri=library/pcre type=require
-### Required by core since 0.98.x
-#depend fmri=library/security/openssl type=require
-#group groupname=clamav
-#user ftpuser=false gcos-field="ClamAV Reserved UID" group=clamav password=NP username=clamav
-
-### Required by clamdtop client.
-#depend fmri=library/ncurses type=require
+### The clamdtop client requires a curses library.
 
 file path=usr/share/man/man1/clamdtop.1 mode=0444 owner=root group=sys
 
@@ -57,4 +49,5 @@ file path=usr/share/man/man1/clamdtop.1 mode=0444 owner=root group=sys
 #file path=usr/bin/$(MACH32)/clamdtop mode=0555 owner=root group=sys
 #file path=usr/bin/$(MACH64)/clamdtop mode=0555 owner=root group=sys
 #hardlink path=usr/bin/clamdtop target=../lib/isaexec pkg.linted=true
+### Currently we only ship a 32-bit build
 file path=usr/bin/clamdtop mode=0555 owner=root group=sys

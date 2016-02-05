@@ -41,15 +41,7 @@ license COPYING license="GPL2"
 depend fmri=antivirus/clamav-core type=require
 ### The above line should ensure common ClamAV dependencies du-jour
 ### as well as "clamav" UID and GID
-
-#depend fmri=library/pcre type=require
-### Required by core since 0.98.x
-#depend fmri=library/security/openssl type=require
-#group groupname=clamav
-#user ftpuser=false gcos-field="ClamAV Reserved UID" group=clamav password=NP username=clamav
-
 ### Sendmail AND its libmilter are needed for clamav-milter.
-#depend fmri=service/network/smtp/sendmail type=require
 
 file \
     files/var/svc/manifest/site/clamav-milter.xml \
@@ -80,4 +72,5 @@ file path=usr/share/man/man8/clamav-milter.8 mode=0444 owner=root group=sys
 #file path=usr/sbin/$(MACH64)/clamav-milter mode=0555 owner=root group=sys
 #file path=usr/sbin/$(MACH32)/clamav-milter mode=0555 owner=root group=sys
 #hardlink path=usr/sbin/clamav-milter target=../lib/isaexec pkg.linted=true
+### Currently we only ship a 32-bit build
 file path=usr/sbin/clamav-milter mode=0555 owner=root group=sys
