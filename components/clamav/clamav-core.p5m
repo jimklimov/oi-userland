@@ -41,6 +41,7 @@ license COPYING license="GPL2"
 group groupname=clamav
 user ftpuser=false gcos-field="ClamAV Reserved UID" group=clamav password=NP username=clamav
 
+dir group=root owner=sys mode=0755 path=usr/share/clamav
 dir group=clamav owner=clamav mode=0755 path=var/clamav
 dir group=clamav owner=clamav mode=0755 path=var/clamav/db
 dir group=clamav owner=clamav mode=0755 path=var/clamav/log
@@ -48,48 +49,47 @@ dir group=clamav owner=clamav mode=0755 path=var/clamav/run
 link path=var/log/clamav target=../clamav/log
 
 file \
-    files/var/svc/manifest/site/clamav.xml \
+    files/clamav.xml \
     path=var/svc/manifest/site/clamav.xml \
     group=sys mode=0444 owner=root \
     restart_fmri=svc:/system/manifest-import:default
 file \
-    files/var/svc/manifest/site/freshclam.xml \
+    files/freshclam.xml \
     path=var/svc/manifest/site/freshclam.xml \
     group=sys mode=0444 owner=root \
     restart_fmri=svc:/system/manifest-import:default
 
 file \
-    files/usr/bin/clamav-enable.sh \
+    files/clamav-enable.sh \
     path=usr/bin/clamav-enable.sh \
     group=bin owner=root mode=0555
 file \
-    files/usr/bin/freshclam.sh \
+    files/freshclam.sh \
     path=usr/bin/freshclam.sh \
     group=bin owner=root mode=0555
 
 file \
     etc/clamd.conf.sample \
-    path=etc/clamd.conf.sample-v$(COMPONENT_VERSION) \
+    path=usr/share/clamav/clamd.conf.sample-v$(COMPONENT_VERSION) \
     group=sys mode=0444 owner=root
 file \
-    files/etc/clamd.conf.sol \
-    path=etc/clamd.conf.sol \
+    files/clamd.conf.sol \
+    path=usr/share/clamav/clamd.conf.sol \
     group=sys mode=0444 owner=root
 file \
     etc/freshclam.conf.sample \
-    path=etc/freshclam.conf.sample-v$(COMPONENT_VERSION) \
+    path=usr/share/clamav/freshclam.conf.sample-v$(COMPONENT_VERSION) \
     group=sys mode=0444 owner=root
 file \
-    files/etc/freshclam.conf.sol \
-    path=etc/freshclam.conf.sol \
+    files/freshclam.conf.sol \
+    path=usr/share/clamav/freshclam.conf.sol \
     group=sys mode=0444 owner=root
 
 file \
-    files/usr/share/clamav/clamav-test.tgz \
+    files/clamav-test.tgz \
     path=usr/share/clamav/clamav-test.tgz \
     mode=0444 owner=root group=sys
 
-dir path=usr/share/clamav mode=0755 owner=root group=sys
 file path=usr/include/clamav.h mode=0444 owner=root group=sys
 
 file path=usr/share/man/man5/freshclam.conf.5 mode=0444 owner=root group=sys
