@@ -16,9 +16,13 @@ include ../../make-rules/shared-macros.mk
 
 COMPONENT_NAME=		clamav
 ### For X.Y.0 versions the TGZ and DIR do not include trailing .0 piece
+### But our package version should better have same number of components
 COMPONENT_VERSION_DIR=	0.99
-COMPONENT_VERSION=	$(COMPONENT_VERSION_DIR).0
-#COMPONENT_VERSION=	$(COMPONENT_VERSION_DIR)
+ifeq ($(words $(subst ., ,$(COMPONENT_VERSION_DIR))),2)
+ COMPONENT_VERSION=	$(COMPONENT_VERSION_DIR).0
+else
+ COMPONENT_VERSION=	$(COMPONENT_VERSION_DIR)
+endif
 ### Library files are tagged with unique per-version numbers
 COMPONENT_VERSION_LIB_MAJOR=	7
 COMPONENT_VERSION_LIB_FULL=	$(COMPONENT_VERSION_LIB_MAJOR).1.1
