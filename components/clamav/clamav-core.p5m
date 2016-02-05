@@ -105,13 +105,8 @@ link path=var/log/clamd.log target=../clamav/log/clamd.log
 link path=var/log/freshclam.log target=../clamav/log/freshclam.log
 
 dir path=usr/share/clamav mode=0755 owner=root group=sys
-dir path=usr/include/libltdl mode=0755 owner=bin group=bin
-
 file path=usr/include/clamav.h mode=0444 owner=root group=sys
-file path=usr/include/ltdl.h mode=0444 owner=root group=sys
-file path=usr/include/libltdl/lt_error.h mode=0444 owner=root group=sys
-file path=usr/include/libltdl/lt_dlloader.h mode=0444 owner=root group=sys
-file path=usr/include/libltdl/lt_system.h mode=0444 owner=root group=sys
+
 file path=usr/share/man/man5/freshclam.conf.5 mode=0444 owner=root group=sys
 file path=usr/share/man/man5/clamd.conf.5 mode=0444 owner=root group=sys
 file path=usr/share/man/man8/clamd.8 mode=0444 owner=root group=sys
@@ -157,7 +152,7 @@ file path=usr/lib/libclamunrar_iface.la mode=0555 owner=root group=sys
 file path=usr/lib/libclamav.la mode=0555 owner=root group=sys
 file path=usr/lib/libclamunrar.la mode=0555 owner=root group=sys
 file path=usr/lib/pkgconfig/libclamav.pc mode=0444 owner=root group=sys
-file path=usr/lib/libltdl.la mode=0555 owner=root group=sys
+
 
 file path=usr/lib/libclamunrar_iface.so.$(COMPONENT_VERSION_LIB_FULL) mode=0555 owner=root group=sys
 link path=usr/lib/libclamav.so.$(COMPONENT_VERSION_LIB_MAJOR) target=libclamav.so.$(COMPONENT_VERSION_LIB_FULL)
@@ -168,15 +163,11 @@ file path=usr/lib/libclamav.so.$(COMPONENT_VERSION_LIB_FULL) mode=0555 owner=roo
 link path=usr/lib/libclamunrar_iface.so.$(COMPONENT_VERSION_LIB_MAJOR) target=libclamunrar_iface.so.$(COMPONENT_VERSION_LIB_FULL)
 link path=usr/lib/libclamav.so target=libclamav.so.$(COMPONENT_VERSION_LIB_FULL)
 link path=usr/lib/libclamunrar.so.$(COMPONENT_VERSION_LIB_MAJOR) target=libclamunrar.so.$(COMPONENT_VERSION_LIB_FULL)
-file path=usr/lib/libltdl.so.$(COMPONENT_VERSION_LIB_TDL) mode=0555 owner=root group=sys
-link path=usr/lib/libltdl.so.$(COMPONENT_VERSION_LIB_MAJOR) target=libltdl.so.$(COMPONENT_VERSION_LIB_TDL)
-link path=usr/lib/libltdl.so target=libltdl.so.$(COMPONENT_VERSION_LIB_TDL)
 
 file path=usr/lib/$(MACH64)/libclamunrar_iface.la mode=0555 owner=root group=sys
 file path=usr/lib/$(MACH64)/libclamav.la mode=0555 owner=root group=sys
 file path=usr/lib/$(MACH64)/libclamunrar.la mode=0555 owner=root group=sys
 file path=usr/lib/$(MACH64)/pkgconfig/libclamav.pc mode=0444 owner=root group=sys
-file path=usr/lib/$(MACH64)/libltdl.la mode=0555 owner=root group=sys
 
 file path=usr/lib/$(MACH64)/libclamunrar_iface.so.$(COMPONENT_VERSION_LIB_FULL) mode=0555 owner=root group=sys
 link path=usr/lib/$(MACH64)/libclamav.so.$(COMPONENT_VERSION_LIB_MAJOR) target=libclamav.so.$(COMPONENT_VERSION_LIB_FULL)
@@ -187,6 +178,20 @@ file path=usr/lib/$(MACH64)/libclamav.so.$(COMPONENT_VERSION_LIB_FULL) mode=0555
 link path=usr/lib/$(MACH64)/libclamunrar_iface.so.$(COMPONENT_VERSION_LIB_MAJOR) target=libclamunrar_iface.so.$(COMPONENT_VERSION_LIB_FULL)
 link path=usr/lib/$(MACH64)/libclamav.so target=libclamav.so.$(COMPONENT_VERSION_LIB_FULL)
 link path=usr/lib/$(MACH64)/libclamunrar.so.$(COMPONENT_VERSION_LIB_MAJOR) target=libclamunrar.so.$(COMPONENT_VERSION_LIB_FULL)
-file path=usr/lib/$(MACH64)/libltdl.so.$(COMPONENT_VERSION_LIB_TDL) mode=0555 owner=root group=sys
-link path=usr/lib/$(MACH64)/libltdl.so.$(COMPONENT_VERSION_LIB_MAJOR) target=libltdl.so.$(COMPONENT_VERSION_LIB_TDL)
-link path=usr/lib/$(MACH64)/libltdl.so target=libltdl.so.$(COMPONENT_VERSION_LIB_TDL)
+
+### If --enable-libltdl-install, conflicts with libtool
+#dir path=usr/include/libltdl mode=0755 owner=bin group=bin
+#file path=usr/include/ltdl.h mode=0444 owner=root group=sys
+#file path=usr/include/libltdl/lt_error.h mode=0444 owner=root group=sys
+#file path=usr/include/libltdl/lt_dlloader.h mode=0444 owner=root group=sys
+#file path=usr/include/libltdl/lt_system.h mode=0444 owner=root group=sys
+
+#file path=usr/lib/libltdl.la mode=0555 owner=root group=sys
+#file path=usr/lib/$(MACH64)/libltdl.la mode=0555 owner=root group=sys
+#file path=usr/lib/libltdl.so.$(COMPONENT_VERSION_LIB_TDL) mode=0555 owner=root group=sys
+#link path=usr/lib/libltdl.so.$(COMPONENT_VERSION_LIB_MAJOR) target=libltdl.so.$(COMPONENT_VERSION_LIB_TDL)
+#link path=usr/lib/libltdl.so target=libltdl.so.$(COMPONENT_VERSION_LIB_TDL)
+
+#file path=usr/lib/$(MACH64)/libltdl.so.$(COMPONENT_VERSION_LIB_TDL) mode=0555 owner=root group=sys
+#link path=usr/lib/$(MACH64)/libltdl.so.$(COMPONENT_VERSION_LIB_MAJOR) target=libltdl.so.$(COMPONENT_VERSION_LIB_TDL)
+#link path=usr/lib/$(MACH64)/libltdl.so target=libltdl.so.$(COMPONENT_VERSION_LIB_TDL)

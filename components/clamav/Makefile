@@ -49,12 +49,14 @@ CONFIGURE_OPTIONS += \
 	--without-gnu-ld \
 	--enable-bigstack \
 	--enable-readdir_r \
-	--enable-ltdl-install \
 	--with-openssl=/usr \
 	--with-zlib=/usr \
 	--with-libbz2-prefix=/usr \
 	--with-libcurl=/usr \
 	--with-xml=/usr
+
+#	--with-ltdl-include=/usr \
+#	--with-ltdl-lib=/usr \
 
 ### The clamav-milter requires that libmilter exists (in OI Hipster's
 ### sendmail-8.14.4, that is only present for 32-bits it seems...)
