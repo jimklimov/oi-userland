@@ -12,16 +12,16 @@
 # Copyright 2016 Jim Klimov <jimklimov@gmail.com>
 #
 
-include ../../make-rules/shared-macros.mk
+include ../../../make-rules/shared-macros.mk
 
-COMPONENT_NAME=		ufoai
+COMPONENT_NAME=		source
 COMPONENT_VERSION=	2.5
 IPS_COMPONENT_VERSION=	$(COMPONENT_VERSION).0
 COMPONENT_PROJECT_URL=	http://ufoai.org
 COMPONENT_SRC=		ufoai-$(COMPONENT_VERSION)-$(COMPONENT_NAME)
-COMPONENT_ARCHIVE=	$(COMPONENT_SRC).tar.gz
+COMPONENT_ARCHIVE=	$(COMPONENT_SRC).tar.bz2
 COMPONENT_ARCHIVE_HASH= \
-	sha256:80ae32cb9f568af4dc7ee4d3c05a4c31fc513fc3e31730fed0ce7378237273a9
+	sha256:0c7cc3bc9efeb276f71cbe6ee8ff7c76f98d183de79f1a069fa63059cf182a8f
 COMPONENT_FMRI=		games/ufoai/game
 COMPONENT_LICENSE=	GPLv2
 COMPONENT_LICENSE_FILE=	$(COMPONENT_NAME).license

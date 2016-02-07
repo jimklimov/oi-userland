@@ -12,7 +12,7 @@
 # Copyright 2016 Jim Klimov <jimklimov@gmail.com>
 #
 
-include ../../make-rules/shared-macros.mk
+include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME=		data
 COMPONENT_VERSION=	2.5
