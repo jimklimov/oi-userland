@@ -30,9 +30,16 @@ COMPONENT_CLASSIFICATION="Applications/Games"
 COMPONENT_ARCHIVE_URL= \
 	http://sourceforge.net/projects/ufoai/files/UFO_AI%202.x/$(COMPONENT_VERSION)/$(COMPONENT_ARCHIVE)
 
+PATH=/usr/gnu/bin:/usr/bin
+
 include $(WS_TOP)/make-rules/prep.mk
-include $(WS_TOP)/make-rules/configure.mk
+include $(WS_TOP)/make-rules/justmake.mk
 include $(WS_TOP)/make-rules/ips.mk
+
+COMPONENT_PRE_BUILD_ACTION = \
+	( cd $(@D) && ./configure --enable-release )
+# Needs to patch egrep
+# --enable-sse
 
 build: $(BUILD_32_and_64)
 

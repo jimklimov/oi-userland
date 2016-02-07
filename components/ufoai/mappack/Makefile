@@ -31,7 +31,7 @@ COMPONENT_ARCHIVE_URL= \
 	http://sourceforge.net/projects/ufoai/files/UFO_AI%202.x/$(COMPONENT_VERSION)/$(COMPONENT_ARCHIVE)
 
 include $(WS_TOP)/make-rules/prep.mk
-include $(WS_TOP)/make-rules/configure.mk
+include $(WS_TOP)/make-rules/justmake.mk
 include $(WS_TOP)/make-rules/ips.mk
 
 build: $(BUILD_32_and_64)
