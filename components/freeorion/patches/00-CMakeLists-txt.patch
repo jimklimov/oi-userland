@@ -1,0 +1,16 @@
+--- freeorion-0.4.5-orig/CMakeLists.txt	2015-09-01 09:54:26.000000000 +0000
++++ freeorion-0.4.5/CMakeLists.txt	2016-02-07 14:21:26.295999165 +0000
+@@ -71,6 +71,13 @@
+         -DBOOST_DATE_TIME_NO_LOCALE
+     )
+     set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated -Wall -Wno-parentheses")
++elseif (CMAKE_SYSTEM_NAME STREQUAL "SunOS")
++    add_definitions(
++        -DFREEORION_LINUX
++        -DENABLE_BINRELOC
++        -DBOOST_ALL_DYN_LINK
++    )
++    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated -Wall -Wno-parentheses")
+ else ()
+     message(FATAL_ERROR "Unknown platform type! Your setup is not a supported platform for FreeOrion.")
+ endif ()
