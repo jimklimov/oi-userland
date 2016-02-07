@@ -17,17 +17,17 @@ include ../../make-rules/shared-macros.mk
 COMPONENT_NAME=		clamav
 ### For X.Y.0 versions the TGZ and DIR do not include trailing .0 piece
 ### But our package version should better have same number of components
-COMPONENT_VERSION_DIR=	0.99
-ifeq ($(words $(subst ., ,$(COMPONENT_VERSION_DIR))),2)
- COMPONENT_VERSION=	$(COMPONENT_VERSION_DIR).0
+COMPONENT_VERSION=	0.99
+ifeq ($(words $(subst ., ,$(COMPONENT_VERSION))),2)
+ IPS_COMPONENT_VERSION=	$(COMPONENT_VERSION).0
 else
- COMPONENT_VERSION=	$(COMPONENT_VERSION_DIR)
+ IPS_COMPONENT_VERSION=	$(COMPONENT_VERSION)
 endif
 ### Library files are tagged with unique per-version numbers
 COMPONENT_VERSION_LIB_MAJOR=	7
 COMPONENT_VERSION_LIB_FULL=	$(COMPONENT_VERSION_LIB_MAJOR).1.1
-COMPONENT_SUMMARY=	ClamAV $(COMPONENT_VERSION) - opensource antivirus toolkit
-COMPONENT_SRC=		$(COMPONENT_NAME)-$(COMPONENT_VERSION_DIR)
+COMPONENT_SUMMARY=	ClamAV $(IPS_COMPONENT_VERSION) - opensource antivirus toolkit
+COMPONENT_SRC=		$(COMPONENT_NAME)-$(COMPONENT_VERSION)
 COMPONENT_ARCHIVE=	$(COMPONENT_SRC).tar.gz
 COMPONENT_ARCHIVE_HASH=	\
 	sha256:d2792c8cfadd685fffc40b2199679628815df031fd3149ccf961649fc8787ea9
