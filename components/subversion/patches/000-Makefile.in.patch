@@ -22,16 +22,15 @@
  SWIG_PL_INCLUDES = @SWIG_PL_INCLUDES@
  SWIG_RB_INCLUDES = @SWIG_RB_INCLUDES@ -I$(SWIG_SRC_DIR)/ruby/libsvn_swig_ruby
  SWIG_RB_COMPILE = @SWIG_RB_COMPILE@
-@@ -180,7 +180,8 @@
+@@ -180,6 +180,7 @@
  ### suppressed (but they may come from httpd or APR).
  CPPFLAGS = @CPPFLAGS@ $(EXTRA_CPPFLAGS)
  LDFLAGS = @LDFLAGS@ $(EXTRA_LDFLAGS)
 -SWIG_LDFLAGS = @SWIG_LDFLAGS@ $(EXTRA_SWIG_LDFLAGS)
 +EXTRA_SWIG_LDFLAGS = -R$(libdir)
 +SWIG_LDFLAGS = @SWIG_LDFLAGS@ $(EXTRA_SWIG_LDFLAGS) $(SWIG_PY_LIBS)
+ SWIG_CPPFLAGS = @SWIG_CPPFLAGS@ $(EXTRA_CPPFLAGS)
  
- COMPILE = $(CC) $(CPPFLAGS) $(CFLAGS) $(INCLUDES)
- COMPILE_CXX = $(CXX) $(CPPFLAGS) $(CXXFLAGS) $(INCLUDES)
 @@ -209,7 +210,7 @@
  LINK_CXX_LIB = $(LINK_CXX) $(LT_SO_VERSION)
  
@@ -54,8 +53,8 @@
  	./config.status subversion/bindings/swig/perl/native/Makefile.PL
  
  $(SWIG_PL_DIR)/native/Makefile: $(SWIG_PL_DIR)/native/Makefile.PL
--	cd $(SWIG_PL_DIR)/native; $(PERL) Makefile.PL
-+	( cd $(SWIG_PL_DIR)/native; $(PERL) Makefile.PL )
+-	cd $(SWIG_PL_DIR)/native; $(PERL) Makefile.PL PREFIX=$(prefix)
++	( cd $(SWIG_PL_DIR)/native; $(PERL) Makefile.PL PREFIX=$(prefix) )
 +	( cd $(SWIG_PL_DIR)/native; \
 +	    for file in Makefile Makefile.client Makefile.delta \
 +	    Makefile.fs Makefile.ra Makefile.repos Makefile.wc ; do \
