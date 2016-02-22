@@ -46,7 +46,7 @@ do_delcron() {
 	( which crontab >/dev/null 2>&1 ) || \
 		{ echo "ERROR: crontab program not found" >&2; return 1; }
 	OUT="`crontab -l`" || return $?
-	echo "$OUT" | egrep -v "bin/freshclam|$FRESHCLAMSH_BINFILE" > "/tmp/saved-crontab.$$"
+	echo "$OUT" | egrep -v "bin/freshclam|$FRESHCLAMSH_BINFILE|^$" > "/tmp/saved-crontab.$$"
 	RES=0
 	if [ -s "/tmp/saved-crontab.$$" ]; then
 		crontab "/tmp/saved-crontab.$$" || RES=$?
