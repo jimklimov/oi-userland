@@ -66,6 +66,8 @@ CXXFLAGS += $(CPP_LARGEFILES)
 CFLAGS += `pkg-config --cflags neon`
 CFLAGS += $(CPP_LARGEFILES)
 
+CFLAGS += -D__EXTENSIONS__
+
 #PERL_VERSION_12 = 5.12
 #PERL_VERSION_16 = 5.16
 #PERL_ARCH_12_i386 = i86pc-solaris-64int
@@ -136,10 +138,8 @@ CONFIGURE_OPTIONS += --localstatedir=/var
 CONFIGURE_OPTIONS += --enable-shared 
 #CONFIGURE_OPTIONS += --disable-static
 CONFIGURE_OPTIONS += --disable-libtool-lock 
-CONFIGURE_OPTIONS += --disable-neon-version-check
 CONFIGURE_OPTIONS += --disable-experimental-libtool
 CONFIGURE_OPTIONS += --with-apxs=$(APXS.$(BITS))
-CONFIGURE_OPTIONS += --with-ssl 
 CONFIGURE_OPTIONS += --with-zlib=$(CONFIGURE_PREFIX)
 CONFIGURE_OPTIONS += --with-jdk=$(JAVA_ROOT)
 CONFIGURE_OPTIONS += --with-apr=/usr/apr
@@ -148,7 +148,6 @@ CONFIGURE_OPTIONS += --enable-nls
 CONFIGURE_OPTIONS += --disable-mod-activation
 CONFIGURE_OPTIONS += --enable-javahl
 CONFIGURE_OPTIONS += --with-swig
-CONFIGURE_OPTIONS += --with-neon=$(CONFIGURE_PREFIX)
 CONFIGURE_OPTIONS += --with-apr=$(APR-CONFIG.$(BITS))
 CONFIGURE_OPTIONS += --with-apr-util=$(APU-CONFIG.$(BITS))
 CONFIGURE_OPTIONS += --with-apxs=$(APXS.$(BITS))
