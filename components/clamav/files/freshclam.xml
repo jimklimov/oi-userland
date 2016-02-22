@@ -15,8 +15,8 @@
     <instance name='default' enabled='false'>
       <exec_method type='method'
                    name='start'
-                   exec='/usr/bin/freshclam.sh --add-cron "%{freshclam/cron-schedule}"'
-                   timeout_seconds='60'>
+                   exec='/usr/bin/freshclam.sh ; /usr/bin/freshclam.sh --add-cron "%{freshclam/cron-schedule}"'
+                   timeout_seconds='600'>
         <method_context>
           <method_credential user='clamav' group='other' />
         </method_context>

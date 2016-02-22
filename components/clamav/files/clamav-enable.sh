@@ -11,7 +11,7 @@ CLAMMILT_CONFFILE=/etc/clamav-milter.conf
 FRESHCLAM_CONFFILE=/etc/freshclam.conf
 FRESHCLAM_RUNFILE="/usr/bin/freshclam.sh"
 
-for F in "$FRESHCLAM_CONFFILE" "$CLAMD_CONFFILE" "$CLAMMILT_CONFFILE" ; do
+for F in "$CLAMD_CONFFILE" "$FRESHCLAM_CONFFILE" "$CLAMMILT_CONFFILE" ; do
 	S="/usr/share/clamav/`basename "$F"`.sol"
 	if [ ! -s "$F" ] && [ -s "$S" ] ; then
 		echo "INFO: Copying default config '$S' into active config '$F'" >&2
