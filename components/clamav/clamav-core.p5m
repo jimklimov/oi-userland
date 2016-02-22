@@ -39,7 +39,7 @@ set name=org.opensolaris.consolidation value=$(CONSOLIDATION)
 license COPYING license="GPL2"
 
 group groupname=clamav
-user ftpuser=false gcos-field="ClamAV Reserved UID" group=clamav password=NP username=clamav
+user ftpuser=false gcos-field="ClamAV Reserved UID" group=clamav password=NL username=clamav
 
 dir path=usr/share/clamav
 dir group=clamav owner=clamav mode=0755 path=var/clamav
