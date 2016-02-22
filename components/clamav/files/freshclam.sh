@@ -45,27 +45,33 @@ $1"
 do_delcron() {
 	( which crontab >/dev/null 2>&1 ) || \
 		{ echo "ERROR: crontab program not found" >&2; return 1; }
-	OUT="`crontab -l`" || return $?
-	echo "$OUT" | egrep -v "bin/freshclam|$FRESHCLAMSH_BINFILE|^$" > "/tmp/saved-crontab.$$"
 	RES=0
+	OUT="`LC_ALL=C LANG=C crontab -l 2>&1`" || RES=$?
+	[ $RES != 0 ] && \
+	if	echo "$OUT" | grep "can't open" >/dev/null && \
+		[ "`echo "$OUT" | wc -l`" -eq 1 ] \
+	; then OUT="" ; RES=0; else return $RES; fi
+	echo "$OUT" | egrep -v "bin/freshclam|$FRESHCLAMSH_BINFILE|^$" > "/tmp/saved-crontab.$$"
 	if [ -s "/tmp/saved-crontab.$$" ]; then
 		crontab "/tmp/saved-crontab.$$" || RES=$?
 	else
 		crontab -r || RES=$?
 	fi
 	rm -f "/tmp/saved-crontab.$$"
+	[ $RES != 0 ] && echo "ERROR: could not delete freshclam from crontab" >&2
 	return $RES
 }
 
 do_addcron() {
 	[ x"$1" = x ] && return 1   # Whole cron-schedule spec
 	do_delcron || return $?  # Also checks for valid crontab program in PATH
-	OUT="`crontab -l`" || return $?
+	OUT="`LC_ALL=C LANG=C crontab -l 2>/dev/null`" || OUT=""
 	echo "$OUT
 $1	[ -x '$FRESHCLAMSH_BINFILE' ] && '$FRESHCLAMSH_BINFILE'" > "/tmp/saved-crontab.$$"
 	RES=0
 	crontab "/tmp/saved-crontab.$$" || RES=$?
 	rm -f "/tmp/saved-crontab.$$"
+	[ $RES != 0 ] && echo "ERROR: could not add freshclam to crontab" >&2
 	return $RES
 }
 
