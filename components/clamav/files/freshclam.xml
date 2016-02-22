@@ -10,7 +10,7 @@
       <service_fmri value='svc:/milestone/multi-user-server'/>
     </dependency>
     <dependency name='cron' grouping='require_all' restart_on='none' type='service'>
-      <service_fmri value='svc:/system/cron/default'/>
+      <service_fmri value='svc:/system/cron:default'/>
     </dependency>
     <instance name='default' enabled='false'>
       <exec_method type='method'
