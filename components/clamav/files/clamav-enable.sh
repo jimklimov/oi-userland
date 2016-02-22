@@ -24,7 +24,7 @@ for F in "$CLAMD_CONFFILE" "$FRESHCLAM_CONFFILE" "$CLAMMILT_CONFFILE" ; do
 	else
 		echo "INFO: Nothing to change about active config '$F'" >&2
 	fi
-fi
+done
 
 for F in "$FRESHCLAM_CONFFILE" "$CLAMD_CONFFILE" "$CLAMMILT_CONFFILE" ; do
 	case "$F" in
