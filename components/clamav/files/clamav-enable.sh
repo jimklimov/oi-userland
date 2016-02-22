@@ -11,6 +11,9 @@ CLAMMILT_CONFFILE=/etc/clamav-milter.conf
 FRESHCLAM_CONFFILE=/etc/freshclam.conf
 FRESHCLAM_RUNFILE="/usr/bin/freshclam.sh"
 
+### After all, copying of configs and enablement of services should be separate:
+### freshclam depends on both its config and clamd.conf, but clamd service needs
+### the databases to start up...
 for F in "$CLAMD_CONFFILE" "$FRESHCLAM_CONFFILE" "$CLAMMILT_CONFFILE" ; do
 	S="/usr/share/clamav/`basename "$F"`.sol"
 	if [ ! -s "$F" ] && [ -s "$S" ] ; then
@@ -21,6 +24,9 @@ for F in "$CLAMD_CONFFILE" "$FRESHCLAM_CONFFILE" "$CLAMMILT_CONFFILE" ; do
 	else
 		echo "INFO: Nothing to change about active config '$F'" >&2
 	fi
+fi
+
+for F in "$FRESHCLAM_CONFFILE" "$CLAMD_CONFFILE" "$CLAMMILT_CONFFILE" ; do
 	case "$F" in
 		"$FRESHCLAM_CONFFILE")
 			if [ -s "$F" ]; then
@@ -28,7 +34,7 @@ for F in "$CLAMD_CONFFILE" "$FRESHCLAM_CONFFILE" "$CLAMMILT_CONFFILE" ; do
 				[ -x "$FRESHCLAM_RUNFILE" ] && "$FRESHCLAM_RUNFILE"
 				theSMF_FMRI="svc:/antivirus/freshclam:default"
 				svcadm refresh "$theSMF_FMRI"
-				svcadm enable "$theSMF_FMRI"
+				svcadm enable -s "$theSMF_FMRI" # Let initial download pass
 				svcadm restart "$theSMF_FMRI"
 				svcadm clear "$theSMF_FMRI"
 				svcs -p "$theSMF_FMRI"
