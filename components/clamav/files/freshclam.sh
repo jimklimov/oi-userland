@@ -30,6 +30,7 @@ LD_LIBRARY_PATH=\
 $LD_LIBRARY_PATH
 export LD_LIBRARY_PATH
 
+
 if [ ! -s "$CLAMD_CONFFILE" -o ! -s "$FRESHCLAM_CONFFILE" ]; then
 	# echo "ClamAV-FreshCLAM: No config file!" >&2
 	exit 0
@@ -46,7 +47,13 @@ do_delcron() {
 	( which crontab >/dev/null 2>&1 ) || \
 		{ echo "ERROR: crontab program not found" >&2; return 1; }
 	RES=0
-	OUT="`LC_ALL=C LANG=C crontab -l 2>&1`" || RES=$?
+
+	# Below we depend on parsing some outputs
+	LC_ALL=C
+	LANG=C
+	export LC_ALL LANG
+
+	OUT="`crontab -l 2>&1`" || RES=$?
 	[ $RES != 0 ] && \
 	if	echo "$OUT" | grep "can't open" >/dev/null && \
 		[ "`echo "$OUT" | wc -l`" -eq 1 ] \
@@ -65,7 +72,13 @@ do_delcron() {
 do_addcron() {
 	[ x"$1" = x ] && return 1   # Whole cron-schedule spec
 	do_delcron || return $?  # Also checks for valid crontab program in PATH
-	OUT="`LC_ALL=C LANG=C crontab -l 2>/dev/null`" || OUT=""
+
+	# Below we depend on parsing some outputs
+	LC_ALL=C
+	LANG=C
+	export LC_ALL LANG
+
+	OUT="`crontab -l 2>/dev/null`" || OUT=""
 	echo "$OUT
 $1	[ -x '$FRESHCLAMSH_BINFILE' ] && '$FRESHCLAMSH_BINFILE'" > "/tmp/saved-crontab.$$"
 	RES=0
