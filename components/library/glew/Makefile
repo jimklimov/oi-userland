@@ -48,10 +48,14 @@ include $(WS_TOP)/make-rules/justmake.mk
 include $(WS_TOP)/make-rules/ips.mk
 
 COMPONENT_PREP_ACTION = \
-    ( ldd "/usr/openwin/lib/libGL.so.1" "/usr/openwin/lib/64/libGL.so.1" 2>/dev/null | \
-        grep "VBox" >&2 && \
-        echo "FATAL: Build this in a clean environment (needs system OpenGL libs)!" >&2 && \
-        exit 1; exit 0 ) && \
+    ( if ldd "/usr/openwin/lib/libGL.so.1" "/usr/openwin/lib/64/libGL.so.1" 2>/dev/null | \
+            grep "VBox" ; then \
+        echo "FATAL: Build this in a clean environment (needs basic system OpenGL libs)!"; \
+        echo "HINT: Review definition of symlinks which VirtualBox installer tends to overwrite:"; \
+        echo "      /usr/lib/mesa/libGL.so.1 and /usr/lib/mesa/$(MACH64)/libGL.so.1  :"; \
+        ls -dal /usr/lib/mesa/libGL.so.1 /usr/lib/mesa/$(MACH64)/libGL.so.1; \
+        exit 1; \
+      fi; exit 0 ) >&2 && \
     ( cd "$(SOURCE_DIR)/config" && cp -pf "$(COMPONENT_DIR)/files/Makefile.illumos-gcc" ./ )
 
 CFLAGS +=	-I$(SOURCE_DIR)/include
