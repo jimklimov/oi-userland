@@ -24,7 +24,7 @@
 # Perhaps we should *require* do the builds in a dedicated local zone?..
 # TODO: Find out the root-cause and attach a patch-file with a fix to this.
 
-include ../../make-rules/shared-macros.mk
+include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME=		glew
 COMPONENT_VERSION=	1.13.0
