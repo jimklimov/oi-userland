@@ -34,6 +34,9 @@ COMPONENT_ARCHIVE_HASH=	\
 COMPONENT_PROJECT_URL=	http://www.clamav.org/
 COMPONENT_ARCHIVE_URL=	\
 	http://www.clamav.net/downloads/production/$(COMPONENT_ARCHIVE)
+# We need to use non-default User-Agent for the fetch, otherwise we are denied
+# to download the source file. (Thanks to Marcel Telka)
+COMPONENT_FETCH_USER_AGENT=	fetch
 
 include $(WS_TOP)/make-rules/prep.mk
 include $(WS_TOP)/make-rules/configure.mk
