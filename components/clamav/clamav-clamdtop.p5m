@@ -19,8 +19,6 @@
 # CDDL HEADER END
 #
 # Copyright (c) 2016 Jim Klimov. All rights reserved.
-# Partially inspired by SFE manifest
-#   http://sfe.opencsw.org/localhostoi151a8/manifest/0/antivirus%2Fclamav@0.98,5.11-0.0.151.1.8%3A20131210T210011Z
 #
 
 # pull the manpages out of the component dir
