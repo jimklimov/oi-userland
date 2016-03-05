@@ -59,6 +59,10 @@ CONFIGURE_OPTIONS +=	--with-zlib=/usr
 CONFIGURE_OPTIONS +=	--with-libbz2-prefix=/usr
 CONFIGURE_OPTIONS +=	--with-libcurl=/usr
 CONFIGURE_OPTIONS +=	--with-xml=/usr
+CONFIGURE_OPTIONS +=	--with-pcre=/usr
+
+# ClamAV includes bluntly <pcre.h> which library/pcre component has in a subdir
+CFLAGS +=	-I/usr/include/pcre
 
 ### The clamav-milter requires that libmilter exists (in OI Hipster's
 ### sendmail-8.14.4, that is only present for 32-bits it seems...)
