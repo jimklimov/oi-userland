@@ -28,7 +28,7 @@ legacy arch=i386 category=GNOME2,application,JDSoi \
     name="SQL database engine library - tcl files" \
     pkg=SUNWsqlite3tcl
 
-file files/pkgIndex.tcl path=usr/lib/tcl8.5/sqlite$(COMPONENT_VERSION)/pkgIndex.tcl
+file files/pkgIndex-$(MACH64).tcl path=usr/lib/tcl8.5/sqlite$(COMPONENT_VERSION)/pkgIndex.tcl
 
 file usr/lib/$(MACH64)/sqlite$(COMPONENT_VERSION)/libsqlite$(COMPONENT_VERSION).so \
     path=usr/lib/tcl8.5/sqlite$(COMPONENT_VERSION)/$(MACH64)/libsqlite$(COMPONENT_VERSION).so
