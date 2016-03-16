@@ -19,22 +19,26 @@
 # CDDL HEADER END
 #
 # Copyright (c) 2013 Louis M. Picciano. All rights reserved.
+# Copyright (c) 2016 Jim Klimov
 #
 
-include ../../../make-rules/shared-macros.mk
+include ../../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME			= sqlite
-COMPONENT_VERSION		= 3.8.11.1
-TARBALL_VERSION			= 3081101
+COMPONENT_FMRI			= database/sqlite-3
+COMPONENT_VERSION		= 3.11.1
+TARBALL_VERSION			= 3110100
 COMPONENT_SRC			= sqlite-autoconf-$(TARBALL_VERSION)
 COMPONENT_ARCHIVE		= $(COMPONENT_SRC).tar.gz
 COMPONENT_ARCHIVE_HASH	= \
-	sha256:fb99b0ac038c4a7e48b44b61836cb41d4eeba36b4d0ee757beeab59031a1d3b6
-COMPONENT_ARCHIVE_URL=	http://www.sqlite.org/2015/$(COMPONENT_ARCHIVE)
+	sha256:533ff1d0271c2e666f01591271cef01a31648563affa0c95e80ef735077d4377
+COMPONENT_ARCHIVE_URL=	http://www.sqlite.org/2016/$(COMPONENT_ARCHIVE)
+COMPONENT_SUMMARY		= in-process SQL database engine library
+COMPONENT_PROJECT_URL	= http://www.sqlite.org/
 
-include ../../../make-rules/prep.mk
-include ../../../make-rules/configure.mk
-include ../../../make-rules/ips.mk
+include $(WS_TOP)/make-rules/prep.mk
+include $(WS_TOP)/make-rules/configure.mk
+include $(WS_TOP)/make-rules/ips.mk
 
 COMPONENT_PREP_ACTION =        ( cd $(@D)  && \
                                         libtoolize --copy --force &&\
@@ -67,7 +71,7 @@ CONFIGURE_OPTIONS	+= --enable-threadsafe
 CONFIGURE_OPTIONS	+= --enable-shared
 CONFIGURE_OPTIONS	+= --disable-static
 
-include ../../../make-rules/shared-targets.mk
+include $(WS_TOP)/make-rules/shared-targets.mk
 
 build:		$(BUILD_32) $(BUILD_64)
 
@@ -77,4 +81,4 @@ test:		$(TEST_32) $(TEST_64)
 
 BUILD_PKG_DEPENDENCIES =	$(BUILD_TOOLS)
 
-include ../../../make-rules/depend.mk
+include $(WS_TOP)/make-rules/depend.mk

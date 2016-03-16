@@ -19,24 +19,25 @@
 # CDDL HEADER END
 #
 # Copyright (c) 2013 Louis M. Picciano. All rights reserved.
+# Copyright (c) 2016 Jim Klimov
 #
 
-include ../../../make-rules/shared-macros.mk
+include ../../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME			= tcl-sqlite
-COMPONENT_VERSION		= 3.7.17
-TARBALL_VERSION			= 3071700
-COMPONENT_SUMMARY		= SQL database engine library - tcl files
+COMPONENT_VERSION		= 3.11.1
+TARBALL_VERSION			= 3110100
 COMPONENT_SRC			= sqlite-autoconf-$(TARBALL_VERSION)
 COMPONENT_ARCHIVE		= $(COMPONENT_SRC).tar.gz
 COMPONENT_ARCHIVE_HASH	= \
-	sha256:8ff46d0baa9e64c0815544e829e985f1161c096aa6344c8f430791dbeadc2baf
-COMPONENT_ARCHIVE_URL=	http://www.sqlite.org/2013/$(COMPONENT_ARCHIVE)
-COMPONENT_PROJECT_URL=	http://www.sqlite.org/
+	sha256:533ff1d0271c2e666f01591271cef01a31648563affa0c95e80ef735077d4377
+COMPONENT_ARCHIVE_URL=  http://www.sqlite.org/2016/$(COMPONENT_ARCHIVE)
+COMPONENT_SUMMARY		= in-process SQL database engine library - tcl files
+COMPONENT_PROJECT_URL	= http://www.sqlite.org/
 
-include ../../../make-rules/prep.mk
-include ../../../make-rules/configure.mk
-include ../../../make-rules/ips.mk
+include $(WS_TOP)/make-rules/prep.mk
+include $(WS_TOP)/make-rules/configure.mk
+include $(WS_TOP)/make-rules/ips.mk
 
 CFLAGS			+= -D_POSIX_PTHREAD_SEMANTICS
 CFLAGS			+= -DNDEBUG
@@ -56,7 +57,7 @@ CONFIGURE_OPTIONS.32	+= --with-tcl="/usr/lib"
 CONFIGURE_OPTIONS.64	+= --with-tcl="/usr/lib/$(MACH64)"
 CONFIGURE_OPTIONS.64	+= LIBS="-m64"
 
-include ../../../make-rules/shared-targets.mk
+include $(WS_TOP)/make-rules/shared-targets.mk
 
 build:		$(BUILD_32) $(BUILD_64)
 
@@ -66,4 +67,4 @@ test:		$(TEST_32) $(TEST_64)
 
 BUILD_PKG_DEPENDENCIES =	$(BUILD_TOOLS)
 
-include ../../../make-rules/depend.mk
+include $(WS_TOP)/make-rules/depend.mk
