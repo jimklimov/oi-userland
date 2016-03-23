@@ -43,12 +43,13 @@ CFLAGS.32=-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE
 CXXFLAGS+=$(CXXFLAGS.$(BITS))
 CFLAGS+=$(CFLAGS.$(BITS))
 
-# Using the /usr/bin/{$MACH64} directory here is important, to find the
-# variant of pg_config and mysql_config (mediated links) with proper $BITS.
-BINSUBDIR.32=bin
-BINSUBDIR.64=bin/$(MACH64)
+# We use a fixed default mysql implementation, and a baseline
+# postgres version is defined in make-rules/*.mk above
+MYSQL_BINDIR.32=/usr/mariadb/5.5/bin
+MYSQL_BINDIR.64=/usr/mariadb/5.5/bin/64
+PATH=$(MYSQL_BINDIR.$(BITS)):$(PG_BINDIR.$(BITS)):/usr/bin:/usr/sbin
 
-COMPONENT_COMMON_ENV +=	PATH=$(USRDIR)/$(BINSUBDIR.$(BITS)):/usr/bin:/usr/sfw/bin:/usr/ccs/bin:/usr/sbin:/usr/gnu/bin
+COMPONENT_COMMON_ENV += PATH="$(PATH)"
 COMPONENT_COMMON_ENV += CC="$(CC)"
 COMPONENT_COMMON_ENV += CXX="$(CXX)"
 COMPONENT_COMMON_ENV += CXXFLAGS="$(CXXFLAGS)"
