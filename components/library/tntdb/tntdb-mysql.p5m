@@ -28,8 +28,8 @@ depend fmri=$(COMPONENT_FMRI)/common  type=require
 
 # Do not force a dependency on specific DB package variant for
 # the DB libraries that any one of variant packages may provide
-file path=usr/lib/tntdb/tntdb4-mysql.so.4.0.0 pkg.depend.bypass-generate=.*
-file path=usr/lib/$(MACH64)/tntdb/tntdb4-mysql.so.4.0.0 pkg.depend.bypass-generate=.*
+file path=usr/lib/tntdb/tntdb4-mysql.so.4.0.0
+file path=usr/lib/$(MACH64)/tntdb/tntdb4-mysql.so.4.0.0
 
 link path=usr/lib/tntdb/tntdb4-mysql.so target=tntdb4-mysql.so.4.0.0
 link path=usr/lib/tntdb/tntdb4-mysql.so.4 target=tntdb4-mysql.so.4.0.0
