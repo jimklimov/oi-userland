@@ -29,6 +29,12 @@ COMMON_PERL_ENV +=	LANG=""
 COMMON_PERL_ENV +=	CC="$(CC)"
 COMMON_PERL_ENV +=	CFLAGS="$(PERL_OPTIMIZE)"
 
+# Rewrite absolute source-code paths into relative for ccache, so that any
+# workspace with a shared CCACHE_DIR can benefit when compiling a component
+ifneq ($(strip $(CCACHE)),)
+COMMON_PERL_ENV += CCACHE_BASEDIR="$(BUILD_DIR_$(BITS))"
+endif
+
 # Yes.  Perl is just scripts, for now, but we need architecture
 # directories so that it populates all architecture prototype
 # directories.

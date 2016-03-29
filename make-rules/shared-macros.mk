@@ -309,6 +309,9 @@ COMPONENT_TEST_COMPARE = \
 # set the default env command to use for test of the component
 COMPONENT_TEST_ENV_CMD =	$(ENV)
 
+# set the default test environment (none) that we can append to later
+COMPONENT_TEST_ENV_CMD =
+
 # set the default command to use for test of the component
 COMPONENT_TEST_CMD =	$(GMAKE)
 
@@ -878,6 +881,14 @@ COMPONENT_BUILD_ENV += $(COMPONENT_BUILD_ENV.$(BITS))
 COMPONENT_BUILD_ARGS += $(COMPONENT_BUILD_ARGS.$(BITS))
 COMPONENT_INSTALL_ENV += $(COMPONENT_INSTALL_ENV.$(BITS))
 COMPONENT_INSTALL_ARGS += $(COMPONENT_INSTALL_ARGS.$(BITS))
+
+# Rewrite absolute source-code paths into relative for ccache, so that any
+# workspace with a shared CCACHE_DIR can benefit when compiling a component
+ifneq ($(strip $(CCACHE)),)
+COMPONENT_BUILD_ENV += CCACHE_BASEDIR="$(BUILD_DIR_$(BITS))"
+COMPONENT_INSTALL_ENV += CCACHE_BASEDIR="$(BUILD_DIR_$(BITS))"
+COMPONENT_TEST_ENV += CCACHE_BASEDIR="$(BUILD_DIR_$(BITS))"
+endif
 
 # declare these phony so that we avoid filesystem conflicts.
 .PHONY:	prep build install publish test clean clobber parfait

@@ -81,6 +81,12 @@ CONFIGURE_ENV += FCFLAGS="$(FCFLAGS)"
 CONFIGURE_ENV += LDFLAGS="$(LDFLAGS)"
 CONFIGURE_ENV += PKG_CONFIG_PATH="$(PKG_CONFIG_PATH)"
 
+# Rewrite absolute source-code paths into relative for ccache, so that any
+# workspace with a shared CCACHE_DIR can benefit when compiling a component
+ifneq ($(strip $(CCACHE)),)
+CONFIGURE_ENV += CCACHE_BASEDIR="$(BUILD_DIR_$(BITS))"
+endif
+
 CONFIGURE_DEFAULT_DIRS?=yes
 
 CONFIGURE_OPTIONS += CC="$(CC)"

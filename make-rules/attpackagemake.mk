@@ -64,6 +64,12 @@ COMPONENT_TEST_ENV = $(COMPONENT_BUILD_ENV)
 COMPONENT_INSTALL_ARGS = HOSTTYPE="$(HOSTTYPE$(BITS))"
 COMPONENT_TEST_ARGS = HOSTTYPE="$(HOSTTYPE$(BITS))"
 
+# Rewrite absolute source-code paths into relative for ccache, so that any
+# workspace with a shared CCACHE_DIR can benefit when compiling a component
+ifneq ($(strip $(CCACHE)),)
+COMPONENT_TEST_ENV += CCACHE_BASEDIR="$(BUILD_DIR_$(BITS))"
+endif
+
 # build the configured source
 $(BUILD_DIR)/%/.built:	$(SOURCE_DIR)/.prep
 	$(RM) -r $(@D) ; $(MKDIR) $(@D)
