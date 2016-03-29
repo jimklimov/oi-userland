@@ -133,6 +133,7 @@ disabled by default. See below for hints how to enable and optionally configure 
   instrument the compilation-wrapper scripts in `tools/ccache-wrap` directory
   (then `ccache -p` can be helpful to inspect actual parsing of configuration),
   and/or use `export CCACHE_LOGFILE=/tmp/ccache.log` to trace its activities.
+* You can also use `DEBUG_USERLAND_CCACHE=true` to automate such inspection.
 * You can dedicate a cache directory different from the default `$HOME/.ccache`
   for example with `export CCACHE_DIR=/tmp/ccache-dir; mkdir -p $CCACHE_DIR`.
 * Troubleshooting: If no files appear in the cache, verify permissions and disk

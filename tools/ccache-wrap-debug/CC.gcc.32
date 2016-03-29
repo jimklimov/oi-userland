@@ -1,0 +1,5 @@
+#!/bin/sh -x
+unset CCACHE_DISABLE
+set | grep CCACHE >&2
+${CCACHE} -p >&2
+${CCACHE} ${CC_gcc_32} "$@"

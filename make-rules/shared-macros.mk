@@ -417,7 +417,12 @@ FC.gcc.64 =	$(GCC_ROOT)/bin/gfortran
 
 ifneq ($(strip $(CCACHE)),)
 
+ifeq ($(strip $(DEBUG_USERLAND_CCACHE)),true)
+CCACHE_WRAP_ROOT   =	$(WS_TOOLS)/ccache-wrap-debug
+else
 CCACHE_WRAP_ROOT   =	$(WS_TOOLS)/ccache-wrap
+endif
+
 export CC_gcc_32  :=	$(CC.gcc.32)
 export CC_gcc_64  :=	$(CC.gcc.64)
 export CXX_gcc_32 :=	$(CXX.gcc.32)
