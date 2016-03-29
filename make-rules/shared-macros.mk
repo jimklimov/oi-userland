@@ -355,7 +355,28 @@ export PARFAIT_NATIVEGXX=$(GCC_ROOT)/bin/g++
 # Review `man ccache` for optional configuration tuning, like cache size etc.
 # For production builds or suspected errors you can disable this feature by
 # setting CCACHE_DISABLE=true (as an environment or makefile variable value).
-export CCACHE := $(shell if test -n "$(CCACHE)" ; then echo "$(CCACHE)"; else test x"$${CCACHE_DISABLE-}" = xtrue -o x"$(CCACHE_DISABLE)" = xtrue || for F in "$$CCACHE" `which ccache 2>/dev/null | egrep '^/'` /usr/bin/ccache; do test -x "$$F" && echo "$$F" && echo "USING CCACHE FOR OI-USERLAND: $$F" >&2 && break; done; fi)
+export CCACHE := $(shell \
+    if test -n "$(CCACHE)" ; then \
+        echo "$(CCACHE)"; \
+    else \
+        if test x"$${CCACHE_DISABLE-}" = xtrue -o x"$(CCACHE_DISABLE)" = xtrue ; then \
+                echo "NOT USING CCACHE FOR OI-USERLAND because explicitly disabled" >&2 ; \
+        else \
+            for F in \
+                "$$CCACHE" \
+                `which ccache 2>/dev/null | egrep '^/'` \
+                /usr/bin/ccache \
+            ; do if test -n "$$F" && test -x "$$F" ; then \
+                    echo "$$F" ; \
+                    echo "USING CCACHE FOR OI-USERLAND: $$F" >&2 ; \
+                    break; \
+                fi; \
+            done; \
+            if test -z "$(CCACHE)" ; then \
+                echo "NOT USING CCACHE FOR OI-USERLAND because not found" >&2 ; \
+            fi; \
+        fi; \
+    fi)
 
 GCC_ROOT =	/usr/gcc/4.9
 
