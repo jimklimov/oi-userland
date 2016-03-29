@@ -269,8 +269,8 @@ link path=usr/share/man/man3/zmq_strerror.3 \
     target=../../../share/zeromq$(COMPONENT_VERSION_ABI)/share/man/man3/zmq_strerror.3 \
     mediator=zeromq mediator-version=$(COMPONENT_VERSION_ABI)
 
-link path=usr/share/man/man7/zmq_term.3 \
-    target=../../../share/zeromq$(COMPONENT_VERSION_ABI)/share/man/man7/zmq_term.3 \
+link path=usr/share/man/man3/zmq_term.3 \
+    target=../../../share/zeromq$(COMPONENT_VERSION_ABI)/share/man/man3/zmq_term.3 \
     mediator=zeromq mediator-version=$(COMPONENT_VERSION_ABI)
 
 link path=usr/share/man/man3/zmq_unbind.3 \
