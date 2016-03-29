@@ -52,6 +52,8 @@ CFLAGS			+= -DSQLITE_ENABLE_STAT2
 
 CONFIGURE_SCRIPT=       $(SOURCE_DIR)/tea/configure
 
+CONFIGURE_ENV	+= CC="$(CC)"
+
 CONFIGURE_OPTIONS	+= --enable-shared
 CONFIGURE_OPTIONS.32	+= --with-tcl="/usr/lib"
 CONFIGURE_OPTIONS.64	+= --with-tcl="/usr/lib/$(MACH64)"
