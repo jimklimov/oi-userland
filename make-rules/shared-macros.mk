@@ -356,6 +356,8 @@ export PARFAIT_NATIVEGXX=$(GCC_ROOT)/bin/g++
 # For production builds or suspected errors you can disable this feature by
 # setting CCACHE_DISABLE=true (as an environment or makefile variable value).
 # In fact, if you want to use this feature, you must set CCACHE_DISABLE=false
+# Still, absence of ccache in PATH is not considered a fatal error since the
+# build would just proceed well with original compiler.
 export CCACHE := $(shell \
     if test -n "$(CCACHE)" ; then \
         echo "$(CCACHE)"; \
@@ -371,12 +373,10 @@ export CCACHE := $(shell \
                 ; do if test -n "$$F" && test -x "$$F" ; then \
                         echo "$$F" ; \
                         echo "USING CCACHE FOR OI-USERLAND: $$F" >&2 ; \
-                        break; \
+                        exit 0; \
                     fi; \
                 done; \
-                if test -z "$(CCACHE)" ; then \
-                    echo "NOT USING CCACHE FOR OI-USERLAND because not found" >&2 ; \
-                fi; \
+                echo "NOT USING CCACHE FOR OI-USERLAND because not found" >&2 ; \
             fi; \
         fi; \
     fi)
