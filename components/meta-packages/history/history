@@ -252,9 +252,11 @@ SUNWlftp@3.7.15,5.11-0.133 network/ftp/lftp@3.7.15-0.133
 SUNWlibcompizconfig@0.5.11,5.11-2015.0.2.0
 SUNWlibconfuse@2.6,5.11-0.133 library/libconfuse@2.6-0.133
 SUNWlibevent@1.3.5,5.11-0.133 library/libevent@1.3.5-0.133
+SUNWlibm@0.5.11,5.11-2015.0.3.0
 SUNWlibmcrypt@2.5.8,5.11-0.133 system/library/security/libmcrypt@2.5.8-0.133
 SUNWlibmemcached@0.16,5.11-0.133 library/libmemcached@0.16-0.133
 SUNWlibmng@1.0.10,5.11-0.133 library/graphics/libmng@1.0.10-0.133
+SUNWlibms@0.5.11,5.11-2015.0.3.0
 SUNWlibnet@1.1.2.1,5.11-0.133 system/library/libnet@1.1.2.1-0.133
 SUNWlibopenusb@1.0.1,5.11-0.133 system/library/usb/openusb@1.0.1-0.133
 SUNWlibpcap@1.0.0,5.11-0.133 system/library/libpcap@1.0.0-0.133
@@ -314,7 +316,7 @@ SUNWntp@4.2.5.172,5.11-0.133 service/network/ntp@4.2.5.172-0.133
 SUNWopenexr@1.6.1,5.11-0.133 library/openexr@1.6.1-0.133
 SUNWopenldap@2.4.11,5.11-0.133 library/openldap@2.4.11-0.133
 SUNWopensolaris-welcome@0.5.11,5.11-0.133 release/openindiana-welcome@0.5.11,5.11-0.148
-SUNWopenssl-fips-140@1.2,5.11-0.133 library/security/openssl/openssl-fips-140@1.2-0.133
+SUNWopenssl-fips-140@1.2,5.11-0.133
 SUNWopenssl@0.9.8.12,5.11-0.133 library/security/openssl@0.9.8.12-0.133
 SUNWp7zip@4.55,5.11-0.133 compress/p7zip@4.55-0.133
 SUNWpampkcs11@0.6.0,5.11-0.133 library/security/pam/module/pam-pkcs11@0.6.0-0.133
@@ -579,9 +581,9 @@ gnome/trusted/login-label-selector@0.6.5,5.11-2015.0.0.0
 gnome/trusted/selection-manager@0.6.2,5.11-2015.0.0.0
 gnome/trusted/trusted-stripe@0.6.8,5.11-2015.0.0.0
 gnome/trusted/xagent@0.5.11,5.11-2015.0.0.0
-group/feature/amp@0.5.11,5.11-2015.0.2.0
-group/feature/developer-gnu@0.5.11,5.11-2015.0.2.0
-group/feature/multi-user-desktop@0.5.11,5.11-2015.0.2.0
+group/feature/amp@0.5.11,5.11-2015.0.2.5166 metapackages/amp@0.5.11,5.11-2014.0.1.0
+group/feature/developer-gnu@0.5.11,5.11-2015.0.2.5166 metapackages/build-essential@1.0,5.11-2015.0.2.2
+group/feature/multi-user-desktop@0.5.11,5.11-2015.0.2.5166 metapackages/gui-install@0.1,5.11-2015.0.2.0
 group/feature/trusted-desktop@0.5.11,5.11-2015.0.2.0
 image/editor/gimp/gimp-help@2.4.2,5.11-2015.0.1.1
 image/editor/gimp/locale/cs@0.5.11,5.11-2015.0.2.0
@@ -732,6 +734,7 @@ library/python-2/pyyaml-24@0.5.11,5.11-2015.0.2.0
 library/python-2/setuptools-24@0.5.11,5.11-2015.0.2.0
 library/python-2/simplejson-24@0.5.11,5.11-2015.0.2.0
 library/python-2/simplejson-devel-26@0.5.11,5.11-0.135 library/python-2/simplejson-26@0.5.11-0.151.1.8
+library/security/openssl/openssl-fips-140@1.2,5.11-2015.0.2.0
 locale/ar-extra@0.5.11,5.11-2015.0.2.0
 mail/evolution/connector/evolution-exchange@2.30.3,5.11-2014.1.3.0
 mail/thunderbird/locale/de@0.5.11,5.11-2015.0.2.0
