@@ -12,7 +12,7 @@
 # Copyright 2016 Jim Klimov <jimklimov@gmail.com>
 #
 
-include ../../../make-rules/shared-macros.mk
+include ../../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME=		data
 COMPONENT_VERSION=	2.5
@@ -30,9 +30,9 @@ COMPONENT_CLASSIFICATION="Applications/Games"
 COMPONENT_ARCHIVE_URL= \
 	http://sourceforge.net/projects/ufoai/files/UFO_AI%202.x/$(COMPONENT_VERSION)/$(COMPONENT_ARCHIVE)
 
-include $(WS_TOP)/make-rules/prep.mk
-include $(WS_TOP)/make-rules/configure.mk
-include $(WS_TOP)/make-rules/ips.mk
+include $(WS_MAKE_RULES)/prep.mk
+include $(WS_MAKE_RULES)/configure.mk
+include $(WS_MAKE_RULES)/ips.mk
 
 build: $(BUILD_32_and_64)
 
@@ -42,4 +42,4 @@ test: $(TEST_32_and_64)
 
 BUILD_PKG_DEPENDENCIES =	$(BUILD_TOOLS)
 
-include $(WS_TOP)/make-rules/depend.mk
+include $(WS_MAKE_RULES)/depend.mk

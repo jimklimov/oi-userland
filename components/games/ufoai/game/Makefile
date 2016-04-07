@@ -12,7 +12,7 @@
 # Copyright 2016 Jim Klimov <jimklimov@gmail.com>
 #
 
-include ../../../make-rules/shared-macros.mk
+include ../../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME=		source
 COMPONENT_VERSION=	2.5
@@ -32,9 +32,9 @@ COMPONENT_ARCHIVE_URL= \
 
 PATH=/usr/gnu/bin:/usr/bin
 
-include $(WS_TOP)/make-rules/prep.mk
-include $(WS_TOP)/make-rules/justmake.mk
-include $(WS_TOP)/make-rules/ips.mk
+include $(WS_MAKE_RULES)/prep.mk
+include $(WS_MAKE_RULES)/justmake.mk
+include $(WS_MAKE_RULES)/ips.mk
 
 COMPONENT_PRE_BUILD_ACTION = \
 	( cd $(@D) && ./configure --enable-release )
@@ -49,4 +49,4 @@ test: $(TEST_32_and_64)
 
 BUILD_PKG_DEPENDENCIES =	$(BUILD_TOOLS)
 
-include $(WS_TOP)/make-rules/depend.mk
+include $(WS_MAKE_RULES)/depend.mk

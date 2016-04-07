@@ -33,42 +33,42 @@ SUBS = game
 
 prep::
 	for SUB in $(SUBS) ; do \
-	  ( cd "$(WS_TOP)/components/$(COMPONENT_NAME)/$$SUB" && gmake $@ ) || exit $$?; \
+	  ( cd "$(WS_TOP)/components/games/$(COMPONENT_NAME)/$$SUB" && gmake $@ ) || exit $$?; \
 	done ; exit 0
 
 clean::
 	for SUB in $(SUBS) ; do \
-	  ( cd "$(WS_TOP)/components/$(COMPONENT_NAME)/$$SUB" && gmake $@ ) || exit $$?; \
+	  ( cd "$(WS_TOP)/components/games/$(COMPONENT_NAME)/$$SUB" && gmake $@ ) || exit $$?; \
 	done ; exit 0
 
 clobber::
 	for SUB in $(SUBS) ; do \
-	  ( cd "$(WS_TOP)/components/$(COMPONENT_NAME)/$$SUB" && gmake $@ ) || exit $$?; \
+	  ( cd "$(WS_TOP)/components/games/$(COMPONENT_NAME)/$$SUB" && gmake $@ ) || exit $$?; \
 	done ; exit 0
 
 parfait:
 	for SUB in $(SUBS) ; do \
-	  ( cd "$(WS_TOP)/components/$(COMPONENT_NAME)/$$SUB" && gmake $@ ) || exit $$?; \
+	  ( cd "$(WS_TOP)/components/games/$(COMPONENT_NAME)/$$SUB" && gmake $@ ) || exit $$?; \
 	done ; exit 0
 
 build:
 	for SUB in $(SUBS) ; do \
-	  ( cd "$(WS_TOP)/components/$(COMPONENT_NAME)/$$SUB" && gmake $@ ) || exit $$?; \
+	  ( cd "$(WS_TOP)/components/games/$(COMPONENT_NAME)/$$SUB" && gmake $@ ) || exit $$?; \
 	done ; exit 0
 
 install:
 	for SUB in $(SUBS) ; do \
-	  ( cd "$(WS_TOP)/components/$(COMPONENT_NAME)/$$SUB" && gmake $@ ) || exit $$?; \
+	  ( cd "$(WS_TOP)/components/games/$(COMPONENT_NAME)/$$SUB" && gmake $@ ) || exit $$?; \
 	done ; exit 0
 
 test:
 	for SUB in $(SUBS) ; do \
-	  ( cd "$(WS_TOP)/components/$(COMPONENT_NAME)/$$SUB" && gmake $@ ) || exit $$?; \
+	  ( cd "$(WS_TOP)/components/games/$(COMPONENT_NAME)/$$SUB" && gmake $@ ) || exit $$?; \
 	done ; exit 0
 
 publish: build install $(PUBLISH_STAMP)
 	for SUB in $(SUBS) ; do \
-	  ( cd "$(WS_TOP)/components/$(COMPONENT_NAME)/$$SUB" && gmake $@ ) || exit $$?; \
+	  ( cd "$(WS_TOP)/components/games/$(COMPONENT_NAME)/$$SUB" && gmake $@ ) || exit $$?; \
 	done ; exit 0
 
 BUILD_PKG_DEPENDENCIES =	$(BUILD_TOOLS)
