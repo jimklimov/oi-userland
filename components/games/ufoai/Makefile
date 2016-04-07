@@ -12,7 +12,7 @@
 # Copyright 2016 Jim Klimov <jimklimov@gmail.com>
 #
 
-include ../../make-rules/shared-macros.mk
+include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME=		ufoai
 COMPONENT_VERSION=	2.5
@@ -24,8 +24,8 @@ COMPONENT_LICENSE_FILE=	$(COMPONENT_NAME).license
 COMPONENT_SUMMARY=	UFO:AlienInvasion is an open source turn-based game inspired by classic titles
 COMPONENT_CLASSIFICATION="Applications/Games"
 
-include $(WS_TOP)/make-rules/prep.mk
-include $(WS_TOP)/make-rules/ips.mk
+include $(WS_MAKE_RULES)/prep.mk
+include $(WS_MAKE_RULES)/ips.mk
 
 SUBS = game
 #SUBS += mappack
@@ -73,4 +73,4 @@ publish: build install $(PUBLISH_STAMP)
 
 BUILD_PKG_DEPENDENCIES =	$(BUILD_TOOLS)
 
-include $(WS_TOP)/make-rules/depend.mk
+include $(WS_MAKE_RULES)/depend.mk
