@@ -98,6 +98,8 @@ BASS_O_MATIC =	$(WS_TOOLS)/bass-o-matic
 
 CLONEY =	$(WS_TOOLS)/cloney
 
+CHECK_OPENGL_VBOX =	( MACH64=$(MACH64) $(WS_TOOLS)/check-ogl.sh )
+
 CONFIG_SHELL =	/bin/bash
 
 PKG_REPO =	file:$(WS_REPO)

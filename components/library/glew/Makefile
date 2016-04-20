@@ -48,7 +48,7 @@ include $(WS_TOP)/make-rules/justmake.mk
 include $(WS_TOP)/make-rules/ips.mk
 
 COMPONENT_PREP_ACTION = \
-	MACH64=$(MACH64) $(COMPONENT_DIR)/files/check-ogl.sh && \
+	$(CHECK_OPENGL_VBOX) && \
 	( cd "$(SOURCE_DIR)/config" && cp -pf "$(COMPONENT_DIR)/files/Makefile.illumos-gcc" ./ )
 
 CFLAGS +=	-I$(SOURCE_DIR)/include
