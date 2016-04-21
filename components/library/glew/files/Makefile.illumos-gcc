@@ -2,6 +2,12 @@
 # Generally this is like "solaris-gcc" (hence the include to be future-proof)
 
 include config/Makefile.solaris-gcc
+
+# Override this definition from Makefile.solaris-gcc so our LDFLAGS can
+# point to specific MESA libGL (not the generic OS heap which VirtualBox
+# Guest Additions then breaks with its symlinks):
+LDFLAGS.EXTRA =
+
 LDFLAGS.GL += -lm
 
 # Allow additions from the builder
