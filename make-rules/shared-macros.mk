@@ -21,7 +21,14 @@
 # Copyright (c) 2010, 2014, Oracle and/or its affiliates. All rights reserved.
 #
 
-PATH=/usr/bin:/usr/gnu/bin
+# For some recipes it is important to try correct-bitness dirs first
+# e.g. when looking for pkg-config scripts matching the build bitness.
+# FYI: Current default is $(DEFAULT_PATH_USRFIRST.$(BITS)) defined below
+PATH=$(DEFAULT_PATH)
+# Recipes that want to redefine the PATH can append the DEFAULT_PATH* vars
+# to the value they want to set (as higher-priority, usually), like this:
+#PATH=/path/i/want:$(DEFAULT_PATH_USRFIRST.$(BITS))
+#PATH=$(DEFAULT_PATH_GNUFIRST)
 
 # The location of an internal mirror of community source archives that we build
 # in this gate.  This mirror has been seeded to include "custom" source archives
@@ -255,6 +262,19 @@ PROTOGNUSBIN.32 =	$(PROTOGNUSBIN)
 PROTOGNUSBIN.64 =	$(PROTOGNUSBIN64)
 PROTOGNULIB.32 =	$(PROTOGNULIB)
 PROTOGNULIB.64 =	$(PROTOGNULIB64)
+
+# Used to set or suffix default PATH in some recipes
+# We set these values here, when component paths and BITS are already defined
+DEFAULT_PATH_USRFIRST.32=$(USRBINDIR32):$(USRBINDIR):$(GNUBIN32):$(GNUBIN)
+DEFAULT_PATH_USRFIRST.64=$(USRBINDIR64):$(USRBINDIR):$(GNUBIN64):$(GNUBIN)
+DEFAULT_PATH_USRFIRST = $(DEFAULT_PATH_USRFIRST.$(BITS))
+DEFAULT_PATH_GNUFIRST.32=$(USRBINDIR32):$(USRBINDIR):$(GNUBIN32):$(GNUBIN)
+DEFAULT_PATH_GNUFIRST.64=$(USRBINDIR64):$(USRBINDIR):$(GNUBIN64):$(GNUBIN)
+DEFAULT_PATH_GNUFIRST = $(DEFAULT_PATH_GNUFIRST.$(BITS))
+# The default bitness-dependent value of PATH as set above
+DEFAULT_PATH.32 = $(DEFAULT_PATH_USRFIRST.32)
+DEFAULT_PATH.64 = $(DEFAULT_PATH_USRFIRST.64)
+DEFAULT_PATH = $(DEFAULT_PATH.$(BITS))
 
 # work around _TIME, _DATE, embedded date chatter in component builds
 # to use, set TIME_CONSTANT in the component Makefile and add $(CONSTANT_TIME)
