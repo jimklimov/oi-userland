@@ -18,41 +18,33 @@
 #
 # CDDL HEADER END
 #
-# Copyright (c) 2011, 2012, Oracle and/or its affiliates. All rights reserved.
-# Copyright (c) 2016, Adam Stevko. All rights reserved.
+
+#
+# Copyright (c) 2011, 2013, Oracle and/or its affiliates. All rights reserved.
+# Copyright (c) 2016 Adam Stevko. All rights reserved.
 #
 
 include ../../../make-rules/shared-macros.mk
 
-COMPONENT_NAME=		screen
-COMPONENT_VERSION=	4.3.1
-COMPONENT_REVISION=	1
-COMPONENT_SUMMARY=	GNU Screen terminal multiplexer
-COMPONENT_PROJECT_URL=	http://www.gnu.org/software/screen/
-COMPONENT_FMRI=		terminal/screen
+COMPONENT_NAME=		iperf
+COMPONENT_VERSION=	3.1.2
+COMPONENT_SUMMARY=	iperf - tool for measuring maximum TCP and UDP bandwidth performance
+COMPONENT_PROJECT_URL=	https://iperf.fr
+COMPONENT_FMRI=		benchmark/iperf3
 COMPONENT_CLASSIFICATION= Applications/System Utilities
 COMPONENT_SRC=		$(COMPONENT_NAME)-$(COMPONENT_VERSION)
 COMPONENT_ARCHIVE=	$(COMPONENT_SRC).tar.gz
-COMPONENT_ARCHIVE_HASH=	sha256:fa4049f8aee283de62e283d427f2cfd35d6c369b40f7f45f947dbfd915699d63
-COMPONENT_ARCHIVE_URL=	http://ftp.gnu.org/gnu/screen/$(COMPONENT_ARCHIVE)
-COMPONENT_LICENSE= 	GPLv2
+COMPONENT_ARCHIVE_URL=	https://iperf.fr/download/source/iperf-$(COMPONENT_VERSION)-source.tar.gz
+COMPONENT_ARCHIVE_HASH=	sha256:48b5c783bb4a9c44f2bdcfe52c5d45b77ab1e1c82de3d0131f692457950811f9
+COMPONENT_LICENSE=	BSD-like
 COMPONENT_LICENSE_FILE= $(COMPONENT_NAME).license
 
 include $(WS_MAKE_RULES)/prep.mk
 include $(WS_MAKE_RULES)/configure.mk
 include $(WS_MAKE_RULES)/ips.mk
 
-CONFIGURE_OPTIONS +=	--enable-colors256
-CONFIGURE_OPTIONS +=	--with-sys-screenrc=/etc/screenrc
-CONFIGURE_OPTIONS +=	--disable-socket-dir
-CONFIGURE_OPTIONS +=	--infodir=$(CONFIGURE_INFODIR)
-
-PROTOTERMINFODIR=$(PROTOUSRSHAREDIR)/lib/terminfo
-
-$(PROTOTERMINFODIR):
-	$(MKDIR) $@
-
-$(INSTALL_32):	$(PROTOTERMINFODIR)
+COMPONENT_PRE_CONFIGURE_ACTION = \
+	($(CLONEY) $(SOURCE_DIR) $(@D))
 
 build:		$(BUILD_32)
 
@@ -62,6 +54,6 @@ test:		$(NO_TESTS)
 
 BUILD_PKG_DEPENDENCIES =	$(BUILD_TOOLS)
 
-include $(WS_TOP)/make-rules/depend.mk
+include $(WS_MAKE_RULES)/depend.mk
 
 REQUIRED_PACKAGES += system/library
