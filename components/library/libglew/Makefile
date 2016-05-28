@@ -26,7 +26,7 @@
 
 include ../../../make-rules/shared-macros.mk
 
-COMPONENT_NAME=		glew
+COMPONENT_NAME=		libglew
 COMPONENT_VERSION=	1.13.0
 COMPONENT_SUMMARY=	The OpenGL Extension Wrangler Library
 COMPONENT_CLASSIFICATION=System/Libraries
@@ -43,17 +43,25 @@ COMPONENT_ARCHIVE_URL= \
 
 PATH=/usr/gnu/bin:/usr/bin
 
-include $(WS_TOP)/make-rules/prep.mk
-include $(WS_TOP)/make-rules/justmake.mk
-include $(WS_TOP)/make-rules/ips.mk
+include $(WS_MAKE_RULES)/prep.mk
+include $(WS_MAKE_RULES)/justmake.mk
+include $(WS_MAKE_RULES)/ips.mk
 
 COMPONENT_PREP_ACTION = \
     ( if ldd "/usr/openwin/lib/libGL.so.1" "/usr/openwin/lib/64/libGL.so.1" 2>/dev/null | \
             grep "VBox" ; then \
-        echo "FATAL: Build this in a clean environment (needs basic system OpenGL libs)!"; \
+        echo "WARN: Build this in a clean environment (needs basic system OpenGL libs)!"; \
         echo "HINT: Review definition of symlinks which VirtualBox installer tends to overwrite:"; \
         echo "      /usr/lib/mesa/libGL.so.1 and /usr/lib/mesa/$(MACH64)/libGL.so.1  :"; \
         ls -dal /usr/lib/mesa/libGL.so.1 /usr/lib/mesa/$(MACH64)/libGL.so.1; \
+        exit 0; \
+      fi; exit 0 ) >&2 && \
+    ( if ldd "/usr/openwin/lib/libGL.so" "/usr/openwin/lib/64/libGL.so" 2>/dev/null | \
+            grep "VBox" ; then \
+        echo "FATAL: Build this in a clean environment (needs basic system OpenGL libs)!"; \
+        echo "HINT: Review definition of symlinks which VirtualBox installer tends to overwrite:"; \
+        echo "      /usr/lib/mesa/libGL.so and /usr/lib/mesa/$(MACH64)/libGL.so  :"; \
+        ls -dal /usr/lib/mesa/libGL.so /usr/lib/mesa/$(MACH64)/libGL.so; \
         exit 1; \
       fi; exit 0 ) >&2 && \
     ( cd "$(SOURCE_DIR)/config" && cp -pf "$(COMPONENT_DIR)/files/Makefile.illumos-gcc" ./ )
@@ -69,6 +77,13 @@ CFLAGS +=	-D_FILE_OFFSET_BITS=64
 
 LIBDIR.32="$(USRLIBDIR)"
 LIBDIR.64="$(USRLIBDIR64)"
+
+MESALIBDIR.32="$(USRDIR)/X11/lib/mesa"
+MESALIBDIR.64="$(MESALIBDIR.32)/$(MACH64)"
+# Work around VirtualBox Guest Additions hacking into Mesa namespace
+# Note: This is needed to avoid linking with .so.1 name that may be botched
+# on the end-user machine
+LDFLAGS +=	$(MESALIBDIR.$(BITS))/libGL.so
 
 COMPONENT_COMMON_ARGS  =	SYSTEM=illumos-gcc
 COMPONENT_COMMON_ARGS +=	BINDIR="$(USRBINDIR$(BITS))"
@@ -110,6 +125,6 @@ install: $(INSTALL_32_and_64)
 
 test: $(TEST_32_and_64)
 
-BUILD_PKG_DEPENDENCIES =	$(BUILD_TOOLS)
-
-include $(WS_TOP)/make-rules/depend.mk
+REQUIRED_PACKAGES += SUNWcs
+REQUIRED_PACKAGES += system/library
+REQUIRED_PACKAGES += x11/library/libx11
