@@ -78,7 +78,9 @@ CONFIGURE_OPTIONS +=	--disable-rpath
 CONFIGURE_OPTIONS +=	--with-x
 CONFIGURE_OPTIONS +=	--with-pic
 
-$(BUILD_DIR_32_1)/.configured:	CONFIGURE_OPTIONS+=--with-vpx
+# Enable this for the new version explicitly (to require installation of pkg)
+$(BUILD_DIR_32)/.configured:	CONFIGURE_OPTIONS+=--with-vpx
+$(BUILD_DIR_64)/.configured:	CONFIGURE_OPTIONS+=--with-vpx
 
 COMPONENT_PREP_ACTION =	(cd $(@D) ; autoreconf -if)
 
