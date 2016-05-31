@@ -42,6 +42,7 @@ TARGET.32 = x86-solaris-gcc
 TARGET.64 = x86_64-solaris-gcc
 
 CXXFLAGS += -std=gnu++11
+LDFLAGS += -Wl,-R
 
 build: $(BUILD_32_and_64)
 
@@ -67,14 +68,14 @@ ELFEDIT_64 = \
 
 $(BUILD_DIR_32)/.installed: $(BUILD_DIR_32)/.built
 	$(MKDIR) $(PROTOUSRBINDIR) $(PROTOUSRLIBDIR)
-	cd $(BUILD_DIR_32) && $(ELFEDIT_32) && \
+	cd $(BUILD_DIR_32) && \
 		$(CP) $(BUILT_LIBS) $(PROTOUSRLIBDIR) && \
 		$(CP) $(BUILT_BINS) $(PROTOUSRBINDIR)
 	$(TOUCH) $@
 
 $(BUILD_DIR_64)/.installed: $(BUILD_DIR_64)/.built
 	$(MKDIR) $(PROTOUSRBINDIR64) $(PROTOUSRLIBDIR64)
-	cd $(BUILD_DIR_64) && $(ELFEDIT_64) && \
+	cd $(BUILD_DIR_64) && \
 		$(CP) $(BUILT_LIBS) $(PROTOUSRLIBDIR64) && \
 		$(CP) $(BUILT_BINS) $(PROTOUSRBINDIR64)
 	$(TOUCH) $@
