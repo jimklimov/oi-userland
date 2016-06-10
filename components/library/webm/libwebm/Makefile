@@ -42,7 +42,11 @@ TARGET.32 = x86-solaris-gcc
 TARGET.64 = x86_64-solaris-gcc
 
 CXXFLAGS += -std=gnu++11
-LDFLAGS += -Wl,-R
+
+USRLIBDIR.32=$(USRLIBDIR)
+USRLIBDIR.64=$(USRLIBDIR64)
+
+COMPONENT_POST_CMAKE_ACTION = ( cd $(BUILD_DIR_$(BITS))/CMakeFiles && for F in *.dir/link.txt ; do $(GSED) -e 's| -Wl,-R$(BUILD_DIR_$(BITS))| -Wl,-R$(USRLIBDIR.$(BITS))|' -i $$F ; done )
 
 build: $(BUILD_32_and_64)
 
@@ -50,21 +54,6 @@ install: $(INSTALL_32_and_64)
 
 BUILT_LIBS = libwebm.so
 BUILT_BINS = sample sample_muxer vttdemux webm2pes
-ELFEDIT_32 = \
-		for F in $(BUILT_LIBS) $(BUILT_BINS) ; do \
-			/usr/bin/elfedit -e "dyn:rpath ''" $$F && \
-			/usr/bin/elfedit -e "dyn:runpath ''" $$F && \
-			/usr/bin/elfedit -e 'dyn:value -s  RPATH '"$(USRLIBDIR)" $$F && \
-			/usr/bin/elfedit -e 'dyn:value -s  RUNPATH '"$(USRLIBDIR)" $$F ; \
-		done
-
-ELFEDIT_64 = \
-		for F in $(BUILT_LIBS) $(BUILT_BINS) ; do \
-			/usr/bin/elfedit -e "dyn:rpath ''" $$F && \
-			/usr/bin/elfedit -e "dyn:runpath ''" $$F && \
-			/usr/bin/elfedit -e 'dyn:value -s  RPATH '"$(USRLIBDIR64)" $$F && \
-			/usr/bin/elfedit -e 'dyn:value -s  RUNPATH '"$(USRLIBDIR64)" $$F ; \
-		done
 
 $(BUILD_DIR_32)/.installed: $(BUILD_DIR_32)/.built
 	$(MKDIR) $(PROTOUSRBINDIR) $(PROTOUSRLIBDIR)
