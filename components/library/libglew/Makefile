@@ -30,7 +30,7 @@ COMPONENT_NAME=		glew
 COMPONENT_VERSION=	1.13.0
 COMPONENT_SUMMARY=	The OpenGL Extension Wrangler Library
 COMPONENT_CLASSIFICATION=System/Libraries
-COMPONENT_FMRI=		library/$(COMPONENT_NAME)
+COMPONENT_FMRI=		x11/library/lib$(COMPONENT_NAME)
 COMPONENT_LICENSE=	GLEW,Mesa3D,Khronos
 COMPONENT_LICENSE_FILE=	LICENSE.txt
 COMPONENT_PROJECT_URL=	http://$(COMPONENT_NAME).sourceforge.net/
@@ -43,9 +43,9 @@ COMPONENT_ARCHIVE_URL= \
 
 PATH=/usr/gnu/bin:/usr/bin
 
-include $(WS_TOP)/make-rules/prep.mk
-include $(WS_TOP)/make-rules/justmake.mk
-include $(WS_TOP)/make-rules/ips.mk
+include $(WS_MAKE_RULES)/prep.mk
+include $(WS_MAKE_RULES)/justmake.mk
+include $(WS_MAKE_RULES)/ips.mk
 
 COMPONENT_PREP_ACTION = \
 	$(CHECK_OPENGL_VBOX) && \
@@ -105,6 +105,6 @@ install: $(INSTALL_32_and_64)
 
 test: $(TEST_32_and_64)
 
-BUILD_PKG_DEPENDENCIES =	$(BUILD_TOOLS)
-
-include $(WS_TOP)/make-rules/depend.mk
+REQUIRED_PACKAGES += SUNWcs
+REQUIRED_PACKAGES += system/library
+REQUIRED_PACKAGES += x11/library/libx11
