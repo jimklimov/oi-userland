@@ -30,7 +30,7 @@ COMPONENT_NAME=		glew
 COMPONENT_VERSION=	1.13.0
 COMPONENT_SUMMARY=	The OpenGL Extension Wrangler Library
 COMPONENT_CLASSIFICATION=System/Libraries
-COMPONENT_FMRI=		x11/library/lib$(COMPONENT_NAME)
+COMPONENT_FMRI=		library/$(COMPONENT_NAME)
 COMPONENT_LICENSE=	GLEW,Mesa3D,Khronos
 COMPONENT_LICENSE_FILE=	LICENSE.txt
 COMPONENT_PROJECT_URL=	http://$(COMPONENT_NAME).sourceforge.net/
@@ -43,42 +43,13 @@ COMPONENT_ARCHIVE_URL= \
 
 PATH=/usr/gnu/bin:/usr/bin
 
-include $(WS_MAKE_RULES)/prep.mk
-include $(WS_MAKE_RULES)/justmake.mk
-include $(WS_MAKE_RULES)/ips.mk
+include $(WS_TOP)/make-rules/prep.mk
+include $(WS_TOP)/make-rules/justmake.mk
+include $(WS_TOP)/make-rules/ips.mk
 
-MESALIBDIR.32=$(USRDIR)/lib/mesa
-MESALIBDIR.64=$(MESALIBDIR.32)/$(MACH64)
-ifndef USE_MESA_LIBGL
-CUSTOM.LDFLAGS.GL = -lGL
 COMPONENT_PREP_ACTION = \
-    @(echo "CHECKING libGL.so.1 for VBoxOGL contamination..."; \
-      if ldd "$(MESALIBDIR.32)/libGL.so.1" "$(MESALIBDIR.64)/libGL.so.1" 2>/dev/null | \
-            grep "VBox" ; then \
-        echo "WARN: Build this in a clean environment (needs basic system OpenGL libs)!"; \
-        echo "HINT: Review definition of symlinks which VirtualBox installer tends to overwrite:"; \
-        echo "      $(MESALIBDIR.32)/libGL.so.1 and $(MESALIBDIR.64)/libGL.so.1  :"; \
-        ls -dal $(MESALIBDIR.32)/libGL.so.1 $(MESALIBDIR.64)/libGL.so.1; \
-        exit 0; \
-      fi; exit 0 ) >&2 && \
-    ( echo "CHECKING libGL.so for VBoxOGL contamination..."; \
-      if ldd "$(MESALIBDIR.32)/libGL.so" "$(MESALIBDIR.64)/libGL.so" 2>/dev/null | \
-            grep "VBox" ; then \
-        echo "FATAL: Build this in a clean environment (needs basic system OpenGL libs)!"; \
-        echo "HINT: Review definition of symlinks which VirtualBox installer tends to overwrite:"; \
-        echo "      $(MESALIBDIR.32)/libGL.so and $(MESALIBDIR.64)/libGL.so  :"; \
-        ls -dal $(MESALIBDIR.32)/libGL.so $(MESALIBDIR.64)/libGL.so; \
-        exit 1; \
-      fi; exit 0 ) >&2 && \
-    ( cd "$(SOURCE_DIR)/config" && cp -pf "$(COMPONENT_DIR)/files/Makefile.illumos-gcc" ./ )
-else
-# Work around VirtualBox Guest Additions hacking into Mesa namespace
-# Note: This is needed to avoid linking with .so.1 name that may be botched
-# on the end-user machine
-CUSTOM.LDFLAGS.GL =	$(MESALIBDIR.$(BITS))/libGL.so.1.2.0
-COMPONENT_PREP_ACTION = \
-    ( cd "$(SOURCE_DIR)/config" && cp -pf "$(COMPONENT_DIR)/files/Makefile.illumos-gcc" ./ )
-endif
+	$(CHECK_OPENGL_VBOX) && \
+	( cd "$(SOURCE_DIR)/config" && cp -pf "$(COMPONENT_DIR)/files/Makefile.illumos-gcc" ./ )
 
 CFLAGS +=	-I$(SOURCE_DIR)/include
 CFLAGS +=	-D_FILE_OFFSET_BITS=64
@@ -91,6 +62,7 @@ CFLAGS +=	-D_FILE_OFFSET_BITS=64
 
 LIBDIR.32=$(USRLIBDIR)
 LIBDIR.64=$(USRLIBDIR64)
+LD=$(USRBINDIR)/ld
 
 COMPONENT_COMMON_ARGS  =	SYSTEM=illumos-gcc
 COMPONENT_COMMON_ARGS +=	BINDIR="$(USRBINDIR$(BITS))"
@@ -101,10 +73,10 @@ COMPONENT_COMMON_ARGS +=	GLEW_PREFIX="$(USRDIR)"
 COMPONENT_COMMON_ARGS +=	GLEW_DEST="$(USRDIR)"
 COMPONENT_COMMON_ARGS +=	CC="$(CC)"
 COMPONENT_COMMON_ARGS +=	CUSTOM.CFLAGS.EXTRA="$(CFLAGS)"
-COMPONENT_COMMON_ARGS +=	LD="$(CC)"
+COMPONENT_COMMON_ARGS +=	LD="$(LD)"
 COMPONENT_COMMON_ARGS +=	CUSTOM.LDFLAGS.EXTRA="$(LDFLAGS)"
 COMPONENT_COMMON_ARGS +=	CUSTOM.LDFLAGS.SO="$(LDFLAGS)"
-COMPONENT_COMMON_ARGS +=	CUSTOM.LDFLAGS.GL="$(CUSTOM.LDFLAGS.GL)"
+COMPONENT_COMMON_ARGS +=	CUSTOM.LDFLAGS.SO.MX="$(LDFLAGS)"
 COMPONENT_COMMON_ARGS +=	AR="$(AR)"
 COMPONENT_COMMON_ARGS +=	CUSTOM.ARFLAGS.EXTRA="$(ARFLAGS)"
 
@@ -118,7 +90,7 @@ COMPONENT_BUILD_TARGETS =	all
 COMPONENT_INSTALL_ARGS +=	$(COMPONENT_COMMON_ARGS)
 COMPONENT_INSTALL_TARGETS =	install.all
 
-ifdef DEBUG
+ifdef DEBUG_MAKE
 ### Trace the Make procedure (megabytes of text!)
  COMPONENT_BUILD_TARGETS +=	V=1 -d --trace
  COMPONENT_INSTALL_TARGETS +=	V=1 -d --trace
@@ -133,6 +105,6 @@ install: $(INSTALL_32_and_64)
 
 test: $(TEST_32_and_64)
 
-REQUIRED_PACKAGES += SUNWcs
-REQUIRED_PACKAGES += system/library
-REQUIRED_PACKAGES += x11/library/libx11
+BUILD_PKG_DEPENDENCIES =	$(BUILD_TOOLS)
+
+include $(WS_TOP)/make-rules/depend.mk
