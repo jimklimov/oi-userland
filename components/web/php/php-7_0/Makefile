@@ -14,10 +14,11 @@
 include ../../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME=		php
-COMPONENT_VERSION=	7.0.6
+COMPONENT_VERSION=	7.0.7
+COMPONENT_REVISION=	2
 COMPONENT_SRC=		$(COMPONENT_NAME)-$(COMPONENT_VERSION)
 COMPONENT_ARCHIVE=	$(COMPONENT_SRC).tar.xz
-COMPONENT_ARCHIVE_HASH=	sha256:1b237a9455e5476a425dbb9d99966bad68107747c601958cb9558a7fb49ab419
+COMPONENT_ARCHIVE_HASH=	sha256:9cc64a7459242c79c10e79d74feaf5bae3541f604966ceb600c3d2e8f5fe4794
 COMPONENT_ARCHIVE_URL=	http://uk1.php.net/get/$(COMPONENT_ARCHIVE)/from/this/mirror
 
 include $(WS_MAKE_RULES)/prep.mk
@@ -55,6 +56,7 @@ CONFIGURE_OPTIONS     +=	--sysconfdir=$(PHP_SYSCONFDIR)
 CONFIGURE_OPTIONS     +=	--datadir=$(PHP_DATADIR)
 CONFIGURE_OPTIONS     +=	--mandir=$(PHP_PREFIX)/share/man
 CONFIGURE_OPTIONS     +=	--localstatedir=$(PHP_DATADIR)
+CONFIGURE_OPTIONS     +=	--enable-maintainer-zts
 
 # SAPI modules
 CONFIGURE_OPTIONS.32  +=	--with-apxs2=$(AP_PREFIX)/bin/apxs
@@ -179,3 +181,26 @@ CONFIGURE_ENV +=	CPPFLAGS="$(CPPFLAGS)"
 build:		$(BUILD_32_and_64)
 
 install:	$(INSTALL_32_and_64)
+
+REQUIRED_PACKAGES += SUNWcs
+REQUIRED_PACKAGES += compress/bzip2
+REQUIRED_PACKAGES += image/library/libjpeg6
+REQUIRED_PACKAGES += image/library/libjpeg6-ijg
+REQUIRED_PACKAGES += image/library/libpng16
+REQUIRED_PACKAGES += library/icu
+REQUIRED_PACKAGES += library/libxml2
+REQUIRED_PACKAGES += library/libxslt
+REQUIRED_PACKAGES += library/openldap
+REQUIRED_PACKAGES += library/readline
+REQUIRED_PACKAGES += library/security/openssl
+REQUIRED_PACKAGES += library/uw-imap
+REQUIRED_PACKAGES += library/zlib
+REQUIRED_PACKAGES += system/library
+REQUIRED_PACKAGES += system/library/gcc-4-runtime
+REQUIRED_PACKAGES += system/library/math
+REQUIRED_PACKAGES += system/library/security/libmcrypt
+REQUIRED_PACKAGES += text/aspell
+REQUIRED_PACKAGES += text/tidy
+REQUIRED_PACKAGES += web/curl
+REQUIRED_PACKAGES += web/php-70/php-cli
+REQUIRED_PACKAGES += web/server/apache-22

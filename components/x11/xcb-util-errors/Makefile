@@ -10,7 +10,7 @@
 #
 
 #
-# Copyright 2015 Captain XNV
+# Copyright 2015 Aurelien Larcher
 #
 
 include ../../../make-rules/shared-macros.mk
@@ -49,3 +49,6 @@ BUILD_PKG_DEPENDENCIES = $(BUILD_TOOLS)
 
 include $(WS_TOP)/make-rules/depend.mk
 
+
+REQUIRED_PACKAGES += system/library
+REQUIRED_PACKAGES += x11/library/libxcb
