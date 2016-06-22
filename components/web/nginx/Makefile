@@ -15,13 +15,13 @@
 include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME=		nginx
-COMPONENT_VERSION=	1.8.1
+COMPONENT_VERSION=	1.11.0
 COMPONENT_LICENSE=	BSD
 COMPONENT_PROJECT_URL=	http://nginx.net/
 COMPONENT_SUMMARY=	Nginx Webserver
 COMPONENT_SRC=		$(COMPONENT_NAME)-$(COMPONENT_VERSION)
 COMPONENT_ARCHIVE=	$(COMPONENT_SRC).tar.gz
-COMPONENT_ARCHIVE_HASH=	sha256:8f4b3c630966c044ec72715754334d1fdf741caa1d5795fb4646c27d09f797b7
+COMPONENT_ARCHIVE_HASH=	sha256:6ca0e7bf540cdae387ce9470568c2c3a826bc7e7f12def1ae7d20b66f4065a99
 COMPONENT_ARCHIVE_URL=	http://nginx.org/download/$(COMPONENT_ARCHIVE)
 
 include $(WS_TOP)/make-rules/prep.mk
@@ -39,16 +39,24 @@ CONFIGURE_OPTIONS += --pid-path=/var/run/nginx
 CONFIGURE_OPTIONS += --lock-path=/var/run/nginx
 CONFIGURE_OPTIONS += --user=webservd
 CONFIGURE_OPTIONS += --group=webservd
+
 CONFIGURE_OPTIONS += --with-http_ssl_module
 CONFIGURE_OPTIONS += --with-http_addition_module
 CONFIGURE_OPTIONS += --with-http_sub_module
 CONFIGURE_OPTIONS += --with-http_dav_module
+CONFIGURE_OPTIONS += --with-http_flv_module
+CONFIGURE_OPTIONS += --with-http_mp4_module
 CONFIGURE_OPTIONS += --with-http_gzip_static_module
 CONFIGURE_OPTIONS += --with-http_geoip_module
 CONFIGURE_OPTIONS += --with-http_realip_module
 CONFIGURE_OPTIONS += --with-http_secure_link_module
+CONFIGURE_OPTIONS += --with-http_v2_module
 CONFIGURE_OPTIONS += --with-http_stub_status_module
 CONFIGURE_OPTIONS += --with-http_xslt_module
+CONFIGURE_OPTIONS += --with-stream
+CONFIGURE_OPTIONS += --with-stream_ssl_module
+CONFIGURE_OPTIONS += --with-mail
+CONFIGURE_OPTIONS += --with-mail_ssl_module
 CONFIGURE_OPTIONS += --with-ipv6
 CONFIGURE_OPTIONS += --with-threads
 
@@ -60,3 +68,11 @@ build:		$(BUILD_32_and_64)
 
 install:	$(INSTALL_32_and_64)
 
+REQUIRED_PACKAGES += database/geoip
+REQUIRED_PACKAGES += library/libxml2
+REQUIRED_PACKAGES += library/libxslt
+REQUIRED_PACKAGES += library/pcre
+REQUIRED_PACKAGES += library/security/openssl
+REQUIRED_PACKAGES += library/zlib
+REQUIRED_PACKAGES += SUNWcs
+REQUIRED_PACKAGES += system/library
