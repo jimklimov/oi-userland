@@ -32,24 +32,24 @@ file path=usr/share/man/man1/cwebp.1
 file path=usr/share/man/man1/dwebp.1
 
 
-link path=usr/lib/$(MACH64)/libwebp.so target=libwebp.so.6.0.0
-link path=usr/lib/$(MACH64)/libwebp.so.6 target=libwebp.so.6.0.0
-file path=usr/lib/$(MACH64)/libwebp.so.6.0.0
-file path=usr/lib/$(MACH64)/pkgconfig/libwebp-0.5.0.pc
+link path=usr/lib/$(MACH64)/libwebp.so target=libwebp.so.6.0.1
+link path=usr/lib/$(MACH64)/libwebp.so.6 target=libwebp.so.6.0.1
+file path=usr/lib/$(MACH64)/libwebp.so.6.0.1
+file path=usr/lib/$(MACH64)/pkgconfig/libwebp-0.5.1.pc
 
-link path=usr/lib/libwebp.so target=libwebp.so.6.0.0
-link path=usr/lib/libwebp.so.6 target=libwebp.so.6.0.0
-file path=usr/lib/libwebp.so.6.0.0
-file path=usr/lib/pkgconfig/libwebp-0.5.0.pc
+link path=usr/lib/libwebp.so target=libwebp.so.6.0.1
+link path=usr/lib/libwebp.so.6 target=libwebp.so.6.0.1
+file path=usr/lib/libwebp.so.6.0.1
+file path=usr/lib/pkgconfig/libwebp-0.5.1.pc
 
-link path=usr/lib/$(MACH64)/libwebpdecoder.so target=libwebpdecoder.so.2.0.0
-link path=usr/lib/$(MACH64)/libwebpdecoder.so.2 target=libwebpdecoder.so.2.0.0
-file path=usr/lib/$(MACH64)/libwebpdecoder.so.2.0.0
+link path=usr/lib/$(MACH64)/libwebpdecoder.so target=libwebpdecoder.so.2.0.1
+link path=usr/lib/$(MACH64)/libwebpdecoder.so.2 target=libwebpdecoder.so.2.0.1
+file path=usr/lib/$(MACH64)/libwebpdecoder.so.2.0.1
 file path=usr/lib/$(MACH64)/pkgconfig/libwebpdecoder.pc
 
-link path=usr/lib/libwebpdecoder.so target=libwebpdecoder.so.2.0.0
-link path=usr/lib/libwebpdecoder.so.2 target=libwebpdecoder.so.2.0.0
-file path=usr/lib/libwebpdecoder.so.2.0.0
+link path=usr/lib/libwebpdecoder.so target=libwebpdecoder.so.2.0.1
+link path=usr/lib/libwebpdecoder.so.2 target=libwebpdecoder.so.2.0.1
+file path=usr/lib/libwebpdecoder.so.2.0.1
 file path=usr/lib/pkgconfig/libwebpdecoder.pc
 
 
@@ -64,14 +64,14 @@ file path=usr/lib/libwebpdemux.so.2.0.0
 file path=usr/lib/pkgconfig/libwebpdemux.pc
 
 
-link path=usr/lib/$(MACH64)/libwebpmux.so target=libwebpmux.so.2.0.0
-link path=usr/lib/$(MACH64)/libwebpmux.so.2 target=libwebpmux.so.2.0.0
-file path=usr/lib/$(MACH64)/libwebpmux.so.2.0.0
+link path=usr/lib/$(MACH64)/libwebpmux.so target=libwebpmux.so.2.0.1
+link path=usr/lib/$(MACH64)/libwebpmux.so.2 target=libwebpmux.so.2.0.1
+file path=usr/lib/$(MACH64)/libwebpmux.so.2.0.1
 file path=usr/lib/$(MACH64)/pkgconfig/libwebpmux.pc
 
-link path=usr/lib/libwebpmux.so target=libwebpmux.so.2.0.0
-link path=usr/lib/libwebpmux.so.2 target=libwebpmux.so.2.0.0
-file path=usr/lib/libwebpmux.so.2.0.0
+link path=usr/lib/libwebpmux.so target=libwebpmux.so.2.0.1
+link path=usr/lib/libwebpmux.so.2 target=libwebpmux.so.2.0.1
+file path=usr/lib/libwebpmux.so.2.0.1
 file path=usr/lib/pkgconfig/libwebpmux.pc
 
 
@@ -102,9 +102,9 @@ file path=usr/include/webp-0.4.0/decode.h
 file path=usr/include/webp-0.4.0/encode.h
 file path=usr/include/webp-0.4.0/types.h
 
-file path=usr/include/webp-0.5.0/decode.h
-file path=usr/include/webp-0.5.0/encode.h
-file path=usr/include/webp-0.5.0/types.h
+file path=usr/include/webp-0.5.1/decode.h
+file path=usr/include/webp-0.5.1/encode.h
+file path=usr/include/webp-0.5.1/types.h
 
 # Link the current version as the default
 link path=usr/include/webp target=webp-$(COMPONENT_VERSION)
