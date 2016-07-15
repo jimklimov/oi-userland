@@ -22,12 +22,12 @@ set name=org.opensolaris.consolidation value=$(CONSOLIDATION)
 
 license $(COMPONENT_LICENSE_FILE) license='$(COMPONENT_LICENSE)'
 
-file path=usr/bin/$(MACH64)/sample
+file usr/bin/$(MACH64)/sample path=usr/demo/libwebm/$(MACH64)/sample
 file path=usr/bin/$(MACH64)/sample_muxer
 file path=usr/bin/$(MACH64)/vttdemux
 file path=usr/bin/$(MACH64)/webm2pes
 
-file path=usr/bin/sample
+file usr/bin/sample path=usr/demo/libwebm/sample
 file path=usr/bin/sample_muxer
 file path=usr/bin/vttdemux
 file path=usr/bin/webm2pes
