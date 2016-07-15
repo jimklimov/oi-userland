@@ -17,12 +17,12 @@
 include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME=		libvpx
-COMPONENT_VERSION=	1.4.0
+COMPONENT_VERSION=	1.5.0
 COMPONENT_SUMMARY=	The VP8/VP9 royalty-free Codec SDK
 COMPONENT_SRC=		$(COMPONENT_NAME)-$(COMPONENT_VERSION)
 COMPONENT_ARCHIVE=	$(COMPONENT_SRC).tar.gz
 COMPONENT_ARCHIVE_HASH= \
-	sha256:eca30ea7fae954286c9fe9de9d377128f36b56ea6b8691427783b20c67bcfc13
+	sha256:f199b03b67042e8d94a3ae8bc841fb82b6a8430bdf3965aeeaafe8245bcfa699
 COMPONENT_ARCHIVE_URL= \
 	https://github.com/webmproject/libvpx/archive/v$(COMPONENT_VERSION).tar.gz
 COMPONENT_PROJECT_URL=	http://www.webmproject.org/
