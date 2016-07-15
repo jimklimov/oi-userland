@@ -14,7 +14,7 @@
 # Copyright 2016 Jim Klimov
 #
 
-include ../../../../make-rules/shared-macros.mk
+include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME=		libvpx
 COMPONENT_VERSION=	1.4.0
