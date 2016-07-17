@@ -106,14 +106,13 @@ file path=usr/lib/$(MACH64)/pkgconfig/libwebp-0.4.0.pc
 file path=usr/lib/pkgconfig/libwebp-0.4.0.pc
 
 
-# Include files are also a bit different for two releases, so we provide both
-file path=usr/include/webp-0.4.0/decode.h
-file path=usr/include/webp-0.4.0/encode.h
-file path=usr/include/webp-0.4.0/types.h
-
 file path=usr/include/webp-0.5.1/decode.h
 file path=usr/include/webp-0.5.1/encode.h
 file path=usr/include/webp-0.5.1/types.h
+file path=usr/include/webp-0.5.1/demux.h
+file path=usr/include/webp-0.5.1/extras.h
+file path=usr/include/webp-0.5.1/mux_types.h
+file path=usr/include/webp-0.5.1/mux.h
 
 # Link the current version as the default
 link path=usr/include/webp target=webp-$(COMPONENT_VERSION)
