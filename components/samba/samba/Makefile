@@ -44,12 +44,12 @@ export PARFAIT_BUILD=no
 include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME=		samba
-COMPONENT_VERSION=	4.1.23
+COMPONENT_VERSION=	4.4.4
 TPNO=			20605
 COMPONENT_SRC=		$(COMPONENT_NAME)-$(COMPONENT_VERSION)
 COMPONENT_PROJECT_URL=	http://www.samba.org/
 COMPONENT_ARCHIVE=	$(COMPONENT_SRC).tar.gz
-COMPONENT_ARCHIVE_HASH= sha256:2c33291bf5454ba05e8b5fdc2c57ee010cf44d077e57a307ad2e7be9fac27cd2
+COMPONENT_ARCHIVE_HASH= sha256:262f9edabbd1c0112819b5063718588c22b0ee4c1a2f648f79f233fdfba25c8b
 COMPONENT_ARCHIVE_URL=	http://us1.samba.org/samba/ftp/stable/$(COMPONENT_ARCHIVE)
 COMPONENT_BUGDB=	utility/samba
 
@@ -121,12 +121,11 @@ CONFIGURE_OPTIONS +=	--with-logfilebase=/var/samba/log
 CONFIGURE_OPTIONS +=	--sharedstatedir=/var/samba/com
 CONFIGURE_OPTIONS +=	--libexecdir=/usr/lib/samba
 
-CONFIGURE_OPTIONS +=	--with-static-modules=
-CONFIGURE_OPTIONS.32 +=	--with-shared-modules=vfs_worm,vfs_zfsacl,vfs_prealloc,vfs_cacheprime,vfs_commit,idmap_ldap,idmap_tdb2,idmap_rid,idmap_ad,idmap_hash,idmap_adex,vfs_solarisacl
+CONFIGURE_OPTIONS +=	--with-static-modules=vfs_solarisacl
+CONFIGURE_OPTIONS.32 +=	--with-shared-modules=vfs_worm,vfs_zfsacl,vfs_prealloc,vfs_cacheprime,vfs_commit,idmap_ldap,idmap_tdb2,idmap_rid,idmap_ad,idmap_hash,idmap_adex
 CONFIGURE_OPTIONS.64 +=	--with-shared-modules=idmap_ldap,idmap_tdb2,idmap_rid,idmap_ad,idmap_hash,idmap_adex
 CONFIGURE_OPTIONS +=	--with-ads
 CONFIGURE_OPTIONS +=	--with-winbind
-CONFIGURE_OPTIONS +=	--enable-nss-wrapper
 CONFIGURE_OPTIONS +=	--with-ldap
 CONFIGURE_OPTIONS +=	--with-libldap=ldap_r
 #CONFIGURE_OPTIONS +=	--with-system-mitkrb5
@@ -135,7 +134,7 @@ CONFIGURE_OPTIONS +=	--with-libldap=ldap_r
 CONFIGURE_OPTIONS +=	--nocache
 CONFIGURE_OPTIONS +=	--nopyo
 CONFIGURE_OPTIONS +=	--disable-rpath
-CONFIGURE_OPTIONS +=	--disable-gnutls
+#CONFIGURE_OPTIONS +=	--disable-gnutls
 CONFIGURE_OPTIONS +=	--bundled-libraries=ALL
 
 #CONFIGURE_OPTIONS.32 +=	--with-samfs=$(PROTO_DIR)/opt/SUNWsamfs/lib
@@ -216,7 +215,7 @@ $(BUILD_DIR_WINB)/.configured:	$(BUILD_DIR_WINB)/.BDprep
 	$(TOUCH) $@
 
 # Build of Winbind (without Samba) for different bitness.
-WB_TARGETS =	--targets=nss_winbind,pamsmbpass,pamwinbind
+WB_TARGETS =	--targets=nss_winbind,pamwinbind
 $(BUILD_DIR_WINB)/.built:	$(BUILD_DIR_WINB)/.configured
 	(cd $(@D) ; $(ENV) $(WAF_PATH) LD_EXEC_OPTIONS="$(LD_EXEC_OPTIONS)" waf build $(WAFOPT1) \
 	    $(WB_TARGETS) )
@@ -249,3 +248,21 @@ system-test:    $(NO_TESTS)
 
 clean::
 	$(RM) -r $(BUILD_DIR)
+
+REQUIRED_PACKAGES += SUNWcs
+REQUIRED_PACKAGES += library/file-monitor/gamin
+REQUIRED_PACKAGES += library/gnu-libiconv
+REQUIRED_PACKAGES += library/gnutls
+REQUIRED_PACKAGES += library/libarchive
+REQUIRED_PACKAGES += library/ncurses
+REQUIRED_PACKAGES += library/openldap
+REQUIRED_PACKAGES += library/print/cups-libs
+REQUIRED_PACKAGES += library/readline
+REQUIRED_PACKAGES += library/security/openssl
+REQUIRED_PACKAGES += runtime/perl-522
+REQUIRED_PACKAGES += runtime/python-26
+REQUIRED_PACKAGES += system/library
+REQUIRED_PACKAGES += system/library/g++-4-runtime
+REQUIRED_PACKAGES += system/library/libdbus
+REQUIRED_PACKAGES += system/library/security/libgcrypt
+REQUIRED_PACKAGES += system/network/avahi
