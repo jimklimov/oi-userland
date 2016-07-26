@@ -16,13 +16,11 @@
 /^encumbered\//d
 
 /^areca$/d
-/^beanshell$/d
 /^enscript$/d
 /^ksh93$/d
 /^memcached-java$/d
 /^open-fabrics$/d
 /^openexr$/d
-/^openssl\/openssl-1.0.1-fips-140$/d
 /^pam_pkcs11$/d
 /^quagga$/d
 /^tcltls$/d
