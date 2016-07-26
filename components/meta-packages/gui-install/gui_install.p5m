@@ -226,8 +226,6 @@ depend fmri=gnome/applet/gnome-utility-applets type=require
 depend fmri=gnome/config/gconf type=require
 depend fmri=gnome/disk-analyzer/baobab type=require
 depend fmri=gnome/file-manager/nautilus type=require
-depend fmri=gnome/ggv type=require
-depend fmri=gnome/gnome-audio type=require
 depend fmri=gnome/gnome-camera type=require
 depend fmri=gnome/gnome-dictionary type=require
 depend fmri=gnome/gnome-keyring type=require
@@ -266,7 +264,9 @@ depend fmri=image/viewer/eog type=require
 depend fmri=install/beadm type=require
 depend fmri=library/aalib type=require
 depend fmri=library/accessibility/brltty type=require
+depend fmri=library/audio/audiofile type=require
 depend fmri=library/audio/gstreamer type=require
+depend fmri=library/audio/gstreamer/plugin/good type=require
 depend fmri=library/c++/glibmm type=require
 depend fmri=library/c++/sigcpp type=require
 depend fmri=library/demo/audio-samples type=require
@@ -396,6 +396,7 @@ depend fmri=network/ftp/ncftp type=require
 depend fmri=network/ipfilter type=require
 depend fmri=network/iscsi/initiator type=require
 depend fmri=network/iscsi/iser type=require
+depend fmri=network/openssh type=require
 depend fmri=network/rsync type=require
 depend fmri=network/ssh type=require
 depend fmri=network/ssh/ssh-key type=require
@@ -429,7 +430,7 @@ depend fmri=service/file-system/nfs type=require
 depend fmri=service/file-system/smb type=require
 depend fmri=service/gnome/desktop-cache type=require
 depend fmri=service/hal type=require
-depend fmri=service/management/sysidtool type=require
+depend fmri=service/management/sysding type=require
 depend fmri=service/network/dns/mdns type=require
 depend fmri=service/network/ftp type=require
 depend fmri=service/network/network-clients type=require
@@ -443,7 +444,6 @@ depend fmri=service/network/tftp type=require
 depend fmri=service/network/wpa type=require
 depend fmri=service/opengl/ogl-select type=require
 depend fmri=service/picl type=require
-depend fmri=service/postrun type=require
 depend fmri=service/resource-pools type=require
 depend fmri=service/resource-pools/poold type=require
 depend fmri=service/security/gss type=require
@@ -547,7 +547,6 @@ depend fmri=system/library/storage/ima/header-ima type=require
 depend fmri=system/library/storage/libmpapi type=require
 depend fmri=system/library/storage/libmpscsi_vhci type=require
 depend fmri=system/library/storage/scsi-plugins type=require
-depend fmri=system/library/sysidtool type=require
 depend fmri=system/library/usb/libusb type=require
 depend fmri=system/library/usb/libusbugen type=require
 depend fmri=locale/af type=require
@@ -653,12 +652,9 @@ depend fmri=locale/zh_sg type=require
 depend fmri=locale/zh_tw type=require
 depend fmri=system/management/intel-amt type=require
 depend fmri=system/management/ipmitool type=require
-depend fmri=system/management/product-registry type=require
 depend fmri=system/management/service-tag type=require
 depend fmri=system/management/snmp/net-snmp type=require
 depend fmri=system/management/snmp/net-snmp/documentation type=require
-depend fmri=system/management/snmp/sea/sea-config type=require
-depend fmri=system/management/sysidtool type=require
 depend fmri=system/manual/locale/ca type=require
 depend fmri=system/manual/locale/ja type=require
 depend fmri=system/network type=require

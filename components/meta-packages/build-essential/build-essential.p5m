@@ -22,6 +22,7 @@ set name=org.opensolaris.consolidation value=$(CONSOLIDATION)
 depend fmri=developer/build/autoconf type=require
 depend fmri=developer/build/automake-110 type=require
 depend fmri=developer/build/automake-111 type=require
+depend fmri=developer/build/automake-115 type=require
 depend fmri=developer/build/libtool type=require
 depend fmri=library/libtool/libltdl type=require
 
@@ -36,8 +37,8 @@ depend fmri=developer/build/help2man type=require
 depend fmri=developer/linker type=require
 
 # Compilers
-depend fmri=developer/gcc-48 type=require
-depend fmri=developer/clang-3.3 type=require
+depend fmri=developer/gcc-49 type=require
+depend fmri=developer/clang-3.4 type=require
 depend fmri=developer/sunstudio12u1 type=require
 
 # Headers
@@ -111,7 +112,7 @@ depend fmri=developer/java/junit type=require
 depend fmri=runtime/perl-516 type=require
 depend fmri=runtime/perl-522 type=require
 depend fmri=runtime/lua type=require
-depend fmri=library/apr-util-13 type=require
+depend fmri=library/apr-util type=require
 
 # illumos-gate build dependencies 
 depend fmri=developer/as type=require
@@ -131,7 +132,6 @@ depend fmri=system/library/dbus type=require
 depend fmri=system/library/libdbus type=require
 depend fmri=system/library/libdbus-glib type=require
 depend fmri=system/library/mozilla-nss/header-nss type=require
-depend fmri=system/management/product-registry type=require
 depend fmri=system/management/snmp/net-snmp type=require
 depend fmri=library/python-2/python-extra-26 type=require
 depend fmri=web/server/apache-22 type=require

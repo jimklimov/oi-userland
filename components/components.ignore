@@ -16,23 +16,15 @@
 /^encumbered\//d
 
 /^areca$/d
-/^beanshell$/d
-/^elinks$/d
 /^enscript$/d
-/^gcc45$/d
 /^ksh93$/d
 /^memcached-java$/d
 /^open-fabrics$/d
 /^openexr$/d
-/^openssl\/openssl-1.0.1-fips-140$/d
 /^pam_pkcs11$/d
-/^php-5_2$/d
-/^php-5_3$/d
-/^php-common$/d
 /^quagga$/d
 /^tcltls$/d
 /^timezone$/d
-/^gcc44/d
 
 # Below is a list of components, which are known to build, but are 
 # disabled for a particular reason. The format is:

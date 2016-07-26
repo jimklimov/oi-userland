@@ -20,10 +20,14 @@ include ../../../make-rules/ips.mk
 
 PKGLINT=    true
 
+download:
+
+prep:
+
 build:
 
 install:
 	[ -d $(PROTO_DIR) ] || mkdir -p $(PROTO_DIR)
 
 clean:
-	[ -d $(BUILD_DIR) ] && rm -rf $(BUILD_DIR)
+	rm -rf $(BUILD_DIR)

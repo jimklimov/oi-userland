@@ -153,7 +153,6 @@ depend type=require fmri=editor/vim@7.2.308-0.151.1.8
 depend type=require fmri=file/gnu-coreutils@8.5-0.151.1.8
 depend type=require fmri=file/gnu-findutils@0.5.11-0.151.1.8
 depend type=require fmri=file/slocate@0.5.11-0.151.1.8
-depend type=require fmri=gnome/gnome-audio@0.5.11-0.151.1.8
 depend type=require fmri=image/library/libjpeg@0.5.11-0.151.1.8
 depend type=require fmri=image/library/libpng@0.5.11-0.151.1.8
 depend type=require fmri=image/library/libtiff@0.5.11-0.151.1.8
@@ -329,6 +328,7 @@ depend type=require fmri=network/ftp@0.5.11-0.151.1.8
 depend type=require fmri=network/ipfilter@0.5.11-0.151.1.8
 depend type=require fmri=network/iscsi/initiator@0.5.11-0.151.1.8
 depend type=require fmri=network/iscsi/iser@0.5.11-0.151.1.8
+depend type=require fmri=network/openssh@7.2.0.2-2015.0.2.0
 depend type=require fmri=network/rsync@3.0.9-0.151.1.8
 depend type=require fmri=network/ssh/ssh-key@0.5.11-0.151.1.8
 depend type=require fmri=network/ssh@0.5.11-0.151.1.8
@@ -360,7 +360,7 @@ depend type=require fmri=service/fault-management@0.5.11-0.151.1.8
 depend type=require fmri=service/file-system/nfs@0.5.11-0.151.1.8
 depend type=require fmri=service/file-system/smb@0.5.11-0.151.1.8
 depend type=require fmri=service/hal@0.5.11-0.151.1.8
-depend type=require fmri=service/management/sysidtool@0.5.11-0.151.1.8
+depend type=require fmri=service/management/sysding@0.5.11-2015.0.2.0
 depend type=require fmri=service/network/dns/bind@9.6.4.8-0.151.1.8
 depend type=require fmri=service/network/dns/mdns@0.5.11-0.151.1.8
 depend type=require fmri=service/network/ftp@0.5.11-0.151.1.8
@@ -459,19 +459,15 @@ depend type=require fmri=system/library/storage/ima@0.5.11-0.151.1.8
 depend type=require fmri=system/library/storage/libmpapi@0.5.11-0.151.1.8
 depend type=require fmri=system/library/storage/libmpscsi_vhci@0.5.11-0.151.1.8
 depend type=require fmri=system/library/storage/scsi-plugins@0.5.11-0.151.1.8
-depend type=require fmri=system/library/sysidtool@0.5.11-0.151.1.8
 depend type=require fmri=system/library/usb/libusb@0.5.11-0.151.1.8
 depend type=require fmri=system/library/usb/libusbugen@0.5.11-0.151.1.8
 depend type=require fmri=system/library@0.5.11-0.151.1.8
 depend type=require fmri=system/management/intel-amt@0.5.11-0.151.1.8
 depend type=require fmri=system/management/ipmitool@1.8.10-0.151.1.8
-depend type=require fmri=system/management/product-registry@0.5.11-0.151.1.8
 depend type=require fmri=system/management/service-tag@0.5.11-0.151.1.8
 depend type=require \
     fmri=system/management/snmp/net-snmp/documentation@5.4.1-0.151.1.8
 depend type=require fmri=system/management/snmp/net-snmp@5.4.1-0.151.1.8
-depend type=require fmri=system/management/snmp/sea/sea-config@0.5.11-0.151.1.8
-depend type=require fmri=system/management/sysidtool@0.5.11-0.151.1.8
 depend type=require fmri=system/manual/locale/ca@0.5.11-0.151
 depend type=require fmri=system/manual/locale/ja@0.5.11-0.151
 depend type=require fmri=system/network/nis@0.5.11-0.151.1.8
