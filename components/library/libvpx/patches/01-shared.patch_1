@@ -1,13 +1,24 @@
---- a/configure	Wed Sep  4 20:49:22 2013
-+++ b/configure	Sat Jul 16 00:00:00 2016
-@@ -459,8 +459,8 @@
-         if ! enabled linux && ! enabled os2; then
-             if enabled gnu; then
+OI/Hipster patch for libvpx-1.6.0
+
+--- a/configure	2016-07-21 03:15:41.000000000 +0200
++++ b/configure	2016-07-26 11:47:53.732092932 +0200
+@@ -500,16 +500,17 @@
+ }
+ 
+ process_detect() {
++    ###echo "process_detect() : tgt_os = '${tgt_os}'"; set
+     if enabled shared; then
+         # Can only build shared libs on a subset of platforms. Doing this check
+         # here rather than at option parse time because the target auto-detect
+         # magic happens after the command line has been parsed.
+         case "${tgt_os}" in
+-        linux|os2|darwin*|iphonesimulator*)
++        linux|os2|darwin*|iphonesimulator*|solaris*)
+             # Supported platforms
+             ;;
+         *)
+-            if enabled gnu; then
++            if enabled gnu || echo "${gcctarget}${MACHTYPE}${OSTYPE}" | egrep -i 'solaris|illumos|sun' >/dev/null; then
                  echo "--enable-shared is only supported on ELF; assuming this is OK"
--            else
--                die "--enable-shared only supported on ELF and OS/2 for now"
-+#            else
-+#                die "--enable-shared only supported on ELF and OS/2 for now"
-             fi
-         fi
-     fi
+             else
+                 die "--enable-shared only supported on ELF, OS/2, and Darwin for now"

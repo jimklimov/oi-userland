@@ -24,12 +24,13 @@ COMPONENT_LICENSE_FILE=	LICENSE
 COMPONENT_CLASSIFICATION=	System/Multimedia Libraries
 COMPONENT_FMRI=	library/video/$(COMPONENT_NAME)
 
-# The current version
-COMPONENT_VERSION_1=	1.5.0
+# The current version is always _1; the older delivered versions (_2+)
+# are in order of growing numbers starting from the oldest we support
+COMPONENT_VERSION_1=	1.6.0
 COMPONENT_SRC_1=		$(COMPONENT_NAME)-$(COMPONENT_VERSION_1)
 COMPONENT_ARCHIVE_1=	$(COMPONENT_SRC_1).tar.gz
 COMPONENT_ARCHIVE_HASH_1= \
-	sha256:f199b03b67042e8d94a3ae8bc841fb82b6a8430bdf3965aeeaafe8245bcfa699
+	sha256:e2fc00c9f60c76f91a1cde16a2356e33a45b76a5a5a1370df65fd57052a4994a
 COMPONENT_ARCHIVE_URL_1= \
 	https://github.com/webmproject/$(COMPONENT_NAME)/archive/v$(COMPONENT_VERSION).tar.gz
 SOURCE_DIR_1=			$(COMPONENT_DIR)/$(COMPONENT_SRC_1)
@@ -49,6 +50,23 @@ COMPONENT_ARCHIVE_URL_2= \
 COMPONENT_SRC_2=		$(COMPONENT_NAME)-$(COMPONENT_VERSION_2)
 COMPONENT_ARCHIVE_2=	$(COMPONENT_SRC_2).tar.gz
 SOURCE_DIR_2=			$(COMPONENT_DIR)/$(COMPONENT_SRC_2)
+
+# Another intermediate version
+COMPONENT_VERSION_3=	1.5.0
+COMPONENT_ARCHIVE_HASH_3= \
+	sha256:f199b03b67042e8d94a3ae8bc841fb82b6a8430bdf3965aeeaafe8245bcfa699
+COMPONENT_ARCHIVE_URL_3= \
+	https://github.com/webmproject/$(COMPONENT_NAME)/archive/v$(COMPONENT_VERSION_3).tar.gz
+COMPONENT_SRC_3=		$(COMPONENT_NAME)-$(COMPONENT_VERSION_3)
+COMPONENT_ARCHIVE_3=	$(COMPONENT_SRC_3).tar.gz
+SOURCE_DIR_3=			$(COMPONENT_DIR)/$(COMPONENT_SRC_3)
+
+# Base variables are needed for packaging automagic
+COMPONENT_ARCHIVE_URL=	$(COMPONENT_ARCHIVE_URL_1)
+COMPONENT_SRC=			$(COMPONENT_SRC_1)
+COMPONENT_VERSION=		$(COMPONENT_VERSION_1)
+SOURCE_DIR=				$(SOURCE_DIR_1)
+
 
 include $(WS_MAKE_RULES)/prep.mk
 include $(WS_MAKE_RULES)/configure.mk
@@ -82,6 +100,9 @@ COMPONENT_PRE_CONFIGURE_ACTION_1 = \
 COMPONENT_PRE_CONFIGURE_ACTION_2 = \
     ($(CLONEY) $(SOURCE_DIR_2) $(@D))
 
+COMPONENT_PRE_CONFIGURE_ACTION_3 = \
+    ($(CLONEY) $(SOURCE_DIR_3) $(@D))
+
 # Unique stuff for the newer version
 BUILD_DIR_32_1 = $(COMPONENT_DIR)/build/$(COMPONENT_VERSION_1)-$(MACH32)
 BUILD_DIR_64_1 = $(COMPONENT_DIR)/build/$(COMPONENT_VERSION_1)-$(MACH64)
@@ -107,6 +128,28 @@ $(BUILD_DIR_64_1)/.configured:  COMPONENT_PRE_CONFIGURE_ACTION=$(COMPONENT_PRE_C
 $(BUILD_DIR_64_1)/.configured:  BITS=64
 
 
+
+# Unique stuff for the intermediate version (1.5.0 should be similar to current 1.6.0)
+BUILD_DIR_32_3 = $(COMPONENT_DIR)/build/$(COMPONENT_VERSION_3)-$(MACH32)
+BUILD_DIR_64_3 = $(COMPONENT_DIR)/build/$(COMPONENT_VERSION_3)-$(MACH64)
+
+BUILD_32 +=     $(BUILD_DIR_32_3)/.built
+BUILD_64 +=     $(BUILD_DIR_64_3)/.built
+
+INSTALL_32 +=   $(BUILD_DIR_32_3)/.installed
+INSTALL_64 +=   $(BUILD_DIR_64_3)/.installed
+
+$(SOURCE_DIR_3)/.prep:
+	$(COMPONENT_PREP_ACTION)
+	$(TOUCH) $@
+
+$(BUILD_DIR_32_3)/.configured:  CONFIGURE_SCRIPT=$(SOURCE_DIR_3)/configure
+$(BUILD_DIR_32_3)/.configured:  COMPONENT_PRE_CONFIGURE_ACTION=$(COMPONENT_PRE_CONFIGURE_ACTION_3)
+$(BUILD_DIR_32_3)/.configured:  BITS=32
+
+$(BUILD_DIR_64_3)/.configured:  CONFIGURE_SCRIPT=$(SOURCE_DIR_3)/configure
+$(BUILD_DIR_64_3)/.configured:  COMPONENT_PRE_CONFIGURE_ACTION=$(COMPONENT_PRE_CONFIGURE_ACTION_3)
+$(BUILD_DIR_64_3)/.configured:  BITS=64
 
 
 
@@ -134,12 +177,12 @@ $(BUILD_DIR_64_2)/.configured:  BITS=64
 
 
 
-# Cause the old version to be prepped at all
-$(SOURCE_DIR_1)/.prep: $(SOURCE_DIR_2)/.prep
+# Cause the old versions to be prepped at all
+$(SOURCE_DIR_1)/.prep: $(SOURCE_DIR_2)/.prep $(SOURCE_DIR_3)/.prep
 
-# install the old version (_2) first
-$(BUILD_DIR_32_1)/.installed:     $(BUILD_DIR_32_2)/.installed
-$(BUILD_DIR_64_1)/.installed:     $(BUILD_DIR_64_2)/.installed
+# install the old versions (_2, _3) first
+$(BUILD_DIR_32_1)/.installed:     $(BUILD_DIR_32_2)/.installed $(BUILD_DIR_32_3)/.installed
+$(BUILD_DIR_64_1)/.installed:     $(BUILD_DIR_64_2)/.installed $(BUILD_DIR_64_3)/.installed
 
 # common targets
 build: $(BUILD_32_and_64)
