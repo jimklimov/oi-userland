@@ -41,27 +41,34 @@ LINT_LIBRARIES = $(wildcard llib-*)
 LINT_FLAGS = -nsvx -I$(@D) -I$(SOURCE_DIR)/include -I$(SOURCE_DIR)
 
 # template for lint library rules. new rules will be added automatically
-define lintlib-rule
-$(BUILD_DIR_32)/$(1).ln:	BITS=32
-$(BUILD_DIR_64)/$(1).ln:	BITS=64
+# the directory variables will be resolved at build-time of each instance
+# of the recipe
 
-$$(BUILD_DIR)/%/$(1).ln:	$(1) $(BUILD_DIR)/%/.installed
+define lintlib-rule
+$$(BUILD_DIR_32)/$(1).ln:	BITS=32
+$$(BUILD_DIR_64)/$(1).ln:	BITS=64
+
+$$(BUILD_DIR_32)/$(1).ln:	$(1) $$(BUILD_DIR_32)/.installed
+	(cd $$(@D) ; $$(LINT) $$(LINT_FLAGS) -o $$(@F:llib-l%.ln=%) ../../$$<)
+
+$$(BUILD_DIR_64)/$(1).ln:	$(1) $$(BUILD_DIR_64)/.installed
 	(cd $$(@D) ; $$(LINT) $$(LINT_FLAGS) -o $$(@F:llib-l%.ln=%) ../../$$<)
 
 $$(PROTOUSRLIBDIR)/$(1):	$(1)
 	$(INSTALL) -c $$< $$@
 
-$$(PROTOUSRLIBDIR)/$(1).ln:	$$(BUILD_DIR)/$(MACH32)/$(1).ln
+$$(PROTOUSRLIBDIR)/$(1).ln:	$$(BUILD_DIR_32)/$(1).ln
 	$(INSTALL) -c $$< $$@
 
-$$(PROTOUSRLIBDIR64)/$(1).ln:	$$(BUILD_DIR)/$(MACH64)/$(1).ln
+$$(PROTOUSRLIBDIR64)/$(1).ln:	$$(BUILD_DIR_64)/$(1).ln
 	$(INSTALL) -c $$< $$@
 
-BUILD_32 += $(BUILD_DIR_32)/$(1).ln
-BUILD_64 += $(BUILD_DIR_64)/$(1).ln
-INSTALL_32 += $(PROTOUSRLIBDIR)/$(1)
-INSTALL_32 += $(PROTOUSRLIBDIR)/$(1).ln
-INSTALL_64 += $(PROTOUSRLIBDIR64)/$(1).ln
+# Way to get circular deps
+#BUILD_32 += $$(BUILD_DIR_32)/$(1).ln
+#BUILD_64 += $$(BUILD_DIR_64)/$(1).ln
+INSTALL_32 += $$(PROTOUSRLIBDIR)/$(1)
+INSTALL_32 += $$(PROTOUSRLIBDIR)/$(1).ln
+INSTALL_64 += $$(PROTOUSRLIBDIR64)/$(1).ln
 endef
 
 # Generate the lint library rules from the above template
