@@ -35,12 +35,6 @@ COMPONENT_ARCHIVE_URL_1= \
 	https://github.com/webmproject/$(COMPONENT_NAME)/archive/v$(COMPONENT_VERSION).tar.gz
 SOURCE_DIR_1=			$(COMPONENT_DIR)/$(COMPONENT_SRC_1)
 
-# Base variables are needed for packaging automagic
-COMPONENT_ARCHIVE_URL=	$(COMPONENT_ARCHIVE_URL_1)
-COMPONENT_SRC=			$(COMPONENT_SRC_1)
-COMPONENT_VERSION=		$(COMPONENT_VERSION_1)
-SOURCE_DIR=				$(SOURCE_DIR_1)
-
 # Older version for legacy compatibility
 COMPONENT_VERSION_2	= 1.4.0
 COMPONENT_ARCHIVE_HASH_2= \
