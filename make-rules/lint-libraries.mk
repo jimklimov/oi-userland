@@ -36,6 +36,7 @@
 # llib-l{libname}
 #
 
+# Files resolved relative to (or rather IN) the COMPONENT_DIR
 LINT_LIBRARIES = $(wildcard llib-*)
 
 LINT_FLAGS = -nsvx -I$(@D) -I$(SOURCE_DIR)/include -I$(SOURCE_DIR)
@@ -44,32 +45,60 @@ LINT_FLAGS = -nsvx -I$(@D) -I$(SOURCE_DIR)/include -I$(SOURCE_DIR)
 # the directory variables will be resolved at build-time of each instance
 # of the recipe
 
-define lintlib-rule
-$$(BUILD_DIR_32)/$(1).ln:	BITS=32
-$$(BUILD_DIR_64)/$(1).ln:	BITS=64
+# arg1 = basename of llib-* file located in the COMPONENT_DIR
+# arg2 = BUILD_DIR_32 for this sub-component
+# arg3 = BUILD_DIR_64 for this sub-component
+# arg4 = PROTOUSRLIBDIR for this sub-component
+# arg5 = PROTOUSRLIBDIR64 for this sub-component
+define lintlib-rule-dir-build-proto
+$(2)/$(1).ln:	BITS=32
+$(3)/$(1).ln:	BITS=64
 
-$$(BUILD_DIR_32)/$(1).ln:	$(1) $$(BUILD_DIR_32)/.installed
-	(cd $$(@D) ; $$(LINT) $$(LINT_FLAGS) -o $$(@F:llib-l%.ln=%) ../../$$<)
+$(2)/$(1).ln:	$$(COMPONENT_DIR)/$(1) $(2)/.built
+	(cd $$(@D) ; $$(LINT) $$(LINT_FLAGS) -o $$(@F:llib-l%.ln=%) $$<)
 
-$$(BUILD_DIR_64)/$(1).ln:	$(1) $$(BUILD_DIR_64)/.installed
-	(cd $$(@D) ; $$(LINT) $$(LINT_FLAGS) -o $$(@F:llib-l%.ln=%) ../../$$<)
+$(3)/$(1).ln:	$$(COMPONENT_DIR)/$(1) $(3)/.built
+	(cd $$(@D) ; $$(LINT) $$(LINT_FLAGS) -o $$(@F:llib-l%.ln=%) $$<)
 
-$$(PROTOUSRLIBDIR)/$(1):	$(1)
+$(4)/$(1):	$(1) $(2)/.installed
 	$(INSTALL) -c $$< $$@
 
-$$(PROTOUSRLIBDIR)/$(1).ln:	$$(BUILD_DIR_32)/$(1).ln
+$(4)/$(1).ln:	$(2)/$(1).ln $(2)/.installed
 	$(INSTALL) -c $$< $$@
 
-$$(PROTOUSRLIBDIR64)/$(1).ln:	$$(BUILD_DIR_64)/$(1).ln
+$(5)/$(1).ln:	$(3)/$(1).ln $(3)/.installed
 	$(INSTALL) -c $$< $$@
 
 # Way to get circular deps
-#BUILD_32 += $$(BUILD_DIR_32)/$(1).ln
-#BUILD_64 += $$(BUILD_DIR_64)/$(1).ln
-INSTALL_32 += $$(PROTOUSRLIBDIR)/$(1)
-INSTALL_32 += $$(PROTOUSRLIBDIR)/$(1).ln
-INSTALL_64 += $$(PROTOUSRLIBDIR64)/$(1).ln
+#BUILD_32 += $(2)/$(1).ln
+#BUILD_64 += $(3)/$(1).ln
+INSTALL_32 += $(4)/$(1)
+INSTALL_32 += $(4)/$(1).ln
+INSTALL_64 += $(5)/$(1).ln
 endef
 
-# Generate the lint library rules from the above template
+# arg1, arg2, arg3 as above; use current PROTOUSRLIBDIR and PROTOUSRLIBDIR64
+define lintlib-rule-dir-build
+$(eval $(call lintlib-rule-dir-build-proto,$(1),$(2),$(3),$$(PROTOUSRLIBDIR),$$(PROTOUSRLIBDIR64)))
+endef
+
+# the original call name, only arg1 is user-specified
+define lintlib-rule
+$(eval $(call lintlib-rule-dir-build-proto,$(1),$$(BUILD_DIR_32),$$(BUILD_DIR_64),$$(PROTOUSRLIBDIR),$$(PROTOUSRLIBDIR64)))
+endef
+
+# These are the unique trailing numbers for enabled sub-components (if any)
+BUILD_DIR_SUFFIXES = $(sort \
+    $(subst BUILD_DIR_32_,, $(filter BUILD_DIR_32_%, $(.VARIABLES))) \
+    $(subst BUILD_DIR_64_,, $(filter BUILD_DIR_64_%, $(.VARIABLES))) )
+
+# Generate the lint library rules from the above template, both
+# for the base directory and the numbered sub-components (if any)
+# NOTE: To avoid same-name conflicts during installation, the Makefile recipe
+# and its .p5m manifest(s) should deliver the files with unique names, e.g.
+# you can make a $(INSTALL) recipe like above based on the .ln built above
+# to produce a filename in protodir with the $(COMPONENT_VERSION) embeded.
 $(foreach lintlib,$(LINT_LIBRARIES),$(eval $(call lintlib-rule,$(lintlib))))
+$(foreach compnum,$(BUILD_DIR_SUFFIXES),$(eval \
+  $(foreach lintlib,$(LINT_LIBRARIES),$(eval $(call lintlib-rule-dir-build,$(lintlib),$(BUILD_DIR_32_$(compnum)),$(BUILD_DIR_64_$(compnum))))) \
+))
