@@ -1,3 +1,5 @@
+OI/Hipster userland patch for libgd-2.0.35 recipe.
+
 --- Makefile.am.orig	Sat Mar 12 23:00:26 2011
 +++ Makefile.am	Sat Mar 12 23:03:00 2011
 @@ -5,15 +5,15 @@

@@ -1,3 +1,5 @@
+OI/Hipster userland patch for libgd-2.0.35 recipe.
+
 Changes needed to get gd2 tests working.
 
 This change needs to be further evaluated to see if it should be passed

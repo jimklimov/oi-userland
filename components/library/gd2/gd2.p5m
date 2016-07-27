@@ -103,10 +103,16 @@ file path=usr/include/gd2/wbmp.h
 file path=usr/lib/$(MACH64)/libgd.so.3.0.0
 file path=usr/lib/$(MACH64)/llib-lgd-$(COMPONENT_VERSION_1).ln
 link target=llib-lgd-$(COMPONENT_VERSION_1).ln path=usr/lib/$(MACH64)/llib-lgd.ln
+link path=usr/lib/$(MACH64)/libgd.so target=libgd.so.3.0.0
+link path=usr/lib/$(MACH64)/libgd.so.3 target=libgd.so.3.0.0
+
 file path=usr/lib/libgd.so.3.0.0
-file llib-lgd path=usr/lib/llib-lgd
 file path=usr/lib/llib-lgd-$(COMPONENT_VERSION_1).ln
 link target=llib-lgd-$(COMPONENT_VERSION_1).ln path=usr/lib/llib-lgd.ln
+link path=usr/lib/libgd.so target=libgd.so.3.0.0
+link path=usr/lib/libgd.so.3 target=libgd.so.3.0.0
+
+file llib-lgd path=usr/lib/llib-lgd
 
 file src/entities.html path=usr/share/doc/gd2/html/entities.html
 file Solaris/libgd2.1-extra path=usr/share/man/man1/annotate.1
@@ -123,11 +129,7 @@ file Solaris/libgd2.1-extra path=usr/share/man/man1/pngtogd.1
 file Solaris/libgd2.1-extra path=usr/share/man/man1/pngtogd2.1
 file Solaris/libgd2.1-extra path=usr/share/man/man1/webpng.1
 file Solaris/libgd2.3 path=usr/share/man/man3/libgd2.3
-#
-link path=usr/lib/$(MACH64)/libgd.so target=libgd.so.3.0.0
-link path=usr/lib/$(MACH64)/libgd.so.3 target=libgd.so.3.0.0
-link path=usr/lib/libgd.so target=libgd.so.3.0.0
-link path=usr/lib/libgd.so.3 target=libgd.so.3.0.0
+
 
 # For legacy and backwards-compatibility reasons, deliver the previous
 # version's numbered .so's
@@ -135,6 +137,12 @@ file path=usr/lib/$(MACH64)/libgd.so.2.0.0
 link path=usr/lib/$(MACH64)/libgd.so.2 target=libgd.so.2.0.0
 file path=usr/lib/libgd.so.2.0.0
 link path=usr/lib/libgd.so.2 target=libgd.so.2.0.0
-#file path=usr/lib/$(MACH64)/llib-lgd-$(COMPONENT_VERSION_2).ln
-#file path=usr/lib/llib-lgd-$(COMPONENT_VERSION_2).ln
+file path=usr/lib/$(MACH64)/llib-lgd-$(COMPONENT_VERSION_2).ln
+file path=usr/lib/llib-lgd-$(COMPONENT_VERSION_2).ln
 
+file path=usr/lib/$(MACH64)/libgd.so.3.0.0
+link path=usr/lib/$(MACH64)/libgd.so.3 target=libgd.so.3.0.0
+file path=usr/lib/libgd.so.3.0.0
+link path=usr/lib/libgd.so.3 target=libgd.so.3.0.0
+file path=usr/lib/$(MACH64)/llib-lgd-$(COMPONENT_VERSION_3).ln
+file path=usr/lib/llib-lgd-$(COMPONENT_VERSION_3).ln

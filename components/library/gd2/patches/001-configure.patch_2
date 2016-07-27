@@ -1,3 +1,5 @@
+OI/Hipster userland patch for libgd-2.0.35 recipe.
+
 # remove searching for libpng12 first since we want the default libpng.
 # see 6989480
 
