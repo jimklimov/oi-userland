@@ -64,13 +64,10 @@ PATCH_LEVEL = 0
 CFLAGS +=	$(CPP_LARGEFILES)
 CPPFLAGS +=	$(CPP_LARGEFILES)
 
-COMPONENT_PRE_CONFIGURE_ACTION_1 = \
-	($(CLONEY) $(SOURCE_DIR_1) $(@D))
-
-COMPONENT_PRE_CONFIGURE_ACTION_2 = \
-	($(CLONEY) $(SOURCE_DIR_2) $(@D))
-
 # Common for both variants, as done below
+COMPONENT_PRE_CONFIGURE_ACTION = \
+	($(CLONEY) $(SOURCE_DIR) $(@D))
+
 COMPONENT_PREP_ACTION = \
 	(cd $(@D) && autoreconf -if)
 
@@ -91,10 +88,7 @@ CONFIGURE_OPTIONS +=	--with-pic
 # Unique stuff for the newer version
 # Enable this for the new version explicitly (to require installation of pkg)
 $(BUILD_DIR_32_1)/.configured:	CONFIGURE_OPTIONS+=--with-vpx
-$(BUILD_DIR_32_1)/.configured:	COMPONENT_PRE_CONFIGURE_ACTION=$(COMPONENT_PRE_CONFIGURE_ACTION_1)
-
 $(BUILD_DIR_64_1)/.configured:	CONFIGURE_OPTIONS+=--with-vpx
-$(BUILD_DIR_64_1)/.configured:	COMPONENT_PRE_CONFIGURE_ACTION=$(COMPONENT_PRE_CONFIGURE_ACTION_1)
 
 # Rename the installed linted libraries
 $(BUILD_DIR_32_1)/%.ln $(BUILD_DIR_64_1)/%.ln:	LINT_FLAGS+=-I$(SOURCE_DIR_1)/src
@@ -107,9 +101,6 @@ $(PROTOUSRLIBDIR64)/llib-lgd-$(COMPONENT_VERSION_1).ln: $(BUILD_DIR_64_1)/llib-l
 
 
 # Stuff for the older version
-$(BUILD_DIR_32_2)/.configured:	COMPONENT_PRE_CONFIGURE_ACTION=$(COMPONENT_PRE_CONFIGURE_ACTION_2)
-$(BUILD_DIR_64_2)/.configured:	COMPONENT_PRE_CONFIGURE_ACTION=$(COMPONENT_PRE_CONFIGURE_ACTION_2)
-
 # Rename the installed linted libraries
 $(BUILD_DIR_32_2)/%.ln $(BUILD_DIR_64_2)/%.ln:	LINT_FLAGS+=-I$(SOURCE_DIR_2)
 
