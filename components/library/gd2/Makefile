@@ -75,6 +75,10 @@ COMPONENT_PRE_CONFIGURE_ACTION = \
 	($(CLONEY) $(SOURCE_DIR) $(@D))
 
 COMPONENT_PREP_ACTION = \
+	(cd $(@D) && ./bootstrap.sh)
+
+# 2.0.35 did not have an autoconfig script
+COMPONENT_PREP_ACTION_2 = \
 	(cd $(@D) && autoreconf -if)
 
 COMPONENT_TEST_CMD = \
