@@ -186,24 +186,37 @@ IPS_COMPONENT_VERSION ?=	$(COMPONENT_VERSION)
 
 # allow publishing to be overridden, such as when
 # a package is for one architecture only.
+ALL_INSTALLED_STAMP ?= $(BUILD_DIR)/.installed-for-packaging
 PRE_PUBLISH_STAMP ?= $(BUILD_DIR)/.pre-published-$(MACH)
 PUBLISH_STAMP ?= $(BUILD_DIR)/.published-$(MACH)
 
+# The "install" target is not a good one to depend on everywhere,
+# because each evaluation is dynamic - both slow and can change
+# files and invalidate previous steps. So in packaging we call it
+# once and leave a single timestamped file to know it is over.
+# If the stamp exists, we know that the build and install rules
+# (however defined and mutilated by ultimate recipes, but usually
+# depending on "%/.installed" files in all sub-component per-MACH
+# build directories) have passed and a PROTO_DIR has been created.
+$(ALL_INSTALLED_STAMP): build install
+	test -d "$(PROTO_DIR)" || { echo "ERROR: install completed but PROTO_DIR is missing!">&2; exit 2; }
+	$(TOUCH) $@
+
 # Do all that is needed to ensure the package is consistent for publishing,
 # except actually pushing to a repo, separately from the push to the repo.
-pre-publish:	build install $(PRE_PUBLISH_STAMP)
+pre-publish:	$(ALL_INSTALLED_STAMP) $(PRE_PUBLISH_STAMP)
 publish:		pre-publish $(PUBLISH_STAMP)
 
 sample-manifest:	$(GENERATED).p5m
 
-$(GENERATED).p5m:	install
+$(GENERATED).p5m:	$(ALL_INSTALLED_STAMP)
 	$(PKGSEND) generate $(PKG_HARDLINKS:%=--target %) $(PROTO_DIR) | \
 	$(PKGMOGRIFY) $(PKG_OPTIONS) /dev/fd/0 $(GENERATE_TRANSFORMS) | \
 		sed -e '/^$$/d' -e '/^#.*$$/d' | $(PKGFMT) | \
 		cat $(METADATA_TEMPLATE) - >$@
 
 # copy the canonical manifest(s) to the build tree
-$(MANIFEST_BASE)-%.generate:	%.p5m canonical-manifests
+$(MANIFEST_BASE)-%.generate:	%.p5m canonical-manifests $(ALL_INSTALLED_STAMP)
 	cat $(METADATA_TEMPLATE) $< >$@
 
 # The text of a transform that will emit a dependency conditional on the
@@ -233,7 +246,7 @@ $(WS_TOP)/transforms/mkgeneric-python: $(WS_TOP)/make-rules/shared-macros.mk
 		$(call mkgeneric,runtime/python,$(ver)))
 
 # Build Python version-wrapping manifests from the generic version.
-$(MANIFEST_BASE)-%.p5m: %-PYVER.p5m $(WS_TOP)/transforms/mkgeneric-python
+$(MANIFEST_BASE)-%.p5m: %-PYVER.p5m $(WS_TOP)/transforms/mkgeneric-python $(ALL_INSTALLED_STAMP)
 	$(PKGMOGRIFY) -D PYV=### $(WS_TOP)/transforms/mkgeneric-python \
 		$(WS_TOP)/transforms/mkgeneric $< > $@
 	if [ -f $*-GENFRAG.p5m ]; then cat $*-GENFRAG.p5m >> $@; fi
@@ -257,7 +270,7 @@ $(WS_TOP)/transforms/mkgeneric-perl: $(WS_TOP)/make-rules/shared-macros.mk
 		$(call mkgeneric,runtime/perl,$(ver)))
 
 # Build Perl version-wrapping manifests from the generic version.
-$(MANIFEST_BASE)-%.p5m: %-PERLVER.p5m $(WS_TOP)/transforms/mkgeneric-perl
+$(MANIFEST_BASE)-%.p5m: %-PERLVER.p5m $(WS_TOP)/transforms/mkgeneric-perl $(ALL_INSTALLED_STAMP)
 	$(PKGMOGRIFY) -D PLV=### $(WS_TOP)/transforms/mkgeneric-perl \
 		$(WS_TOP)/transforms/mkgeneric $< > $@
 	if [ -f $*-GENFRAG.p5m ]; then cat $*-GENFRAG.p5m >> $@; fi
@@ -279,7 +292,7 @@ $(MANIFEST_BASE)-%-$(shell echo $(1) | tr -d .).mogrified: \
         PKG_MACROS += RUBY_VERSION=$(1) RUBY_LIB_VERSION=$(2) \
             RUBYV=$(subst .,,$(1))
 
-$(MANIFEST_BASE)-%-$(shell echo $(1) | tr -d .).p5m: %-RUBYVER.p5m
+$(MANIFEST_BASE)-%-$(shell echo $(1) | tr -d .).p5m: %-RUBYVER.p5m $(ALL_INSTALLED_STAMP)
 	if [ -f $$*-$(shell echo $(1) | tr -d .)GENFRAG.p5m ]; then \
 	        cat $$*-$(shell echo $(1) | tr -d .)GENFRAG.p5m >> $$@; \
 	fi
@@ -303,14 +316,14 @@ $(BUILD_DIR)/mkgeneric-ruby: $(WS_TOP)/make-rules/shared-macros.mk
 # Build Ruby version-wrapping manifests from the generic version.
 # Creates build/manifest-*-modulename.p5m file.
 #
-$(MANIFEST_BASE)-%.p5m: %-RUBYVER.p5m $(BUILD_DIR)/mkgeneric-ruby
+$(MANIFEST_BASE)-%.p5m: %-RUBYVER.p5m $(BUILD_DIR)/mkgeneric-ruby $(ALL_INSTALLED_STAMP)
 	$(PKGMOGRIFY) -D RUBYV=### $(BUILD_DIR)/mkgeneric-ruby \
 	        $(WS_TOP)/transforms/mkgeneric $< > $@
 	if [ -f $*-GENFRAG.p5m ]; then cat $*-GENFRAG.p5m >> $@; fi
 
 ifeq   ($(strip $(COMPONENT_AUTOGEN_MANIFEST)),yes)
 # auto-generate file/directory list
-$(MANIFEST_BASE)-%.generated:	%.p5m $(BUILD_DIR)
+$(MANIFEST_BASE)-%.generated:	%.p5m $(BUILD_DIR) $(ALL_INSTALLED_STAMP)
 	(cat $(METADATA_TEMPLATE); \
 	$(PKGSEND) generate $(PKG_HARDLINKS:%=--target %) $(PROTO_DIR)) | \
 	$(PKGMOGRIFY) $(PKG_OPTIONS) /dev/fd/0 $(AUTOGEN_MANIFEST_TRANSFORMS) | \
@@ -330,7 +343,7 @@ $(MANIFEST_BASE)-%.mogrified:	$(MANIFEST_BASE)-%.generated
 		sed -e '/^$$/d' -e '/^#.*$$/d' | uniq >$@
 else
 # mogrify non-parameterized manifests
-$(MANIFEST_BASE)-%.mogrified:	%.p5m $(BUILD_DIR)
+$(MANIFEST_BASE)-%.mogrified:	%.p5m $(BUILD_DIR) $(ALL_INSTALLED_STAMP)
 	$(PKGMOGRIFY) $(PKG_OPTIONS) $< \
 		$(PUBLISH_TRANSFORMS) | \
 		sed -e '/^$$/d' -e '/^#.*$$/d' | uniq >$@
@@ -378,7 +391,7 @@ sample-resolve.deps:
 
 
 # resolve the dependencies all at once
-$(BUILD_DIR)/.resolved-$(MACH):	$(DEPENDED)
+$(BUILD_DIR)/.resolved-$(MACH):	$(DEPENDED) $(ALL_INSTALLED_STAMP)
 	$(PKGDEPEND) resolve $(EXTDEPFILES:%=-e %) -m $(DEPENDED)
 	$(TOUCH) $@
 
@@ -455,7 +468,7 @@ install-packages:	publish
 	    echo "unsafe to install package(s) automatically" ; \
 	 fi
 
-$(RESOLVED):	install
+$(RESOLVED):	$(ALL_INSTALLED_STAMP)
 
 canonical-manifests:	$(CANONICAL_MANIFESTS) Makefile $(PATCHES)
 ifeq	($(strip $(CANONICAL_MANIFESTS)),)
