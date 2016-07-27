@@ -41,13 +41,10 @@ CFLAGS +=	$(CPP_LARGEFILES)
 CXXFLAGS +=	$(CPP_LARGEFILES)
 CPPFLAGS +=	$(CPP_LARGEFILES)
 
-# We use a fixed default mysql implementation (oldest available for best
-# compatibility), and a similarly baseline postgres version as defined
+# We use a fixed default mysql and postgres implementation+version as defined
 # in `make-rules/*.mk` files included above
-MYSQL_BINDIR.32?=/usr/mariadb/5.5/bin
-MYSQL_BINDIR.64?=/usr/mariadb/5.5/bin/64
-PATH.64=$(USRBINDIR)/$(MACH64):$(USRBINDIR):$(GNUBIN)/$(MACH64):$(GNUBIN)
-PATH.32=$(USRBINDIR):$(GNUBIN)
+PATH.64=$(USRBINDIR.64):$(USRBINDIR.32):$(GNUBIN.64):$(GNUBIN.32)
+PATH.32=$(USRBINDIR.32):$(GNUBIN.32)
 PATH=$(MYSQL_BINDIR.$(BITS)):$(PG_BINDIR.$(BITS)):$(PATH.$(BITS))
 
 COMPONENT_COMMON_ENV += PATH="$(PATH)"
@@ -72,8 +69,8 @@ install: $(INSTALL_32_and_64)
 
 test: $(TEST_32_and_64)
 
-REQUIRED_PACKAGES += database/mariadb-55/library
-REQUIRED_PACKAGES += database/postgres-$(PG_VERNUM)/library
+REQUIRED_PACKAGES += $(MYSQL_BASEPKG)/library
+REQUIRED_PACKAGES += $(PG_BASEPKG)/library
 REQUIRED_PACKAGES += database/sqlite-3
 REQUIRED_PACKAGES += library/cxxtools
 REQUIRED_PACKAGES += system/library
