@@ -103,22 +103,27 @@ endif
 ifdef BUILD_DIR_32$(1)
 BUILD_32 +=		$$(BUILD_DIR_32$(1))/.built
 INSTALL_32 +=	$$(BUILD_DIR_32$(1))/.installed
+$$(BUILD_DIR_32$(1))/.configured: $$(SOURCE_DIR$(1))/.prep
+$$(BUILD_DIR_32$(1))/.configured: BITS=32
+$$(BUILD_DIR_32$(1))/.configured: SOURCE_DIR=$$(SOURCE_DIR$(1))
+$$(BUILD_DIR_32$(1))/.built: $$(BUILD_DIR_32$(1))/.configured
 $$(BUILD_DIR_32$(1))/.built: BITS=32
 $$(BUILD_DIR_32$(1))/.built: SOURCE_DIR=$$(SOURCE_DIR$(1))
 $$(BUILD_DIR_32$(1))/.built: BUILD_DIR_32=$$(BUILD_DIR_32$(1))
+$$(BUILD_DIR_32$(1))/.installed: $$(BUILD_DIR_32$(1))/.built
 $$(BUILD_DIR_32$(1))/.installed: BITS=32
 $$(BUILD_DIR_32$(1))/.installed: SOURCE_DIR=$$(SOURCE_DIR$(1))
 $$(BUILD_DIR_32$(1))/.installed: BUILD_DIR_32=$$(BUILD_DIR_32$(1))
-$$(BUILD_DIR_32$(1))/.configured: BITS=32
-$$(BUILD_DIR_32$(1))/.configured: SOURCE_DIR=$$(SOURCE_DIR$(1))
 
 ifeq ($(strip $(wildcard $$(COMPONENT_TEST_RESULTS_DIR)/results-*.master)),)
 TEST_32 +=		$$(BUILD_DIR_32$(1))/.tested
+$$(BUILD_DIR_32$(1))/.tested: $$(BUILD_DIR_32$(1))/.installed
 $$(BUILD_DIR_32$(1))/.tested: BITS=32
 $$(BUILD_DIR_32$(1))/.tested: SOURCE_DIR=$$(SOURCE_DIR$(1))
 $$(BUILD_DIR_32$(1))/.tested: BUILD_DIR_32=$$(BUILD_DIR_32$(1))
 else
 TEST_32 +=		$$(BUILD_DIR_32$(1))/.tested-and-compared
+$$(BUILD_DIR_32$(1))/.tested-and-compared: $$(BUILD_DIR_32$(1))/.installed
 $$(BUILD_DIR_32$(1))/.tested-and-compared: BITS=32
 $$(BUILD_DIR_32$(1))/.tested-and-compared: SOURCE_DIR=$$(SOURCE_DIR$(1))
 $$(BUILD_DIR_32$(1))/.tested-and-compared: BUILD_DIR_32=$$(BUILD_DIR_32$(1))
@@ -129,22 +134,27 @@ endif
 ifdef BUILD_DIR_64$(1)
 BUILD_64 +=		$$(BUILD_DIR_64$(1))/.built
 INSTALL_64 +=	$$(BUILD_DIR_64$(1))/.installed
+$$(BUILD_DIR_64$(1))/.configured: $$(SOURCE_DIR$(1))/.prep
+$$(BUILD_DIR_64$(1))/.configured: BITS=64
+$$(BUILD_DIR_64$(1))/.configured: SOURCE_DIR=$$(SOURCE_DIR$(1))
+$$(BUILD_DIR_64$(1))/.built: $$(BUILD_DIR_64$(1))/.configured
 $$(BUILD_DIR_64$(1))/.built: BITS=64
 $$(BUILD_DIR_64$(1))/.built: SOURCE_DIR=$$(SOURCE_DIR$(1))
 $$(BUILD_DIR_64$(1))/.built: BUILD_DIR_64=$$(BUILD_DIR_64$(1))
+$$(BUILD_DIR_64$(1))/.installed: $$(BUILD_DIR_64$(1))/.built
 $$(BUILD_DIR_64$(1))/.installed: BITS=64
 $$(BUILD_DIR_64$(1))/.installed: SOURCE_DIR=$$(SOURCE_DIR$(1))
 $$(BUILD_DIR_64$(1))/.installed: BUILD_DIR_64=$$(BUILD_DIR_64$(1))
-$$(BUILD_DIR_64$(1))/.configured: BITS=64
-$$(BUILD_DIR_64$(1))/.configured: SOURCE_DIR=$$(SOURCE_DIR$(1))
 
 ifeq ($(strip $(wildcard $$(COMPONENT_TEST_RESULTS_DIR)/results-*.master)),)
 TEST_64 +=		$$(BUILD_DIR_64$(1))/.tested
+$$(BUILD_DIR_64$(1))/.tested: $$(BUILD_DIR_64$(1))/.installed
 $$(BUILD_DIR_64$(1))/.tested: BITS=64
 $$(BUILD_DIR_64$(1))/.tested: SOURCE_DIR=$$(SOURCE_DIR$(1))
 $$(BUILD_DIR_64$(1))/.tested: BUILD_DIR_64=$$(BUILD_DIR_64$(1))
 else
 TEST_64 +=		$$(BUILD_DIR_64$(1))/.tested-and-compared
+$$(BUILD_DIR_64$(1))/.tested-and-compared: $$(BUILD_DIR_64$(1))/.installed
 $$(BUILD_DIR_64$(1))/.tested-and-compared: BITS=64
 $$(BUILD_DIR_64$(1))/.tested-and-compared: SOURCE_DIR=$$(SOURCE_DIR$(1))
 $$(BUILD_DIR_64$(1))/.tested-and-compared: BUILD_DIR_64=$$(BUILD_DIR_64$(1))
