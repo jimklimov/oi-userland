@@ -197,9 +197,11 @@ PUBLISH_STAMP ?= $(BUILD_DIR)/.published-$(MACH)
 # If the stamp exists, we know that the build and install rules
 # (however defined and mutilated by ultimate recipes, but usually
 # depending on "%/.installed" files in all sub-component per-MACH
-# build directories) have passed and a PROTO_DIR has been created.
+# build directories) have passed and a PROTO_DIR has probably been
+# created (although some components are known to limit themselves
+# to just building code with no actual installation implementation).
 $(ALL_INSTALLED_STAMP): build install
-	test -d "$(PROTO_DIR)" || { echo "ERROR: install completed but PROTO_DIR is missing!">&2; exit 2; }
+	test -d "$(PROTO_DIR)" || { echo "WARN: install completed but PROTO_DIR is missing!">&2; }
 	$(TOUCH) $@
 
 # Do all that is needed to ensure the package is consistent for publishing,
