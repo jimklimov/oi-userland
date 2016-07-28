@@ -189,26 +189,14 @@ IPS_COMPONENT_VERSION ?=	$(COMPONENT_VERSION)
 
 # allow publishing to be overridden, such as when
 # a package is for one architecture only.
-ALL_INSTALLED_STAMP ?= $(BUILD_DIR)/.installed-for-packaging
 PRE_PUBLISH_STAMP ?= $(BUILD_DIR)/.pre-published-$(MACH)
 PUBLISH_STAMP ?= $(BUILD_DIR)/.published-$(MACH)
 
-# The "install" target is not a good one to depend on everywhere,
-# because each evaluation is dynamic - both slow and can change
-# files and invalidate previous steps. So in packaging we call it
-# once and leave a single timestamped file to know it is over.
-# If the stamp exists, we know that the build and install rules
-# (however defined and mutilated by ultimate recipes, but usually
-# depending on "%/.installed" files in all sub-component per-MACH
-# build directories) have passed and a PROTO_DIR has probably been
-# created (although some components are known to limit themselves
-# to just building code with no actual installation implementation).
-$(ALL_INSTALLED_STAMP): build install
-	test -d "$(PROTO_DIR)" || { echo "WARN: install completed but PROTO_DIR is missing!">&2; }
-	$(TOUCH) $@
-
 # Do all that is needed to ensure the package is consistent for publishing,
 # except actually pushing to a repo, separately from the push to the repo.
+# Note that running "install" rule as a dependency for multiple targets can
+# have adverse effects, so instead we call it at most once by requiring the
+# touched ALL_INSTALLED_STAMP file.
 pre-publish:	$(ALL_INSTALLED_STAMP) $(PRE_PUBLISH_STAMP)
 publish:		pre-publish $(PUBLISH_STAMP)
 
