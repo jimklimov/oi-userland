@@ -324,6 +324,7 @@ $(BUILD_DIR_32)/.installed:       BITS=32
 $(BUILD_DIR_64)/.installed:       BITS=64
 
 # set the default target for installation of the component
+# (the argument(s) to its make or equivalent build wrapper)
 COMPONENT_INSTALL_TARGETS =	install
 
 # set the default test results directory
@@ -434,7 +435,7 @@ $(BUILD_DIR_64)/.tested-and-compared:	BITS=64
 # created (although some components are known to limit themselves
 # to just building code with no actual installation implementation).
 ALL_INSTALLED_STAMP ?= $(BUILD_DIR)/.all-installed
-$(ALL_INSTALLED_STAMP): install $(COMPONENT_INSTALL_TARGETS)
+$(ALL_INSTALLED_STAMP): install
 	test -d "$(PROTO_DIR)" || { echo "WARN: install completed but PROTO_DIR is missing!">&2; }
 	$(TOUCH) $@
 
