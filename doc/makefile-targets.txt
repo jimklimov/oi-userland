@@ -77,7 +77,7 @@ install::
 
 $(ALL_INSTALLED_STAMP):
   This variable points to a file in the build directory that can be used by
-  recipe steps thich should logically follow the "install" target.  That is,
+  recipe steps which should logically follow the "install" target.  That is,
   for this file to be touched, the component's generic "install" rule must
   complete successfully.  This covers doing smaller-scoped install rules of
   the multiple sub-components, for multiple architectures and bitnesses, as
