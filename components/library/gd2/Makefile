@@ -96,8 +96,10 @@ CONFIGURE_OPTIONS +=	--disable-rpath
 CONFIGURE_OPTIONS +=	--with-x
 CONFIGURE_OPTIONS +=	--with-pic
 
-# Unique stuff for the newer version
+# Unique stuff for the newest version
 # Enable this for the new version explicitly (to require installation of pkg)
+# NOTE: Current builds do not take advantage of "liq" aka "libimagequant"
+# (part of pngquant2) because they are not packaged with "oi-userland" so far.
 $(BUILD_DIR_32_1)/.configured:	CONFIGURE_OPTIONS+=--with-webp
 $(BUILD_DIR_64_1)/.configured:	CONFIGURE_OPTIONS+=--with-webp
 $(BUILD_DIR_32_1)/.configured:	CONFIGURE_OPTIONS+=--with-iconv
