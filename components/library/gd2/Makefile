@@ -100,6 +100,8 @@ CONFIGURE_OPTIONS +=	--with-pic
 # Enable this for the new version explicitly (to require installation of pkg)
 $(BUILD_DIR_32_1)/.configured:	CONFIGURE_OPTIONS+=--with-webp
 $(BUILD_DIR_64_1)/.configured:	CONFIGURE_OPTIONS+=--with-webp
+$(BUILD_DIR_32_1)/.configured:	CONFIGURE_OPTIONS+=--with-iconv
+$(BUILD_DIR_64_1)/.configured:	CONFIGURE_OPTIONS+=--with-iconv
 
 # Rename the installed linted libraries
 $(BUILD_DIR_32_1)/%.ln $(BUILD_DIR_64_1)/%.ln:	LINT_FLAGS+=-I$(SOURCE_DIR_1)/src

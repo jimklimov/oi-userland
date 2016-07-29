@@ -48,6 +48,7 @@ link path=usr/bin/gdlib-config target=./$(MACH32)/gdlib-config
 
 # Binaries
 file usr/bin/annotate path=usr/bin/$(MACH32)/annotate
+file usr/bin/bdftogd path=usr/bin/$(MACH32)/bdftogd
 file usr/bin/gd2copypal path=usr/bin/$(MACH32)/gd2copypal
 file usr/bin/gd2time path=usr/bin/$(MACH32)/gd2time
 file usr/bin/gd2togif path=usr/bin/$(MACH32)/gd2togif
@@ -61,6 +62,7 @@ file usr/bin/pngtogd2 path=usr/bin/$(MACH32)/pngtogd2
 file usr/bin/webpng path=usr/bin/$(MACH32)/webpng
 
 file path=usr/bin/$(MACH64)/annotate
+file path=usr/bin/$(MACH64)/bdftogd
 file path=usr/bin/$(MACH64)/gd2copypal
 file path=usr/bin/$(MACH64)/gd2time
 file path=usr/bin/$(MACH64)/gd2togif
@@ -87,8 +89,10 @@ hardlink path=usr/bin/pngtogd2 target=../lib/isaexec pkg.linted=true
 hardlink path=usr/bin/webpng target=../lib/isaexec pkg.linted=true
 
 file path=usr/include/gd2/entities.h
-file path=usr/include/gd2/gd.h
+file path=usr/include/gd2/gd_color_map.h
+file path=usr/include/gd2/gd_errors.h
 file path=usr/include/gd2/gd_io.h
+file path=usr/include/gd2/gd.h
 file path=usr/include/gd2/gdcache.h
 file path=usr/include/gd2/gdfontg.h
 file path=usr/include/gd2/gdfontl.h
@@ -97,20 +101,21 @@ file path=usr/include/gd2/gdfonts.h
 file path=usr/include/gd2/gdfontt.h
 file path=usr/include/gd2/gdfx.h
 file path=usr/include/gd2/gdhelpers.h
+file path=usr/include/gd2/gdpp.h
 file path=usr/include/gd2/jisx0208.h
 file path=usr/include/gd2/wbmp.h
 
-file path=usr/lib/$(MACH64)/libgd.so.3.0.0
+file path=usr/lib/$(MACH64)/libgd.so.3.0.3
 file path=usr/lib/$(MACH64)/llib-lgd-$(COMPONENT_VERSION_1).ln
 link target=llib-lgd-$(COMPONENT_VERSION_1).ln path=usr/lib/$(MACH64)/llib-lgd.ln
-link path=usr/lib/$(MACH64)/libgd.so target=libgd.so.3.0.0
-link path=usr/lib/$(MACH64)/libgd.so.3 target=libgd.so.3.0.0
+link path=usr/lib/$(MACH64)/libgd.so target=libgd.so.3
+link path=usr/lib/$(MACH64)/libgd.so.3 target=libgd.so.3.0.3
 
-file path=usr/lib/libgd.so.3.0.0
+file path=usr/lib/libgd.so.3.0.3
 file path=usr/lib/llib-lgd-$(COMPONENT_VERSION_1).ln
 link target=llib-lgd-$(COMPONENT_VERSION_1).ln path=usr/lib/llib-lgd.ln
-link path=usr/lib/libgd.so target=libgd.so.3.0.0
-link path=usr/lib/libgd.so.3 target=libgd.so.3.0.0
+link path=usr/lib/libgd.so target=libgd.so.3
+link path=usr/lib/libgd.so.3 target=libgd.so.3.0.3
 
 file llib-lgd path=usr/lib/llib-lgd
 
@@ -141,8 +146,6 @@ file path=usr/lib/$(MACH64)/llib-lgd-$(COMPONENT_VERSION_2).ln
 file path=usr/lib/llib-lgd-$(COMPONENT_VERSION_2).ln
 
 file path=usr/lib/$(MACH64)/libgd.so.3.0.0
-link path=usr/lib/$(MACH64)/libgd.so.3 target=libgd.so.3.0.0
 file path=usr/lib/libgd.so.3.0.0
-link path=usr/lib/libgd.so.3 target=libgd.so.3.0.0
 file path=usr/lib/$(MACH64)/llib-lgd-$(COMPONENT_VERSION_3).ln
 file path=usr/lib/llib-lgd-$(COMPONENT_VERSION_3).ln
