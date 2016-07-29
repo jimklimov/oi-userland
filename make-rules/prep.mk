@@ -261,21 +261,25 @@ endif
 endef
 
 # Define how each sub-component source directory should be prepped
-#	@echo "=== 1 = '$(1)'; SOURCE_DIR$(1) = '$$(SOURCE_DIR$(1))'; COMPONENT_SRC$(1) = '$$(COMPONENT_SRC$(1))'; BUILD_DIR_32$(1) = '$$(BUILD_DIR_32$(1))'; BUILD_DIR_64$(1) = '$$(BUILD_DIR_64$(1))'"
-#	@echo "=== base vars:  SOURCE_DIR = '$$(SOURCE_DIR)'; COMPONENT_SRC = '$$(COMPONENT_SRC)'; BUILD_DIR_32 = '$$(BUILD_DIR_32)'; BUILD_DIR_64 = '$$(BUILD_DIR_64)'"
+# Note: the IFEQ directives can not be used in functions, but the
+# $(if "string",then,else") functions can. The string is automatically
+# stripped of surrounding whitespace and then not-empty == true.
+# The clause below uses the custom $(COMPONENT_PREP_ACTION$(1))
+# if both $(1) and the custom variable are not empty; otherwise it
+# falls back to whateve value of common $(COMPONENT_PREP_ACTION).
+#	@echo "=== 1 = '$(1)'; SOURCE_DIR$(1) = '$$(SOURCE_DIR$(1))'; COMPONENT_SRC$(1) = '$$(COMPONENT_SRC$(1))'; BUILD_DIR_32$(1) = '$$(BUILD_DIR_32$(1))'; BUILD_DIR_64$(1) = '$$(BUILD_DIR_64$(1))'; COMPONENT_PREP_ACTION$(1) = '$$(COMPONENT_PREP_ACTION$(1))'"
+#	@echo "=== base vars:  SOURCE_DIR = '$$(SOURCE_DIR)'; COMPONENT_SRC = '$$(COMPONENT_SRC)'; BUILD_DIR_32 = '$$(BUILD_DIR_32)'; BUILD_DIR_64 = '$$(BUILD_DIR_64)'; COMPONENT_PREP_ACTION = '$$(COMPONENT_PREP_ACTION)'"
+COMPONENT_PREP_ACTION ?= (true)
+
 define prep-rules
 ifdef SOURCE_DIR$(1)
 
+ifndef COMPONENT_PREP_ACTION$(1)
+$(if $(1),COMPONENT_PREP_ACTION$(1) ?= $$(COMPONENT_PREP_ACTION))
+endif
+
 $$(SOURCE_DIR$(1))/.prep:	download unpack patch
-ifeq ($(strip $(1)),)
-	$$(COMPONENT_PREP_ACTION)
-else
-ifeq ($(strip $$(COMPONENT_PREP_ACTION$(1))),)
-	$$(COMPONENT_PREP_ACTION)
-else
 	$$(COMPONENT_PREP_ACTION$(1))
-endif
-endif
 	$(TOUCH) $$@
 
 prep::	$$(SOURCE_DIR$(1))/.prep
