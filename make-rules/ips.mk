@@ -119,6 +119,9 @@ PKG_PROTO_DIRS += $(MANGLED_DIR) $(PROTO_DIR) $(@D) $(COMPONENT_DIR) $(COMPONENT
 
 MANIFEST_BASE =		$(BUILD_DIR)/manifest-$(MACH)
 
+SAMPLE_MANIFEST_DIR = 	$(COMPONENT_DIR)/manifests
+SAMPLE_MANIFEST_FILE =	$(SAMPLE_MANIFEST_DIR)/sample-manifest.p5m
+
 CANONICAL_MANIFESTS =	$(wildcard *.p5m)
 ifneq ($(wildcard $(HISTORY)),)
 HISTORICAL_MANIFESTS = $(shell $(NAWK) -v FUNCTION=name -f $(GENERATE_HISTORY) < $(HISTORY))
@@ -174,6 +177,7 @@ MANIFESTS =		$(VERSIONED_MANIFESTS:%=$(MANIFEST_BASE)-%)
 
 DEPENDED=$(VERSIONED_MANIFESTS:%.p5m=$(MANIFEST_BASE)-%.depend)
 RESOLVED=$(VERSIONED_MANIFESTS:%.p5m=$(MANIFEST_BASE)-%.depend.res)
+PRE_PUBLISHED=$(RESOLVED:%.depend.res=%.pre-published)
 PUBLISHED=$(RESOLVED:%.depend.res=%.published)
 
 COPYRIGHT_FILE ?=	$(COMPONENT_NAME)-$(COMPONENT_VERSION).copyright
@@ -185,20 +189,32 @@ IPS_COMPONENT_VERSION ?=	$(COMPONENT_VERSION)
 
 # allow publishing to be overridden, such as when
 # a package is for one architecture only.
+PRE_PUBLISH_STAMP ?= $(BUILD_DIR)/.pre-published-$(MACH)
 PUBLISH_STAMP ?= $(BUILD_DIR)/.published-$(MACH)
 
-publish:		build install $(PUBLISH_STAMP)
+# Do all that is needed to ensure the package is consistent for publishing,
+# except actually pushing to a repo, separately from the push to the repo.
+# Note that running "install" rule as a dependency for multiple targets can
+# have adverse effects, so instead we call it at most once by requiring the
+# touched ALL_INSTALLED_STAMP file.
+pre-publish:	$(ALL_INSTALLED_STAMP) $(PRE_PUBLISH_STAMP)
+publish:		pre-publish $(PUBLISH_STAMP)
 
 sample-manifest:	$(GENERATED).p5m
 
-$(GENERATED).p5m:	install
+$(GENERATED).p5m:	$(ALL_INSTALLED_STAMP)
+	[ ! -d $(SAMPLE_MANIFEST_DIR) ] && $(MKDIR) $(SAMPLE_MANIFEST_DIR) || true
 	$(PKGSEND) generate $(PKG_HARDLINKS:%=--target %) $(PROTO_DIR) | \
 	$(PKGMOGRIFY) $(PKG_OPTIONS) /dev/fd/0 $(GENERATE_TRANSFORMS) | \
-		sed -e '/^$$/d' -e '/^#.*$$/d' | $(PKGFMT) | \
-		cat $(METADATA_TEMPLATE) - >$@
+		sed -e '/^$$/d' -e '/^#.*$$/d' -e '/^dir .*$$/d' \
+		-e '/\.la$$/d' -e '/\.pyo$$/d' -e '/usr\/lib\/python[23]\..*\.pyc$$/d' \
+		-e '/.*\/__pycache__\/.*/d'  | \
+		$(PKGFMT) | \
+		cat $(METADATA_TEMPLATE) - | \
+		$(TEE) $@ $(SAMPLE_MANIFEST_FILE) >/dev/null
 
 # copy the canonical manifest(s) to the build tree
-$(MANIFEST_BASE)-%.generate:	%.p5m canonical-manifests
+$(MANIFEST_BASE)-%.generate:	%.p5m canonical-manifests $(ALL_INSTALLED_STAMP)
 	cat $(METADATA_TEMPLATE) $< >$@
 
 # The text of a transform that will emit a dependency conditional on the
@@ -222,14 +238,14 @@ $(foreach ver,$(PYTHON_VERSIONS),$(eval $(call python-manifest-rule,$(ver))))
 # appropriate conditional dependencies into a python library's
 # runtime-version-generic package to pull in the version-specific bits when the
 # corresponding version of python is on the system.
-$(WS_TOP)/transforms/mkgeneric-python: $(WS_TOP)/make-rules/shared-macros.mk
+$(BUILD_DIR)/mkgeneric-python: $(WS_TOP)/make-rules/shared-macros.mk $(MAKEFILE_PREREQ)
 	$(RM) $@
 	$(foreach ver,$(shell echo $(PYTHON_VERSIONS) | tr -d .), \
 		$(call mkgeneric,runtime/python,$(ver)))
 
 # Build Python version-wrapping manifests from the generic version.
-$(MANIFEST_BASE)-%.p5m: %-PYVER.p5m $(WS_TOP)/transforms/mkgeneric-python
-	$(PKGMOGRIFY) -D PYV=### $(WS_TOP)/transforms/mkgeneric-python \
+$(MANIFEST_BASE)-%.p5m: %-PYVER.p5m $(BUILD_DIR)/mkgeneric-python $(ALL_INSTALLED_STAMP)
+	$(PKGMOGRIFY) -D PYV=### $(BUILD_DIR)/mkgeneric-python \
 		$(WS_TOP)/transforms/mkgeneric $< > $@
 	if [ -f $*-GENFRAG.p5m ]; then cat $*-GENFRAG.p5m >> $@; fi
 
@@ -246,14 +262,14 @@ $(foreach ver,$(PERL_VERSIONS),$(eval $(call perl-manifest-rule,$(ver))))
 # appropriate conditional dependencies into a perl library's
 # runtime-version-generic package to pull in the version-specific bits when the
 # corresponding version of perl is on the system.
-$(WS_TOP)/transforms/mkgeneric-perl: $(WS_TOP)/make-rules/shared-macros.mk
+$(BUILD_DIR)/mkgeneric-perl: $(WS_TOP)/make-rules/shared-macros.mk $(MAKEFILE_PREREQ)
 	$(RM) $@
 	$(foreach ver,$(shell echo $(PERL_VERSIONS) | tr -d .), \
 		$(call mkgeneric,runtime/perl,$(ver)))
 
 # Build Perl version-wrapping manifests from the generic version.
-$(MANIFEST_BASE)-%.p5m: %-PERLVER.p5m $(WS_TOP)/transforms/mkgeneric-perl
-	$(PKGMOGRIFY) -D PLV=### $(WS_TOP)/transforms/mkgeneric-perl \
+$(MANIFEST_BASE)-%.p5m: %-PERLVER.p5m $(BUILD_DIR)/mkgeneric-perl $(ALL_INSTALLED_STAMP)
+	$(PKGMOGRIFY) -D PLV=### $(BUILD_DIR)/mkgeneric-perl \
 		$(WS_TOP)/transforms/mkgeneric $< > $@
 	if [ -f $*-GENFRAG.p5m ]; then cat $*-GENFRAG.p5m >> $@; fi
 
@@ -274,7 +290,7 @@ $(MANIFEST_BASE)-%-$(shell echo $(1) | tr -d .).mogrified: \
         PKG_MACROS += RUBY_VERSION=$(1) RUBY_LIB_VERSION=$(2) \
             RUBYV=$(subst .,,$(1))
 
-$(MANIFEST_BASE)-%-$(shell echo $(1) | tr -d .).p5m: %-RUBYVER.p5m
+$(MANIFEST_BASE)-%-$(shell echo $(1) | tr -d .).p5m: %-RUBYVER.p5m $(ALL_INSTALLED_STAMP)
 	if [ -f $$*-$(shell echo $(1) | tr -d .)GENFRAG.p5m ]; then \
 	        cat $$*-$(shell echo $(1) | tr -d .)GENFRAG.p5m >> $$@; \
 	fi
@@ -289,7 +305,7 @@ $(foreach ver,$(RUBY_VERSIONS),\
 # appropriate conditional dependencies into a ruby library's
 # runtime-version-generic package to pull in the version-specific bits when the
 # corresponding version of ruby is on the system.
-$(BUILD_DIR)/mkgeneric-ruby: $(WS_TOP)/make-rules/shared-macros.mk
+$(BUILD_DIR)/mkgeneric-ruby: $(WS_TOP)/make-rules/shared-macros.mk $(MAKEFILE_PREREQ)
 	$(RM) $@
 	$(foreach ver,$(RUBY_VERSIONS),\
 	        $(call mkgeneric,runtime/ruby,$(shell echo $(ver) | \
@@ -298,14 +314,14 @@ $(BUILD_DIR)/mkgeneric-ruby: $(WS_TOP)/make-rules/shared-macros.mk
 # Build Ruby version-wrapping manifests from the generic version.
 # Creates build/manifest-*-modulename.p5m file.
 #
-$(MANIFEST_BASE)-%.p5m: %-RUBYVER.p5m $(BUILD_DIR)/mkgeneric-ruby
+$(MANIFEST_BASE)-%.p5m: %-RUBYVER.p5m $(BUILD_DIR)/mkgeneric-ruby $(ALL_INSTALLED_STAMP)
 	$(PKGMOGRIFY) -D RUBYV=### $(BUILD_DIR)/mkgeneric-ruby \
 	        $(WS_TOP)/transforms/mkgeneric $< > $@
 	if [ -f $*-GENFRAG.p5m ]; then cat $*-GENFRAG.p5m >> $@; fi
 
 ifeq   ($(strip $(COMPONENT_AUTOGEN_MANIFEST)),yes)
 # auto-generate file/directory list
-$(MANIFEST_BASE)-%.generated:	%.p5m $(BUILD_DIR)
+$(MANIFEST_BASE)-%.generated:	%.p5m $(BUILD_DIR) $(ALL_INSTALLED_STAMP)
 	(cat $(METADATA_TEMPLATE); \
 	$(PKGSEND) generate $(PKG_HARDLINKS:%=--target %) $(PROTO_DIR)) | \
 	$(PKGMOGRIFY) $(PKG_OPTIONS) /dev/fd/0 $(AUTOGEN_MANIFEST_TRANSFORMS) | \
@@ -325,7 +341,7 @@ $(MANIFEST_BASE)-%.mogrified:	$(MANIFEST_BASE)-%.generated
 		sed -e '/^$$/d' -e '/^#.*$$/d' | uniq >$@
 else
 # mogrify non-parameterized manifests
-$(MANIFEST_BASE)-%.mogrified:	%.p5m $(BUILD_DIR)
+$(MANIFEST_BASE)-%.mogrified:	%.p5m $(BUILD_DIR) $(ALL_INSTALLED_STAMP)
 	$(PKGMOGRIFY) $(PKG_OPTIONS) $< \
 		$(PUBLISH_TRANSFORMS) | \
 		sed -e '/^$$/d' -e '/^#.*$$/d' | uniq >$@
@@ -373,7 +389,7 @@ sample-resolve.deps:
 
 
 # resolve the dependencies all at once
-$(BUILD_DIR)/.resolved-$(MACH):	$(DEPENDED)
+$(BUILD_DIR)/.resolved-$(MACH):	$(DEPENDED) $(ALL_INSTALLED_STAMP)
 	$(PKGDEPEND) resolve $(EXTDEPFILES:%=-e %) -m $(DEPENDED)
 	$(TOUCH) $@
 
@@ -412,9 +428,20 @@ FRC:
 PKGSEND_PUBLISH_OPTIONS = -s $(WS_REPO) publish --fmri-in-manifest
 PKGSEND_PUBLISH_OPTIONS += $(PKG_PROTO_DIRS:%=-d %)
 PKGSEND_PUBLISH_OPTIONS += -T \*.py
-$(MANIFEST_BASE)-%.published:	$(MANIFEST_BASE)-%.depend.res $(BUILD_DIR)/.linted-$(MACH)
+
+# Do all the hard work that is needed to ensure the package is consistent
+# and ready for publishing, except actually pushing bits to a repository
+$(MANIFEST_BASE)-%.pre-published:	$(MANIFEST_BASE)-%.depend.res $(BUILD_DIR)/.linted-$(MACH)
+	$(CP) $< $@
+	@echo "NEW PACKAGE CONTENTS ARE LOCALLY VALIDATED AND READY TO GO"
+
+# Push to the repo
+$(MANIFEST_BASE)-%.published:	$(MANIFEST_BASE)-%.pre-published
 	$(PKGSEND) $(PKGSEND_PUBLISH_OPTIONS) $<
 	$(PKGFMT) <$< >$@
+
+$(BUILD_DIR)/.pre-published-$(MACH):	$(PRE_PUBLISHED)
+	$(TOUCH) $@
 
 $(BUILD_DIR)/.published-$(MACH):	$(PUBLISHED)
 	$(TOUCH) $@
@@ -422,24 +449,24 @@ $(BUILD_DIR)/.published-$(MACH):	$(PUBLISHED)
 print-package-names:	canonical-manifests
 	@cat $(VERSIONED_MANIFESTS) $(WS_TOP)/transforms/print-pkgs | \
 		$(PKGMOGRIFY) $(PKG_OPTIONS) /dev/fd/0 | \
- 		sed -e '/^$$/d' -e '/^#.*$$/d' | sort -u
+		sed -e '/^$$/d' -e '/^#.*$$/d' | sort -u
 
 print-package-paths:	canonical-manifests
 	@cat $(VERSIONED_MANIFESTS) $(WS_TOP)/transforms/print-paths | \
 		$(PKGMOGRIFY) $(PKG_OPTIONS) /dev/fd/0 | \
- 		sed -e '/^$$/d' -e '/^#.*$$/d' | sort -u
+		sed -e '/^$$/d' -e '/^#.*$$/d' | sort -u
 
 install-packages:	publish
 	@if [ $(IS_GLOBAL_ZONE) = 0 -o x$(ROOT) != x ]; then \
 	    cat $(VERSIONED_MANIFESTS) $(WS_TOP)/transforms/print-paths | \
-		$(PKGMOGRIFY) $(PKG_OPTIONS) /dev/fd/0 | \
- 		sed -e '/^$$/d' -e '/^#.*$$/d' -e 's;/;;' | sort -u | \
-		(cd $(PROTO_DIR) ; pfexec /bin/cpio -dump $(ROOT)) ; \
-	else ; \
+	    $(PKGMOGRIFY) $(PKG_OPTIONS) /dev/fd/0 | \
+	    sed -e '/^$$/d' -e '/^#.*$$/d' -e 's;/;;' | sort -u | \
+	    (cd $(PROTO_DIR) ; pfexec /bin/cpio -dump $(ROOT)) ; \
+	 else ; \
 	    echo "unsafe to install package(s) automatically" ; \
-        fi
+	 fi
 
-$(RESOLVED):	install
+$(RESOLVED):	$(ALL_INSTALLED_STAMP)
 
 canonical-manifests:	$(CANONICAL_MANIFESTS) Makefile $(PATCHES)
 ifeq	($(strip $(CANONICAL_MANIFESTS)),)
@@ -463,3 +490,6 @@ pre-prep:	required-pkgs.mk
 
 
 CLEAN_PATHS +=	required-pkgs.mk
+CLEAN_PATHS +=	$(BUILD_DIR)/mkgeneric-perl
+CLEAN_PATHS +=	$(BUILD_DIR)/mkgeneric-python
+CLEAN_PATHS +=	$(BUILD_DIR)/mkgeneric-ruby

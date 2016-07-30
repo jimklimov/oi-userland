@@ -16,7 +16,7 @@ include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME=		pygobject
 COMPONENT_VERSION=	2.28.6
-COMPONENT_REVISION=	1
+COMPONENT_REVISION=	3
 COMPONENT_PROJECT_URL=	http://www.gnome.org
 COMPONENT_SUMMARY=	Python bindings for GObject
 COMPONENT_SRC=		$(COMPONENT_NAME)-$(COMPONENT_VERSION)
@@ -36,9 +36,9 @@ BUILD_64 = $(VARIANTS:%=%/$(MACH64)/.built)
 INSTALL_32 = $(VARIANTS:%=%/$(MACH32)/.installed)
 INSTALL_64 = $(VARIANTS:%=%/$(MACH64)/.installed)
 
-# Avoid overwriting python2.6 files in /usr/share
-$(VARIANT_PYTHON26)/$(MACH32)/.installed:	$(VARIANT_PYTHON27)/$(MACH32)/.installed
-$(VARIANT_PYTHON26)/$(MACH64)/.installed:	$(VARIANT_PYTHON27)/$(MACH64)/.installed
+# Avoid overwriting python2.7 files in /usr/share
+$(VARIANT_PYTHON27)/$(MACH32)/.installed:	$(VARIANT_PYTHON26)/$(MACH32)/.installed
+$(VARIANT_PYTHON27)/$(MACH64)/.installed:	$(VARIANT_PYTHON26)/$(MACH64)/.installed
 
 $(VARIANT_PYTHON26)/$(MACH64)/.configured: BITS=64
 $(VARIANT_PYTHON27)/$(MACH64)/.configured: BITS=64
@@ -68,6 +68,11 @@ CFLAGS += $(gcc_C99_ENABLE)
 
 CONFIGURE_OPTIONS+=	--sysconfdir=/etc
 CONFIGURE_OPTIONS+=	--without-ffi
+
+# Disable introspection modules in this package since we ship the modern ones
+# in the ../pygobject-3 packages instead, and they'd clash if we didn't disable.
+CONFIGURE_OPTIONS += --disable-introspection
+
 CONFIGURE_ENV+=		PYTHON=$(PYTHON)
 
 CONFIGURE_ENV+=         PYTHON=$(PYTHON)
@@ -81,4 +86,8 @@ install:	$(INSTALL_32_and_64)
 
 test:		$(NO_TESTS)
 
-include $(WS_TOP)/make-rules/depend.mk
+REQUIRED_PACKAGES += SUNWcs
+REQUIRED_PACKAGES += library/desktop/cairo
+REQUIRED_PACKAGES += library/desktop/gobject/gobject-introspection
+REQUIRED_PACKAGES += library/glib2
+REQUIRED_PACKAGES += system/library
