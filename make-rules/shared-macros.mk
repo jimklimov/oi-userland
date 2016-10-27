@@ -92,7 +92,7 @@ COMPILER =		gcc
 LINKER =		gcc
 BITS =			32
 PYTHON_VERSION =	2.7
-PYTHON_VERSIONS =	2.6 2.7
+PYTHON_VERSIONS =	2.7
 
 BASS_O_MATIC =	$(WS_TOOLS)/bass-o-matic
 
@@ -541,13 +541,13 @@ LINT =		$(lint.$(BITS))
 
 LD =		/usr/bin/ld
 
-PYTHON.2.6.VENDOR_PACKAGES.32 = /usr/lib/python2.6/vendor-packages
-PYTHON.2.6.VENDOR_PACKAGES.64 = /usr/lib/python2.6/vendor-packages/64
-PYTHON.2.6.VENDOR_PACKAGES = $(PYTHON.2.6.VENDOR_PACKAGES.$(BITS))
-
 PYTHON.2.7.VENDOR_PACKAGES.32 = /usr/lib/python2.7/vendor-packages
 PYTHON.2.7.VENDOR_PACKAGES.64 = /usr/lib/python2.7/vendor-packages/64
 PYTHON.2.7.VENDOR_PACKAGES = $(PYTHON.2.7.VENDOR_PACKAGES.$(BITS))
+
+PYTHON.3.4.VENDOR_PACKAGES.32 = /usr/lib/python3.4/vendor-packages
+PYTHON.3.4.VENDOR_PACKAGES.64 = /usr/lib/python3.4/vendor-packages/64
+PYTHON.3.4.VENDOR_PACKAGES = $(PYTHON.3.4.VENDOR_PACKAGES.$(BITS))
 
 ifeq   ($(strip $(PARFAIT_BUILD)),yes)
 CC.studio.32 =	$(WS_TOOLS)/parfait/cc
@@ -578,9 +578,6 @@ RUBY_VERSIONS = $(RUBY_LIB_VERSION)
 PYTHON_VENDOR_PACKAGES.32 = /usr/lib/python$(PYTHON_VERSION)/vendor-packages
 PYTHON_VENDOR_PACKAGES.64 = /usr/lib/python$(PYTHON_VERSION)/vendor-packages/64
 PYTHON_VENDOR_PACKAGES = $(PYTHON_VENDOR_PACKAGES.$(BITS))
-
-PYTHON.2.6.32 =	/usr/bin/python2.6
-PYTHON.2.6.64 =	/usr/bin/$(MACH64)/python2.6
 
 PYTHON.2.7.32 =	/usr/bin/python2.7
 PYTHON.2.7.64 =	/usr/bin/$(MACH64)/python2.7
@@ -683,6 +680,27 @@ PKG_MACROS +=   MYSQL_VERSION=$(MYSQL_VERSION)
 PKG_MACROS +=   MYSQL_VERNUM=$(MYSQL_VERNUM)
 PKG_MACROS +=   MYSQL_BASEPKG=$(MYSQL_BASEPKG)
 
+# Default libjpeg implementation layout
+JPEG_IMPLEM ?=     libjpeg8-turbo
+JPEG_HOME =        $(USRLIBDIR)/$(JPEG_IMPLEM)
+JPEG_BINDIR.32 =   $(JPEG_HOME)/bin
+JPEG_BINDIR.64 =   $(JPEG_HOME)/bin/$(MACH64)
+JPEG_BINDIR =      $(JPEG_BINDIR.$(BITS))
+JPEG_INCDIR =      $(USRINCDIR)/$(JPEG_IMPLEM)
+JPEG_LIBDIR.32 =   $(JPEG_HOME)/lib
+JPEG_LIBDIR.64 =   $(JPEG_HOME)/lib/$(MACH64)
+JPEG_LIBDIR =      $(JPEG_LIBDIR.$(BITS))
+JPEG_CPPFLAGS =    -I$(JPEG_INCDIR)
+JPEG_CFLAGS.32 =   -Wl,-L$(JPEG_LIBDIR.32) -Wl,-R$(JPEG_LIBDIR.32)
+JPEG_CFLAGS.64 =   -Wl,-L$(JPEG_LIBDIR.64) -Wl,-R$(JPEG_LIBDIR.64)
+JPEG_CFLAGS =      $(JPEG_CFLAGS.$(BITS))
+JPEG_CXXFLAGS.32 = -Wl,-L$(JPEG_LIBDIR.32) -Wl,-R$(JPEG_LIBDIR.32)
+JPEG_CXXFLAGS.64 = -Wl,-L$(JPEG_LIBDIR.64) -Wl,-R$(JPEG_LIBDIR.64)
+JPEG_CXXFLAGS =    $(JPEG_CXXFLAGS.$(BITS))
+JPEG_LDFLAGS.32 =  -L$(JPEG_LIBDIR.32) -R$(JPEG_LIBDIR.32)
+JPEG_LDFLAGS.64 =  -L$(JPEG_LIBDIR.64) -R$(JPEG_LIBDIR.64)
+JPEG_LDFLAGS =     $(JPEG_LDFLAGS.$(BITS))
+
 # This is the default BUILD version of tcl
 # Not necessarily the system's default version, i.e. /usr/bin/tclsh
 TCL_VERSION =  8.5
@@ -724,11 +742,13 @@ LN =		/bin/ln
 CAT =		/bin/cat
 SYMLINK =	/bin/ln -s
 ENV =		/usr/bin/env
+FIND =		/usr/bin/find
 INSTALL =	/usr/bin/ginstall
 CHMOD =		/usr/bin/chmod
 NAWK =		/usr/bin/nawk
 TEE =		/usr/bin/tee
 GAS =		/usr/gnu/bin/as
+GTAR =		/usr/gnu/bin/tar
 STRIP =	/usr/bin/strip
 IPS2TGZ = 	$(WS_TOOLS)/ips2tgz
 
