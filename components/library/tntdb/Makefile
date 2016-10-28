@@ -13,9 +13,6 @@
 # Copyright 2016 Jim Klimov
 #
 
-# BuildRequires: cxxtools, sqlite-3, pg_config (postgres-9*/developer),
-# mysql_config (mariadb-55/client, percona, mysql)
-
 include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME=	tntdb
@@ -70,7 +67,11 @@ install: $(INSTALL_32_and_64)
 test: $(TEST_32_and_64)
 
 REQUIRED_PACKAGES += $(MYSQL_BASEPKG)/library
+# We need mysql_config delivered by (mariadb-55|mysql|percona)/client :
+REQUIRED_PACKAGES += $(MYSQL_BASEPKG)/client
 REQUIRED_PACKAGES += $(PG_BASEPKG)/library
+# We need pg_config :
+REQUIRED_PACKAGES += $(PG_BASEPKG)/developer
 REQUIRED_PACKAGES += database/sqlite-3
 REQUIRED_PACKAGES += library/cxxtools
 REQUIRED_PACKAGES += system/library
