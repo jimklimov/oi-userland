@@ -14,11 +14,12 @@
 include ../../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME=		php
-COMPONENT_VERSION=	5.6.21
+COMPONENT_VERSION=	5.6.27
 COMPONENT_SRC=		$(COMPONENT_NAME)-$(COMPONENT_VERSION)
-COMPONENT_ARCHIVE=	$(COMPONENT_SRC).tar.bz2
-COMPONENT_ARCHIVE_HASH=	sha256:b4ed7ab574b689fd6d6494fde954826c06efc85c505e017b8d776c7c7f479590
+COMPONENT_ARCHIVE=	$(COMPONENT_SRC).tar.xz
+COMPONENT_ARCHIVE_HASH=	sha256:16eb544498339d1d855292826e2e547ab01a31600141094959073e5e10e93ab5
 COMPONENT_ARCHIVE_URL=	http://uk1.php.net/get/$(COMPONENT_ARCHIVE)/from/this/mirror
+COMPONENT_SIG_URL= 	http://uk1.php.net/distributions/$(COMPONENT_ARCHIVE).asc	
 
 include $(WS_TOP)/make-rules/prep.mk
 include $(WS_TOP)/make-rules/configure.mk
@@ -183,3 +184,26 @@ CONFIGURE_ENV +=	CPPFLAGS="$(CPPFLAGS)"
 build:		$(BUILD_32_and_64) 
 
 install:	$(INSTALL_32_and_64)
+
+REQUIRED_PACKAGES += SUNWcs
+REQUIRED_PACKAGES += compress/bzip2
+REQUIRED_PACKAGES += image/library/libjpeg6
+REQUIRED_PACKAGES += image/library/libjpeg6-ijg
+REQUIRED_PACKAGES += image/library/libpng16
+REQUIRED_PACKAGES += library/icu
+REQUIRED_PACKAGES += library/libxml2
+REQUIRED_PACKAGES += library/libxslt
+REQUIRED_PACKAGES += library/openldap
+REQUIRED_PACKAGES += library/readline
+REQUIRED_PACKAGES += library/security/openssl
+REQUIRED_PACKAGES += library/uw-imap
+REQUIRED_PACKAGES += library/zlib
+REQUIRED_PACKAGES += system/library
+REQUIRED_PACKAGES += system/library/gcc-4-runtime
+REQUIRED_PACKAGES += system/library/math
+REQUIRED_PACKAGES += system/library/security/libmcrypt
+REQUIRED_PACKAGES += text/aspell
+REQUIRED_PACKAGES += text/tidy
+REQUIRED_PACKAGES += web/curl
+REQUIRED_PACKAGES += web/php-56/php-cli
+REQUIRED_PACKAGES += web/server/apache-22

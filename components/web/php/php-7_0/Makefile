@@ -14,11 +14,12 @@
 include ../../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME=		php
-COMPONENT_VERSION=	7.0.6
+COMPONENT_VERSION=	7.0.12
 COMPONENT_SRC=		$(COMPONENT_NAME)-$(COMPONENT_VERSION)
 COMPONENT_ARCHIVE=	$(COMPONENT_SRC).tar.xz
-COMPONENT_ARCHIVE_HASH=	sha256:1b237a9455e5476a425dbb9d99966bad68107747c601958cb9558a7fb49ab419
+COMPONENT_ARCHIVE_HASH=	sha256:f3d6c49e1c242e5995dec15e503fde996c327eb86cd7ec45c690e93c971b83ff
 COMPONENT_ARCHIVE_URL=	http://uk1.php.net/get/$(COMPONENT_ARCHIVE)/from/this/mirror
+COMPONENT_SIG_URL=	http://uk1.php.net/get/$(COMPONENT_ARCHIVE).asc/from/this/mirror
 
 include $(WS_MAKE_RULES)/prep.mk
 include $(WS_MAKE_RULES)/configure.mk
@@ -35,8 +36,11 @@ PHP_PREFIX=/usr/php/7.0
 PHP_SYSCONFDIR=/etc/php/7.0
 PHP_DATADIR=/var/php/7.0
 
-CFLAGS = $(CC_BITS) -D_POSIX_PTHREAD_SEMANTICS
-CPPFLAGS += -I/usr/include/openldap
+CFLAGS			= $(CC_BITS) -D_POSIX_PTHREAD_SEMANTICS
+CPPFLAGS		+= -I/usr/include/openldap
+CPPFLAGS		+=      -I$(MYSQL_INCDIR)
+CFLAGS			+=	-I$(MYSQL_INCDIR)
+LDFLAGS		+=	-L$(MYSQL_LIBDIR) -R$(MYSQL_LIBDIR)
 
 COMPONENT_PREP_ACTION =        ( cd $(@D) && autoconf )
 
@@ -55,6 +59,7 @@ CONFIGURE_OPTIONS     +=	--sysconfdir=$(PHP_SYSCONFDIR)
 CONFIGURE_OPTIONS     +=	--datadir=$(PHP_DATADIR)
 CONFIGURE_OPTIONS     +=	--mandir=$(PHP_PREFIX)/share/man
 CONFIGURE_OPTIONS     +=	--localstatedir=$(PHP_DATADIR)
+CONFIGURE_OPTIONS     +=	--enable-maintainer-zts
 
 # SAPI modules
 CONFIGURE_OPTIONS.32  +=	--with-apxs2=$(AP_PREFIX)/bin/apxs
@@ -92,6 +97,12 @@ CONFIGURE_OPTIONS     +=	--with-curl=shared
 CONFIGURE_OPTIONS     +=	--with-pspell=shared
 CONFIGURE_OPTIONS     +=	--with-imap=shared
 CONFIGURE_OPTIONS     +=	--with-imap-ssl
+
+# Extensions, dependent on other packages
+
+CONFIGURE_OPTIONS     +=	--with-mysqli=shared,$(MYSQL_BINDIR)/mysql_config
+CONFIGURE_OPTIONS     +=	--with-pdo-mysql=shared,$(MYSQL_HOME)
+CONFIGURE_OPTIONS     +=	--with-pgsql=shared,$(PG_BINDIR)
 
 # Enabled Extensions
 #CONFIGURE_OPTIONS     +=	--with-libxml-dir=$(ECPREFIX)
@@ -175,7 +186,33 @@ CONFIGURE_ENV.64 +=     EXTENSION_DIR=$(PHP_PREFIX)/extensions/$(MACH64)
 CONFIGURE_ENV.32 +=     ICU_CONFIG=/usr/bin/icu-config
 CONFIGURE_ENV.64 +=     ICU_CONFIG=/usr/bin/amd64/icu-config
 CONFIGURE_ENV +=	CPPFLAGS="$(CPPFLAGS)"
+CONFIGURE_ENV +=	PG_CONFIG=$(PG_BINDIR)/pg_config
 
 build:		$(BUILD_32_and_64)
 
 install:	$(INSTALL_32_and_64)
+
+REQUIRED_PACKAGES += SUNWcs
+REQUIRED_PACKAGES += compress/bzip2
+REQUIRED_PACKAGES += database/mariadb-55/library
+REQUIRED_PACKAGES += database/postgres-93/library
+REQUIRED_PACKAGES += image/library/libjpeg6
+REQUIRED_PACKAGES += image/library/libjpeg6-ijg
+REQUIRED_PACKAGES += image/library/libpng16
+REQUIRED_PACKAGES += library/icu
+REQUIRED_PACKAGES += library/libxml2
+REQUIRED_PACKAGES += library/libxslt
+REQUIRED_PACKAGES += library/openldap
+REQUIRED_PACKAGES += library/readline
+REQUIRED_PACKAGES += library/security/openssl
+REQUIRED_PACKAGES += library/uw-imap
+REQUIRED_PACKAGES += library/zlib
+REQUIRED_PACKAGES += system/library
+REQUIRED_PACKAGES += system/library/gcc-4-runtime
+REQUIRED_PACKAGES += system/library/math
+REQUIRED_PACKAGES += system/library/security/libmcrypt
+REQUIRED_PACKAGES += text/aspell
+REQUIRED_PACKAGES += text/tidy
+REQUIRED_PACKAGES += web/curl
+REQUIRED_PACKAGES += web/php-70/php-cli
+REQUIRED_PACKAGES += web/server/apache-22

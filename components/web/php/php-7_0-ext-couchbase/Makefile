@@ -15,10 +15,11 @@ include ../../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME=		php-7.0-ext-couchbase
 COMPONENT_VERSION=	2.2.0
+COMPONENT_REVISION=	2
 COMPONENT_PROJECT_URL=	http://pecl.php.net/package/couchbase
-COMPONENT_SRC=		couchbase-$(COMPONENT_VERSION)beta2
+COMPONENT_SRC=		couchbase-$(COMPONENT_VERSION)
 COMPONENT_ARCHIVE=	$(COMPONENT_SRC).tgz
-COMPONENT_ARCHIVE_HASH=	sha256:71da31b658e1987a376282909c0b815a5e469d86d407d18cdf30bf8e9b397498
+COMPONENT_ARCHIVE_HASH=	sha256:6ce11f344bd01df7e8b96894ea3db44e72a273633d67f80dbc130147cc161acc
 COMPONENT_ARCHIVE_URL=	http://pecl.php.net/get/$(COMPONENT_ARCHIVE)
 COMPONENT_LICENSE=	ASL-2
 COMPONENT_LICENSE_FILE=	LICENSE
@@ -46,6 +47,7 @@ CONFIGURE_OPTIONS     +=	--includedir=$(PHP_PREFIX)/include
 CONFIGURE_OPTIONS     +=	--sysconfdir=$(PHP_SYSCONFDIR)
 CONFIGURE_OPTIONS     +=	--datadir=$(PHP_DATADIR)
 CONFIGURE_OPTIONS     +=	--mandir=$(PHP_PREFIX)/share/man
+CONFIGURE_OPTIONS     +=	--enable-maintainer-zts
 
 CONFIGURE_OPTIONS.64  +=	--build=x86_64-pc-solaris2.10
 CONFIGURE_OPTIONS.32  +=	--with-php-config=$(PHP_PREFIX)/bin/php-config
@@ -67,3 +69,7 @@ COMPONENT_INSTALL_ARGS		+=	INSTALL_ROOT=$(PROTO_DIR)
 build:		$(BUILD_32_and_64)
 
 install:	$(INSTALL_32_and_64)
+
+REQUIRED_PACKAGES += library/libcouchbase
+REQUIRED_PACKAGES += system/library
+REQUIRED_PACKAGES += web/php-70/php-common

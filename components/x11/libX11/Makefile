@@ -18,6 +18,7 @@ include ../../../make-rules/shared-macros.mk
 COMPONENT_NAME= libX11
 
 COMPONENT_VERSION= 1.6.3
+COMPONENT_REVISION= 2
 COMPONENT_SUMMARY= libX11 - X11 core protocol client library
 COMPONENT_SRC= $(COMPONENT_NAME)-$(COMPONENT_VERSION)
 COMPONENT_ARCHIVE= $(COMPONENT_SRC).tar.bz2
@@ -80,3 +81,8 @@ COMPONENT_BUILD_ARGS += $(COMPONENT_BUILD_ARGS.$(BITS))
 build: $(BUILD_32_and_64)
 
 install: $(INSTALL_32_and_64)
+
+REQUIRED_PACKAGES += system/library
+REQUIRED_PACKAGES += x11/library/libxau
+REQUIRED_PACKAGES += x11/library/libxcb
+REQUIRED_PACKAGES += x11/library/libxext

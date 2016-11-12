@@ -17,6 +17,7 @@ include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME= libXfixes
 COMPONENT_VERSION= 5.0.1
+COMPONENT_REVISION= 1
 COMPONENT_SUMMARY= libXfixes - XFIXES extension client library
 COMPONENT_SRC= $(COMPONENT_NAME)-$(COMPONENT_VERSION)
 COMPONENT_ARCHIVE= $(COMPONENT_SRC).tar.bz2
@@ -46,3 +47,6 @@ LD_OPTIONS += -M$(COMPONENT_DIR)/mapfile-vers
 build: $(BUILD_32_and_64)
 
 install: $(INSTALL_32_and_64)
+
+REQUIRED_PACKAGES += system/library
+REQUIRED_PACKAGES += x11/library/libx11

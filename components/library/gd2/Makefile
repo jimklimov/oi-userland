@@ -19,20 +19,22 @@
 # CDDL HEADER END
 #
 # Copyright (c) 2011, 2012, Oracle and/or its affiliates. All rights reserved.
+# Copyright 2016 Jim Klimov
 #
 include ../../../make-rules/shared-macros.mk
 
+# The current version, its patch-files have patch_1 suffix
 COMPONENT_NAME=		gd2
-COMPONENT_VERSION=      2.0.35
-COMPONENT_REVISION=	2
+COMPONENT_VERSION=	2.1.1
 COMPONENT_SRC_NAME=	gd
-COMPONENT_SRC=          $(COMPONENT_SRC_NAME)-$(COMPONENT_VERSION)
-COMPONENT_PROJECT_URL=  http://www.libgd.org/
-COMPONENT_ARCHIVE=      gd-$(COMPONENT_VERSION).tar.bz2
-COMPONENT_ARCHIVE_HASH= \
-    sha256:bf222490749d2a9a9ac3593b01eb55aed98461ff81202414707f61b42aa300f9
-COMPONENT_ARCHIVE_URL=  http://pkgs.fedoraproject.org/repo/pkgs/gd/$(COMPONENT_ARCHIVE)/6c6c3dbb7bf079e0bb5fbbfd3bb8a71c/$(COMPONENT_ARCHIVE)
-COMPONENT_BUGDB=	library/gd2
+COMPONENT_SRC=	libgd-$(COMPONENT_SRC_NAME)-$(COMPONENT_VERSION)
+# ...aka http://libgd.github.io/ nowadays
+COMPONENT_ARCHIVE=	$(COMPONENT_SRC_NAME)-$(COMPONENT_VERSION).tar.gz
+COMPONENT_ARCHIVE_HASH=	\
+    sha256:a68c69d2fe3eaab9db63b1c4d391dd549c26d3b47bfba484d5ed2d433c55d4d8
+COMPONENT_ARCHIVE_URL=	https://github.com/libgd/libgd/archive/$(COMPONENT_ARCHIVE)
+COMPONENT_REVISION=	3
+COMPONENT_PROJECT_URL=	http://www.libgd.org/
 
 include $(WS_MAKE_RULES)/prep.mk
 include $(WS_MAKE_RULES)/configure.mk
@@ -41,22 +43,24 @@ include $(WS_MAKE_RULES)/lint-libraries.mk
 
 PATCH_LEVEL = 0
 
-CFLAGS += $(CPP_LARGEFILES)
-CPPFLAGS += $(CPP_LARGEFILES)
+CFLAGS +=	$(CPP_LARGEFILES)
+CPPFLAGS +=	$(CPP_LARGEFILES)
+LINT_FLAGS +=	-I$(SOURCE_DIR)/src
 
 # Needed for "gmake test" to work.
 COMPONENT_PRE_CONFIGURE_ACTION = \
 	($(CLONEY) $(SOURCE_DIR) $(@D))
 
-CONFIGURE_ENV += CPPFLAGS="$(CPPFLAGS)"
+CONFIGURE_ENV +=	CPPFLAGS="$(CPPFLAGS)"
 
-CONFIGURE_OPTIONS  +=           --includedir=$(CONFIGURE_INCLUDEDIR)/gd2
-CONFIGURE_OPTIONS  +=           --disable-static
-CONFIGURE_OPTIONS  +=           --disable-rpath
-CONFIGURE_OPTIONS  +=           --with-x
-CONFIGURE_OPTIONS  +=           --with-pic
+CONFIGURE_OPTIONS +=	--includedir=$(CONFIGURE_INCLUDEDIR)/gd2
+CONFIGURE_OPTIONS +=	--disable-static
+CONFIGURE_OPTIONS +=	--disable-rpath
+CONFIGURE_OPTIONS +=	--with-x
+CONFIGURE_OPTIONS +=	--with-pic
+CONFIGURE_OPTIONS +=	--with-vpx
 
-COMPONENT_PREP_ACTION = (cd $(@D) ; autoreconf -if)
+COMPONENT_PREP_ACTION =	(cd $(SOURCE_DIR) && autoreconf -if )
 
 COMPONENT_TEST_CMD = \
 	cmake -DBUILD_TEST=1 .; \
@@ -64,14 +68,23 @@ COMPONENT_TEST_CMD = \
 	ctest .
 COMPONENT_TEST_TARGETS =
 
-build: $(BUILD_32_and_64)
+build:		$(BUILD_32_and_64)
 
-install: $(INSTALL_32_and_64)
+install:	$(INSTALL_32_and_64)
 
 # gdimageline_aa fails
-test: 	$(TEST_32_and_64)
+test:		$(TEST_32_and_64)
 
-BUILD_PKG_DEPENDENCIES = $(BUILD_TOOLS)
-
-include $(WS_MAKE_RULES)/depend.mk
-
+REQUIRED_PACKAGES += image/library/libjpeg6
+REQUIRED_PACKAGES += image/library/libjpeg6-ijg
+REQUIRED_PACKAGES += image/library/libpng16
+REQUIRED_PACKAGES += image/library/libtiff
+REQUIRED_PACKAGES += library/video/libvpx
+REQUIRED_PACKAGES += library/zlib
+REQUIRED_PACKAGES += runtime/perl-522
+REQUIRED_PACKAGES += SUNWcs
+REQUIRED_PACKAGES += system/library
+REQUIRED_PACKAGES += system/library/fontconfig
+REQUIRED_PACKAGES += system/library/freetype-2
+REQUIRED_PACKAGES += system/library/math
+REQUIRED_PACKAGES += x11/library/libxpm

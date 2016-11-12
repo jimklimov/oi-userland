@@ -63,16 +63,16 @@ COMPONENT_TEST_ENV += $(PYTHON_ENV)
 # Reset arguments specified as environmnent variables
 COMPONENT_BUILD_ARGS =
 
-# If we are building Python 2.7 or 3.4 support, build them and install them
-# before Python 2.6, so 2.6 is installed last and is the canonical version.
+# If we are building Python 2.6 or 3.4 support, build them and install them
+# before Python 2.7, so 2.7 is installed last and is the canonical version.
 # When we change the default, the new default should go last.
-ifneq ($(findstring 2.7,$(PYTHON_VERSIONS)),)
-$(BUILD_DIR)/%-2.6/.built:     $(BUILD_DIR)/%-2.7/.built
-$(BUILD_DIR)/%-2.6/.installed: $(BUILD_DIR)/%-2.7/.installed
+ifneq ($(findstring 2.6,$(PYTHON_VERSIONS)),)
+$(BUILD_DIR)/%-2.7/.built:     $(BUILD_DIR)/%-2.6/.built
+$(BUILD_DIR)/%-2.7/.installed: $(BUILD_DIR)/%-2.6/.installed
 endif
 ifneq ($(findstring 3.4,$(PYTHON_VERSIONS)),)
-$(BUILD_DIR)/%-2.6/.built:     $(BUILD_DIR)/%-3.4/.built
-$(BUILD_DIR)/%-2.6/.installed: $(BUILD_DIR)/%-3.4/.installed
+$(BUILD_DIR)/%-2.7/.built:     $(BUILD_DIR)/%-3.4/.built
+$(BUILD_DIR)/%-2.7/.installed: $(BUILD_DIR)/%-3.4/.installed
 endif
 
 # Create a distutils config file specific to the combination of build
@@ -114,10 +114,10 @@ $(BUILD_DIR)/%/.installed:	$(BUILD_DIR)/%/.built $(BUILD_DIR)/config-%/$(CFG)
 
 # Define bit specific and Python version specific filenames.
 COMPONENT_TEST_MASTER =	$(COMPONENT_TEST_RESULTS_DIR)/results-$(PYTHON_VERSION)-$(BITS).master
-COMPONENT_TEST_OUTPUT =	$(COMPONENT_TEST_RESULTS_DIR)/test-$(PYTHON_VERSION)-$(BITS)-results
-COMPONENT_TEST_DIFFS =	$(COMPONENT_TEST_RESULTS_DIR)/test-$(PYTHON_VERSION)-$(BITS)-diffs
-COMPONENT_TEST_SNAPSHOT = $(COMPONENT_TEST_RESULTS_DIR)/results-$(PYTHON_VERSION)-$(BITS).snapshot
-COMPONENT_TEST_TRANSFORM_CMD = $(COMPONENT_TEST_RESULTS_DIR)/transform-$(PYTHON_VERSION)-$(BITS)-results
+COMPONENT_TEST_OUTPUT =	$(COMPONENT_TEST_BUILD_DIR)/test-$(PYTHON_VERSION)-$(BITS)-results
+COMPONENT_TEST_DIFFS =	$(COMPONENT_TEST_BUILD_DIR)/test-$(PYTHON_VERSION)-$(BITS)-diffs
+COMPONENT_TEST_SNAPSHOT = $(COMPONENT_TEST_BUILD_DIR)/results-$(PYTHON_VERSION)-$(BITS).snapshot
+COMPONENT_TEST_TRANSFORM_CMD = $(COMPONENT_TEST_BUILD_DIR)/transform-$(PYTHON_VERSION)-$(BITS)-results
 
 COMPONENT_TEST_DEP =	$(BUILD_DIR)/%/.installed
 COMPONENT_TEST_DIR =	$(COMPONENT_SRC)/test
@@ -139,6 +139,8 @@ endif
 
 # test the built source
 $(BUILD_DIR)/%/.tested-and-compared:    $(COMPONENT_TEST_DEP)
+	$(RM) -rf $(COMPONENT_TEST_BUILD_DIR)
+	$(MKDIR) $(COMPONENT_TEST_BUILD_DIR)
 	$(COMPONENT_PRE_TEST_ACTION)
 	-(cd $(COMPONENT_TEST_DIR) ; \
 		$(COMPONENT_TEST_ENV_CMD) $(COMPONENT_TEST_ENV) \

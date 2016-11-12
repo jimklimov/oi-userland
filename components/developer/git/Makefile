@@ -23,33 +23,38 @@
 include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME=		git
-COMPONENT_VERSION=	1.9.4
-COMPONENT_REVISION=	3
-COMPONENT_PROJECT_URL=	http://git-scm.com/
+COMPONENT_VERSION=	2.9.2
+COMPONENT_PROJECT_URL=	https://git-scm.com/
 COMPONENT_SRC=		$(COMPONENT_NAME)-$(COMPONENT_VERSION)
 COMPONENT_ARCHIVE=	$(COMPONENT_SRC).tar.xz
-COMPONENT_ARCHIVE_HASH=	\
-    sha256:6bfb1f386a1fdbda3ec3206f499ffc24b262f3811c98e82e0ec8764d13511dea
+COMPONENT_ARCHIVE_HASH=	sha256:f8f546648f77f246f1302e3ec4037c81db25af1f02931597148c5bf61fac2db5
 COMPONENT_ARCHIVE_URL=	https://www.kernel.org/pub/software/scm/git/$(COMPONENT_ARCHIVE)
 COMPONENT_BUGDB=	utility/git
+COMPONENT_FMRI=		developer/versioning/git
+COMPONENT_LICENSE=	GPLv2
+COMPONENT_LICENSE_FILE=	git.license
+COMPONENT_SUMMARY=	git - Fast Version Control System
+COMPONENT_DESCRIPTION=	Git is a free & open source, distributed version control system designed to handle everything from small to very large projects with speed and efficiency.
+COMPONENT_CLASSIFICATION=	Development/Source Code Management
 
 #
 # man pages are a separate archive
 #
-COMPONENT_ARCHIVE_1 =	$(COMPONENT_NAME)-manpages-$(COMPONENT_VERSION).tar.xz
-COMPONENT_ARCHIVE_HASH_1 = \
-    sha256:23935b38ce36fe47f01499cc2eadae2b180244b3ab706bec1fc0ae84ed32908e
-COMPONENT_ARCHIVE_URL_1 = https://www.kernel.org/pub/software/scm/git/$(COMPONENT_ARCHIVE_1)
+COMPONENT_ARCHIVE_1=		$(COMPONENT_NAME)-manpages-$(COMPONENT_VERSION).tar.xz
+COMPONENT_ARCHIVE_HASH_1=	sha256:4c5c516ee4c0412b9475739e2125a257f6022e7c7bd006827c376fe70d47c323
+COMPONENT_ARCHIVE_URL_1=	https://www.kernel.org/pub/software/scm/git/$(COMPONENT_ARCHIVE_1)
 
-include $(WS_TOP)/make-rules/prep.mk
-include $(WS_TOP)/make-rules/configure.mk
-include $(WS_TOP)/make-rules/ips.mk
+include $(WS_MAKE_RULES)/prep.mk
+include $(WS_MAKE_RULES)/configure.mk
+include $(WS_MAKE_RULES)/ips.mk
 
 CONFIGURE_PREFIX    =	/usr
+CONFIGURE_OPTIONS  +=	--with-libpcre
 CONFIGURE_OPTIONS  +=	--without-openssl
 CONFIGURE_OPTIONS  +=	--libexecdir=/usr/lib
 CONFIGURE_OPTIONS  +=	--with-perl=$(PERL)
 CONFIGURE_OPTIONS  +=	--with-python=$(PYTHON)
+CONFIGURE_OPTIONS  +=	CPPFLAGS="-I/usr/include/pcre"
 
 COMPONENT_BUILD_ENV+=	NO_PERL_MAKEMAKER=1
 COMPONENT_INSTALL_ENV+=	NO_PERL_MAKEMAKER=1
@@ -57,18 +62,22 @@ COMPONENT_INSTALL_ENV+=	PERL_LIB=$(shell $(PERL) -MConfig -e 'print "$$Config{in
 COMPONENT_INSTALL_ARGS+=	INSTALL="$(INSTALL)"
 
 COMPONENT_TEST_TARGETS = test
+COMPONENT_TEST_ENV = PATH=/usr/gnu/bin:/usr/bin ENV='/usr/bin/env -i'
 
 # This runs configure but configure doesn't generate a Makefile.
 # Instead a Makefile comes with git.
 # Anyways viewpathing doesn't work.
 # Therefore we need cloney to copy a set of files to build.
+# Overwrite symliked tests, because they relying on test assets being regular files.
 
 COMPONENT_PRE_CONFIGURE_ACTION = \
-	(chmod u+x $(COMPONENT_SRC)/t/*.sh  && $(CLONEY) $(SOURCE_DIR) $(@D))
+	(chmod u+x $(COMPONENT_SRC)/t/*.sh  && $(CLONEY) $(SOURCE_DIR) $(@D) && \
+	$(RM) -r $(@D)/t && $(CP) -rp $(COMPONENT_SRC)/t $(@D))
+
 
 build:		$(BUILD_32)
 
-install:	$(INSTALL_32) $(BUILD_DIR)/.manpages
+install:	$(INSTALL_32) $(BUILD_DIR)/.manpages $(BUILD_DIR_32)/.contrib
 
 # There are some known issues around I18N.
 test:	$(TEST_32)
@@ -97,7 +106,19 @@ $(BUILD_DIR)/.manpages:
 	done
 	$(TOUCH) $@
 
+$(BUILD_DIR_32)/.contrib:
+	$(MKDIR) $(PROTOUSRSHAREDIR)/bash-completion/completions
+	$(CP) -RLp $(BUILD_DIR_32)/contrib/diff-highlight/diff-highlight $(PROTOUSRBINDIR)/diff-highlight
+	$(CP) -RLp $(BUILD_DIR_32)/contrib/completion/git-completion.bash $(PROTOUSRSHAREDIR)/bash-completion/completions/git
+	(cd $(PROTOUSRSHAREDIR)/bash-completion/completions; $(LN) -sf git gitk)
+	$(TOUCH) $@
 
-BUILD_PKG_DEPENDENCIES =	$(BUILD_TOOLS)
-
-include $(WS_TOP)/make-rules/depend.mk
+REQUIRED_PACKAGES += SUNWcs
+REQUIRED_PACKAGES += library/expat
+REQUIRED_PACKAGES += library/pcre
+REQUIRED_PACKAGES += library/zlib
+REQUIRED_PACKAGES += runtime/perl-522
+REQUIRED_PACKAGES += runtime/python-27
+REQUIRED_PACKAGES += shell/bash
+REQUIRED_PACKAGES += system/library
+REQUIRED_PACKAGES += web/curl

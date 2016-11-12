@@ -17,7 +17,7 @@ include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME= liblouis
 COMPONENT_VERSION= 2.1.1
-COMPONENT_REVISION= 1
+COMPONENT_REVISION= 3
 COMPONENT_SUMMARY= Support for contracted braille
 COMPONENT_SRC= $(COMPONENT_NAME)-$(COMPONENT_NAME)_2_1_1
 COMPONENT_ARCHIVE= $(COMPONENT_NAME)_2_1_1.tar.gz
@@ -66,3 +66,6 @@ build: $(BUILD_32_and_64)
 install: $(INSTALL_32_and_64) $(BUILD_DIR)/.built_python_modules $(BUILD_DIR)/.installed_python_modules
 
 test: $(TEST_32_and_64)
+
+REQUIRED_PACKAGES += runtime/python-27
+REQUIRED_PACKAGES += system/library

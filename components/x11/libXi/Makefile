@@ -17,6 +17,7 @@ include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME= libXi
 COMPONENT_VERSION= 1.7.6
+COMPONENT_REVISION= 2
 COMPONENT_SUMMARY= libXi - X Input extension client library
 COMPONENT_SRC= $(COMPONENT_NAME)-$(COMPONENT_VERSION)
 COMPONENT_ARCHIVE= $(COMPONENT_SRC).tar.bz2
@@ -46,3 +47,7 @@ LD_OPTIONS += -M$(COMPONENT_DIR)/mapfile-vers
 build: $(BUILD_32_and_64)
 
 install: $(INSTALL_32_and_64)
+
+REQUIRED_PACKAGES += system/library
+REQUIRED_PACKAGES += x11/library/libx11
+REQUIRED_PACKAGES += x11/library/libxext
