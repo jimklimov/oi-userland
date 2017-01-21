@@ -7,7 +7,7 @@
 
 # skip sun-solaris perl modules, they should be delivered by 
 # illumos-gate now
-/^perl_modules\/sun_solaris$/d
+/^perl\/sun_solaris$/d
 
 # skip libm, it should be delivered by illumos-gate now
 /^osol\/math$/d
@@ -17,7 +17,6 @@
 
 /^enscript$/d
 /^ksh93$/d
-/^memcached-java$/d
 /^open-fabrics$/d
 /^openexr$/d
 /^pam_pkcs11$/d

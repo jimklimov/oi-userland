@@ -27,7 +27,7 @@ include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME=		graphviz
 COMPONENT_VERSION=	2.38.0
-COMPONENT_REVISION=	4
+COMPONENT_REVISION=	6
 COMPONENT_PROJECT_URL=	http://www.graphviz.org/
 COMPONENT_SRC=		$(COMPONENT_NAME)-$(COMPONENT_VERSION)
 COMPONENT_ARCHIVE=	$(COMPONENT_SRC).tar.gz
@@ -51,6 +51,12 @@ CPPFLAGS +=	-I$(JAVA_HOME)/include -I$(JAVA_HOME)/include/solaris
 CPPFLAGS +=	$(shell /usr/php/5.6/bin/php-config --includes)
 #CXX +=		$(studio_NORUNPATH)
 
+COMPONENT_PREP_ACTION = (cd $(@D) && libtoolize -cf && \
+				aclocal && \
+				autoconf -f -I m4 && \
+				autoheader && \
+				automake --add-missing)
+
 # Can't find headers without this.
 COMPONENT_PRE_CONFIGURE_ACTION =        ($(CLONEY) $(SOURCE_DIR) $(@D))
 
@@ -58,7 +64,7 @@ CONFIGURE_ENV +=	CPPFLAGS="$(CPPFLAGS)"
 CONFIGURE_ENV +=	PERL=$(PERL)
 # Explicitly use Ruby 1.9.  Allows switching Ruby default without
 # affecting graphviz build.
-CONFIGURE_ENV +=	RUBY=$(RUBY.1.9)
+CONFIGURE_ENV +=	RUBY=$(RUBY)
 CONFIGURE_OPTIONS +=	--without-included-ltdl
 CONFIGURE_OPTIONS +=	--enable-python=no
 CONFIGURE_OPTIONS +=	--enable-python26=no
@@ -104,7 +110,7 @@ REQUIRED_PACKAGES += print/filter/ghostscript
 REQUIRED_PACKAGES += runtime/lua
 REQUIRED_PACKAGES += runtime/perl-522
 REQUIRED_PACKAGES += runtime/python-27
-REQUIRED_PACKAGES += runtime/ruby-19
+REQUIRED_PACKAGES += runtime/ruby-23
 REQUIRED_PACKAGES += runtime/tk-8
 REQUIRED_PACKAGES += system/library
 REQUIRED_PACKAGES += system/library/g++-4-runtime

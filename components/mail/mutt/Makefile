@@ -26,11 +26,12 @@
 include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME=		mutt
-COMPONENT_VERSION=	1.7.1
+COMPONENT_VERSION=	1.7.2
+COMPONENT_REVISION=	1
 COMPONENT_SRC=		$(COMPONENT_NAME)-$(COMPONENT_VERSION)
 COMPONENT_ARCHIVE=	$(COMPONENT_SRC).tar.gz
 COMPONENT_ARCHIVE_HASH=	\
-    sha256:e9c6f88e83d48690033f0d862a70293ac746286b77241554f5448bc23bd0d6df
+    sha256:1553501687cd22d5b8aaee4dc5a7d9dcf6cc61d7956f6aabaadd252d10cd5ff9
 COMPONENT_ARCHIVE_URL=	ftp://ftp.mutt.org/pub/mutt/$(COMPONENT_ARCHIVE)
 COMPONENT_PROJECT_URL=	http://www.mutt.org/
 COMPONENT_BUGDB=	utility/mutt
@@ -46,6 +47,7 @@ CONFIGURE_OPTIONS  +=		--enable-imap
 CONFIGURE_OPTIONS  +=		--enable-smtp
 CONFIGURE_OPTIONS  +=		--enable-hcache
 CONFIGURE_OPTIONS  +=		--enable-sidebar
+CONFIGURE_OPTIONS  +=		--enable-debug
 CONFIGURE_OPTIONS  +=		--with-gdbm
 CONFIGURE_OPTIONS  +=		--with-regex
 CONFIGURE_OPTIONS  +=		--with-slang
