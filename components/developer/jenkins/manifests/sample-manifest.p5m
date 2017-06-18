@@ -20,6 +20,12 @@ set name=info.upstream-url value=$(COMPONENT_PROJECT_URL)
 set name=info.source-url value=$(COMPONENT_ARCHIVE_URL)
 set name=org.opensolaris.consolidation value=$(CONSOLIDATION)
 
+# NOTE WHEN REGENERATING THIS PROJECT:
+# To save some time and storage while building this component,
+# we use symlinks to the verbatim downloaded WAR file. This
+# drives "make sample-manifest" a bit crazy, causing it to
+# think you deliver the symlinks rather than real file+symlink.
+
 license $(COMPONENT_LICENSE_FILE) license='$(COMPONENT_LICENSE)'
 
 file path=usr/share/jenkins/war-weekly/jenkins-$(COMPONENT_VERSION).war

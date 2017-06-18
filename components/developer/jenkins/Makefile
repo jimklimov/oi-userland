@@ -62,7 +62,10 @@ clobber::   clean
 
 COMPONENT_PREP_ACTION = ( $(MKDIR) $(@D)/ && cp $(USERLAND_ARCHIVES)/$(COMPONENT_ARCHIVE) $(COMPONENT_DIR)/files/Makefile $(@D)/ )
 
-COMPONENT_COPY_ACTION = cp -r $(SOURCE_DIR)/* $(@D)/
+# This, and the symlinks in the custom Makefile, save quite a bit
+# of storage overhead (do not need to copy the WAR 3 extra times)
+# but drives the "make sample-manifest" crazy. Oh well...
+COMPONENT_COPY_ACTION = ( $(CLONEY) $(SOURCE_DIR)/ $(@D)/ )
 
 COMPONENT_INSTALL_ENV += JENKINS_VERSION=$(COMPONENT_VERSION)
 COMPONENT_INSTALL_ENV += JENKINS_RELEASE=weekly
