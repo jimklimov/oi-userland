@@ -236,6 +236,8 @@ file path=usr/share/man/man1/nvidia-smi.1
 file path=usr/share/man/man1/nvidia-xconfig.1
 file path=usr/share/nvidia/nvidia-application-profiles-key-documentation
 file path=usr/share/nvidia/nvidia-application-profiles-rc
+link path=dev/nvidia-modeset target=../devices/pseudo/nvidia_modeset@0:ctl \
+    variant.opensolaris.zone=global pkg.linted=true
 link path=dev/nvidia0 target=fbs/nvidia0 variant.opensolaris.zone=global pkg.linted=true
 link path=dev/nvidia1 target=fbs/nvidia1 variant.opensolaris.zone=global pkg.linted=true
 link path=dev/nvidia10 target=fbs/nvidia10 variant.opensolaris.zone=global pkg.linted=true
@@ -255,6 +257,7 @@ link path=dev/nvidia9 target=fbs/nvidia9 variant.opensolaris.zone=global pkg.lin
 link path=dev/nvidiactl target=../devices/pseudo/nvidia@255:nvidiactl \
     variant.opensolaris.zone=global pkg.linted=true
 
+driver name=nvidia_modeset perms="* 0666 root root"
 driver name=nvidia perms="* 0666 root root" \
 	alias="pci10de,6c0" \
 	alias="pci10de,6c4" \
