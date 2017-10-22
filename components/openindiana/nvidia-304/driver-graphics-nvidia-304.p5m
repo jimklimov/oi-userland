@@ -20,27 +20,19 @@
 <transform file -> add pkg.depend.bypass-generate usr/sfw/lib(.*)/libgcc_s.so.1>
 <transform file -> add pkg.depend.bypass-generate usr/sfw/lib(.*)/libstdc\\+\\+\\.so.*>
 
-<transform dir path=usr$ -> default group sys>
-<transform dir path=usr/share$ -> default group sys>
-<transform dir path=usr/share/applications$ -> default group other>
 <transform dir path=usr/share/control-center-2.0$ -> default group other>
 <transform dir path=usr/share/control-center-2.0/capplets$ -> default group other>
-<transform dir path=usr/share/doc$ -> default group other>
 <transform dir path=usr/share/icons$ -> default group other>
 
 <transform file path=.*kernel/drv/.+\.conf -> default mode 0444>
 <transform file path=.*kernel/drv/.+ -> default mode 0555>
 <transform file path=.*kernel/drv/$(MACH64)/.+ -> default mode 0555>
-<transform file path=.*kernel/misc/.+\.conf -> default mode 0444>
-<transform file path=.*kernel/misc/.+ -> default mode 0555>
-<transform file path=.*kernel/misc/$(MACH64)/.+ -> default mode 0555>
 
 set name=pkg.fmri \
     value=pkg:/driver/graphics/nvidia-304@$(IPS_COMPONENT_VERSION),$(BUILD_VERSION)
-set name=pkg.summary value="NVIDIA Graphics System Software"
+set name=pkg.summary value="NVIDIA Graphics System Device Driver and Software"
 set name=pkg.description \
-    value="X and OpenGL Drivers for NVIDIA Quadro graphics, driver 304 series"
-set name=description value="NVIDIA Graphics System Software"
+    value="Kernel, X and OpenGL Drivers for NVIDIA Quadro graphics, 304 series"
 set name=info.classification \
     value=org.opensolaris.category.2008:Drivers/Display
 set name=org.opensolaris.consolidation value=$(CONSOLIDATION)
@@ -51,12 +43,14 @@ set name=variant.opensolaris.zone value=global value=nonglobal
 license driver-graphics-nvidia.license license="NVIDIA license"
 
 legacy pkg=NVDAgraphics \
-    desc="X and OpenGL Drivers for NVIDIA Quadro graphics, driver 304 series" \
-    name="NVIDIA Graphics System Software" vendor="NVIDIA Corporation"
+    desc="X and OpenGL Drivers for NVIDIA Quadro graphics, 304 series" \
+    name="NVIDIA Graphics System Software" vendor="NVIDIA Corporation" \
+    version=304.137,REV=2017.09.14.14.33
 
 legacy pkg=NVDAgraphicsr \
-    desc="Kernel Drivers for NVIDIA Quadro graphics, driver 304 series" \
-    name="NVIDIA Graphics System Device Driver" vendor="NVIDIA Corporation"
+    desc="Kernel Drivers for NVIDIA Quadro graphics, 304 series" \
+    name="NVIDIA Graphics System Device Driver" vendor="NVIDIA Corporation" \
+    version=304.137,REV=2017.09.14.14.33
 
 file Solaris/gl.h path=usr/X11/include/NVIDIA/GL/gl.h
 file Solaris/glext.h path=usr/X11/include/NVIDIA/GL/glext.h
@@ -71,22 +65,33 @@ file path=kernel/drv/nvidia \
 file path=kernel/drv/nvidia.conf \
     preserve=true \
     reboot-needed=false variant.opensolaris.zone=global group=sys
+link path=usr/X11/lib/NVIDIA/$(MACH64)/libGL.so target=libGL.so.1
 file path=usr/X11/lib/NVIDIA/$(MACH64)/libGL.so.1
 file path=usr/X11/lib/NVIDIA/$(MACH64)/libnvidia-glcore.so.1
+link path=usr/X11/lib/NVIDIA/$(MACH64)/libnvidia-tls.so \
+    target=libnvidia-tls.so.1
 file path=usr/X11/lib/NVIDIA/$(MACH64)/libnvidia-tls.so.1
 file path=usr/X11/lib/NVIDIA/$(MACH64)/libvdpau_nvidia.so.1
+link path=usr/X11/lib/NVIDIA/libGL.so target=libGL.so.1
 file path=usr/X11/lib/NVIDIA/libGL.so.1
 file path=usr/X11/lib/NVIDIA/libXvMCNVIDIA.so.1
 # Note: no 64-bit XvMC in tarball, and it is not served in other branches at all
 file path=usr/X11/lib/NVIDIA/libnvidia-glcore.so.1
+link path=usr/X11/lib/NVIDIA/libnvidia-tls.so target=libnvidia-tls.so.1
 file path=usr/X11/lib/NVIDIA/libnvidia-tls.so.1
 file path=usr/X11/lib/NVIDIA/libvdpau_nvidia.so.1
 file path=usr/X11/lib/X11/getconfig/nvda.cfg
+link path=usr/X11/lib/modules/NVIDIA/$(MACH64)/libnvidia-wfb.so \
+    target=libnvidia-wfb.so.1
 file path=usr/X11/lib/modules/NVIDIA/$(MACH64)/libnvidia-wfb.so.1 pkg.debug.depend.path=usr/lib/$(MACH64)
+link path=usr/X11/lib/modules/NVIDIA/libnvidia-wfb.so target=libnvidia-wfb.so.1
 file path=usr/X11/lib/modules/NVIDIA/libnvidia-wfb.so.1 pkg.debug.depend.path=usr/lib
 file path=usr/X11/lib/modules/drivers/$(MACH64)/nvidia_drv.so
 file path=usr/X11/lib/modules/drivers/nvidia_drv.so
+link path=usr/X11/lib/modules/extensions/NVIDIA/$(MACH64)/libglx.so \
+    target=libglx.so.1
 file path=usr/X11/lib/modules/extensions/NVIDIA/$(MACH64)/libglx.so.1
+link path=usr/X11/lib/modules/extensions/NVIDIA/libglx.so target=libglx.so.1
 file path=usr/X11/lib/modules/extensions/NVIDIA/libglx.so.1
 file path=usr/bin/nvidia-SunOS-bug-report.sh
 file path=usr/bin/nvidia-settings
@@ -102,7 +107,25 @@ file path=usr/dt/appconfig/icons/C/nvidia-settings.t.bm
 file path=usr/dt/appconfig/icons/C/nvidia-settings.t.pm
 file path=usr/dt/appconfig/icons/C/nvidia-settings.t_m.bm
 file path=usr/dt/appconfig/types/C/nvidia-settings.dt
+link path=usr/lib/$(MACH64)/libnvidia-glcore.so.1 \
+    target=../../X11/lib/NVIDIA/$(MACH64)/libnvidia-glcore.so.1
+link path=usr/lib/$(MACH64)/libnvidia-tls.so target=libnvidia-tls.so.1
+link path=usr/lib/$(MACH64)/libnvidia-tls.so.1 \
+    target=../../X11/lib/NVIDIA/$(MACH64)/libnvidia-tls.so.1
+link path=usr/lib/$(MACH64)/libvdpau_nvidia.so \
+    target=../../X11/lib/NVIDIA/$(MACH64)/libvdpau_nvidia.so.1
+link path=usr/lib/$(MACH64)/vdpau/libvdpau_nvidia.so.1 \
+    target=../../../X11/lib/NVIDIA/$(MACH64)/libvdpau_nvidia.so.1
+link path=usr/lib/libnvidia-cfg.so target=libnvidia-cfg.so.1
 file path=usr/lib/libnvidia-cfg.so.1
+link path=usr/lib/libnvidia-glcore.so.1 \
+    target=../X11/lib/NVIDIA/libnvidia-glcore.so.1
+link path=usr/lib/libnvidia-tls.so target=libnvidia-tls.so.1
+link path=usr/lib/libnvidia-tls.so.1 target=../X11/lib/NVIDIA/libnvidia-tls.so.1
+link path=usr/lib/libvdpau_nvidia.so \
+    target=../X11/lib/NVIDIA/libvdpau_nvidia.so.1
+link path=usr/lib/vdpau/libvdpau_nvidia.so.1 \
+    target=../../X11/lib/NVIDIA/libvdpau_nvidia.so.1
 file path=usr/share/applications/nvidia-settings.desktop \
     restart_fmri=svc:/application/desktop-cache/desktop-mime-cache:default
 file path=usr/share/control-center-2.0/capplets/nvidia-settings.s10.desktop
@@ -167,36 +190,6 @@ link path=dev/nvidia8 target=fbs/nvidia8 variant.opensolaris.zone=global pkg.lin
 link path=dev/nvidia9 target=fbs/nvidia9 variant.opensolaris.zone=global pkg.linted=true
 link path=dev/nvidiactl target=../devices/pseudo/nvidia@255:nvidiactl \
     variant.opensolaris.zone=global pkg.linted=true
-link path=usr/X11/lib/NVIDIA/$(MACH64)/libGL.so target=libGL.so.1
-link path=usr/X11/lib/NVIDIA/$(MACH64)/libnvidia-tls.so \
-    target=libnvidia-tls.so.1
-link path=usr/X11/lib/NVIDIA/libGL.so target=libGL.so.1
-link path=usr/X11/lib/NVIDIA/libnvidia-tls.so target=libnvidia-tls.so.1
-link path=usr/X11/lib/modules/NVIDIA/$(MACH64)/libnvidia-wfb.so \
-    target=libnvidia-wfb.so.1
-link path=usr/X11/lib/modules/NVIDIA/libnvidia-wfb.so \
-    target=libnvidia-wfb.so.1
-link path=usr/X11/lib/modules/extensions/NVIDIA/$(MACH64)/libglx.so \
-    target=libglx.so.1
-link path=usr/X11/lib/modules/extensions/NVIDIA/libglx.so target=libglx.so.1
-link path=usr/lib/$(MACH64)/libnvidia-glcore.so.1 \
-    target=../../X11/lib/NVIDIA/$(MACH64)/libnvidia-glcore.so.1
-link path=usr/lib/$(MACH64)/libnvidia-tls.so target=libnvidia-tls.so.1
-link path=usr/lib/$(MACH64)/libnvidia-tls.so.1 \
-    target=../../X11/lib/NVIDIA/$(MACH64)/libnvidia-tls.so.1
-link path=usr/lib/$(MACH64)/libvdpau_nvidia.so \
-    target=../../X11/lib/NVIDIA/$(MACH64)/libvdpau_nvidia.so.1
-link path=usr/lib/$(MACH64)/vdpau/libvdpau_nvidia.so.1 \
-    target=../../../X11/lib/NVIDIA/$(MACH64)/libvdpau_nvidia.so.1
-link path=usr/lib/libnvidia-glcore.so.1 \
-    target=../X11/lib/NVIDIA/libnvidia-glcore.so.1
-link path=usr/lib/libnvidia-tls.so target=libnvidia-tls.so.1
-link path=usr/lib/libnvidia-tls.so.1 \
-    target=../X11/lib/NVIDIA/libnvidia-tls.so.1
-link path=usr/lib/libvdpau_nvidia.so \
-    target=../X11/lib/NVIDIA/libvdpau_nvidia.so.1
-link path=usr/lib/vdpau/libvdpau_nvidia.so.1 \
-    target=../../X11/lib/NVIDIA/libvdpau_nvidia.so.1
 
 driver name=nvidia perms="* 0666 root root" \
 	alias="pci10de,40" \
