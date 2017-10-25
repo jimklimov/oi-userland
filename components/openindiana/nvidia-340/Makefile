@@ -27,32 +27,11 @@ COMPONENT_PROJECT_URL=	http://www.nvidia.com/object/solaris-display-archive.html
 
 include $(WS_MAKE_RULES)/prep.mk
 include $(WS_MAKE_RULES)/ips.mk
-
-$(SOURCE_DIR)/.unpacked: download Makefile $(PATCHES)
-	$(RM) -r $(SOURCE_DIR)
-	$(SHELL) $(USERLAND_ARCHIVES)$(COMPONENT_ARCHIVE) -x
-	$(TOUCH) $@
-
-$(BUILD_32):	$(SOURCE_DIR)/.prep
-	$(RM) -r $(@D) ; $(MKDIR) $(@D)
-	$(TOUCH) $@
-
-$(INSTALL_32): 	$(BUILD_32)
-	[ -d $(PROTO_DIR)/kernel/drv/amd64 ] || mkdir -p $(PROTO_DIR)/kernel/drv/amd64
-	for i in kernel/drv/amd64/nvidia kernel/drv/nvidia kernel/drv/nvidia.conf; do \
-	    cp $(SOURCE_DIR)/NVDAgraphicsr/reloc/$$i $(PROTO_DIR)/$$i; done
-	rm -fr $(PROTO_DIR)/usr
-	cp -a $(SOURCE_DIR)/NVDAgraphics/reloc $(PROTO_DIR)/usr
-	$(TOUCH) $@
+include $(WS_MAKE_RULES)/nvidia.mk
 
 build: $(BUILD_32)
 
 install: $(INSTALL_32)
-
-clean::
-	if [ -d $(BUILD_DIR) ] ;  then \
-	  rm -rf $(BUILD_DIR) ; \
-	fi
 
 REQUIRED_PACKAGES += SUNWcs
 REQUIRED_PACKAGES += library/desktop/atk

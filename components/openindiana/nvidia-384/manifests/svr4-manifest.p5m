@@ -22,36 +22,60 @@ set name=org.opensolaris.consolidation value=$(CONSOLIDATION)
 
 license $(COMPONENT_LICENSE_FILE) license='$(COMPONENT_LICENSE)'
 
-file path=kernel/drv/$(MACH64)/nvidia
-file path=kernel/drv/$(MACH64)/nvidia_modeset
-file path=kernel/drv/nvidia
-file path=kernel/drv/nvidia.conf
-file path=kernel/drv/nvidia_modeset
-file path=kernel/drv/nvidia_modeset.conf
+set name=pkg.summary pkg.send.convert.sunw-pkg-hollow=true \
+    value="NVIDIA Graphics System Device Driver"
+set name=pkg.summary value="NVIDIA Graphics System Software"
+set name=pkg.description pkg.send.convert.sunw-pkg-hollow=true \
+    value="Kernel Drivers for NVIDIA Quadro graphics"
+set name=pkg.description value="X and OpenGL Drivers for NVIDIA Quadro graphics"
+file path=kernel/drv/$(MACH64)/nvidia pkg.send.convert.sunw-pkg-hollow=true
+file path=kernel/drv/$(MACH64)/nvidia_modeset \
+    pkg.send.convert.sunw-pkg-hollow=true
+file path=kernel/drv/nvidia pkg.send.convert.sunw-pkg-hollow=true
+file path=kernel/drv/nvidia.conf pkg.send.convert.sunw-pkg-hollow=true
+file path=kernel/drv/nvidia_modeset pkg.send.convert.sunw-pkg-hollow=true
+file path=kernel/drv/nvidia_modeset.conf pkg.send.convert.sunw-pkg-hollow=true
+link path=usr/X11/lib/NVIDIA/$(MACH64)/libEGL.so target=libEGL.so.1
 file path=usr/X11/lib/NVIDIA/$(MACH64)/libEGL.so.1
+link path=usr/X11/lib/NVIDIA/$(MACH64)/libGL.so target=libGL.so.1
 file path=usr/X11/lib/NVIDIA/$(MACH64)/libGL.so.1
+link path=usr/X11/lib/NVIDIA/$(MACH64)/libGLESv1_CM.so target=libGLESv1_CM.so.1
 file path=usr/X11/lib/NVIDIA/$(MACH64)/libGLESv1_CM.so.1
+link path=usr/X11/lib/NVIDIA/$(MACH64)/libGLESv2.so target=libGLESv2.so.2
 file path=usr/X11/lib/NVIDIA/$(MACH64)/libGLESv2.so.2
 file path=usr/X11/lib/NVIDIA/$(MACH64)/libnvidia-eglcore.so.1
 file path=usr/X11/lib/NVIDIA/$(MACH64)/libnvidia-glcore.so.1
 file path=usr/X11/lib/NVIDIA/$(MACH64)/libnvidia-glsi.so.1
+link path=usr/X11/lib/NVIDIA/$(MACH64)/libnvidia-tls.so \
+    target=libnvidia-tls.so.1
 file path=usr/X11/lib/NVIDIA/$(MACH64)/libnvidia-tls.so.1
 file path=usr/X11/lib/NVIDIA/$(MACH64)/libvdpau_nvidia.so.1
+link path=usr/X11/lib/NVIDIA/libEGL.so target=libEGL.so.1
 file path=usr/X11/lib/NVIDIA/libEGL.so.1
+link path=usr/X11/lib/NVIDIA/libGL.so target=libGL.so.1
 file path=usr/X11/lib/NVIDIA/libGL.so.1
+link path=usr/X11/lib/NVIDIA/libGLESv1_CM.so target=libGLESv1_CM.so.1
 file path=usr/X11/lib/NVIDIA/libGLESv1_CM.so.1
+link path=usr/X11/lib/NVIDIA/libGLESv2.so target=libGLESv2.so.2
 file path=usr/X11/lib/NVIDIA/libGLESv2.so.2
 file path=usr/X11/lib/NVIDIA/libnvidia-eglcore.so.1
 file path=usr/X11/lib/NVIDIA/libnvidia-glcore.so.1
 file path=usr/X11/lib/NVIDIA/libnvidia-glsi.so.1
+link path=usr/X11/lib/NVIDIA/libnvidia-tls.so target=libnvidia-tls.so.1
 file path=usr/X11/lib/NVIDIA/libnvidia-tls.so.1
 file path=usr/X11/lib/NVIDIA/libvdpau_nvidia.so.1
 file path=usr/X11/lib/X11/getconfig/nvda.cfg
+link path=usr/X11/lib/modules/NVIDIA/$(MACH64)/libnvidia-wfb.so \
+    target=libnvidia-wfb.so.1
 file path=usr/X11/lib/modules/NVIDIA/$(MACH64)/libnvidia-wfb.so.1
+link path=usr/X11/lib/modules/NVIDIA/libnvidia-wfb.so target=libnvidia-wfb.so.1
 file path=usr/X11/lib/modules/NVIDIA/libnvidia-wfb.so.1
 file path=usr/X11/lib/modules/drivers/$(MACH64)/nvidia_drv.so
 file path=usr/X11/lib/modules/drivers/nvidia_drv.so
+link path=usr/X11/lib/modules/extensions/NVIDIA/$(MACH64)/libglx.so \
+    target=libglx.so.1
 file path=usr/X11/lib/modules/extensions/NVIDIA/$(MACH64)/libglx.so.1
+link path=usr/X11/lib/modules/extensions/NVIDIA/libglx.so target=libglx.so.1
 file path=usr/X11/lib/modules/extensions/NVIDIA/libglx.so.1
 file path=usr/bin/$(MACH32)/nvidia-debugdump
 file path=usr/bin/$(MACH32)/nvidia-settings
@@ -62,6 +86,10 @@ file path=usr/bin/$(MACH64)/nvidia-settings
 file path=usr/bin/$(MACH64)/nvidia-smi
 file path=usr/bin/$(MACH64)/nvidia-xconfig
 file path=usr/bin/nvidia-SunOS-bug-report.sh
+hardlink path=usr/bin/nvidia-debugdump target=../lib/isaexec
+hardlink path=usr/bin/nvidia-settings target=../lib/isaexec
+hardlink path=usr/bin/nvidia-smi target=../lib/isaexec
+hardlink path=usr/bin/nvidia-xconfig target=../lib/isaexec
 file path=usr/dt/appconfig/appmanager/C/Desktop_Apps/nvidia-settings
 file path=usr/dt/appconfig/icons/C/nvidia-settings.l.bm
 file path=usr/dt/appconfig/icons/C/nvidia-settings.l.pm
@@ -73,12 +101,56 @@ file path=usr/dt/appconfig/icons/C/nvidia-settings.t.bm
 file path=usr/dt/appconfig/icons/C/nvidia-settings.t.pm
 file path=usr/dt/appconfig/icons/C/nvidia-settings.t_m.bm
 file path=usr/dt/appconfig/types/C/nvidia-settings.dt
+link path=usr/lib/$(MACH64)/libEGL.so target=libEGL.so.1
+link path=usr/lib/$(MACH64)/libEGL.so.1 \
+    target=../../X11/lib/NVIDIA/$(MACH64)/libEGL.so.1
+link path=usr/lib/$(MACH64)/libGLESv1_CM.so target=libGLESv1_CM.so.1
+link path=usr/lib/$(MACH64)/libGLESv1_CM.so.1 \
+    target=../../X11/lib/NVIDIA/$(MACH64)/libGLESv1_CM.so.1
+link path=usr/lib/$(MACH64)/libGLESv2.so target=libGLESv2.so.2
+link path=usr/lib/$(MACH64)/libGLESv2.so.2 \
+    target=../../X11/lib/NVIDIA/$(MACH64)/libGLESv2.so.2
+link path=usr/lib/$(MACH64)/libnvidia-cfg.so target=libnvidia-cfg.so.1
 file path=usr/lib/$(MACH64)/libnvidia-cfg.so.1
-file path=usr/lib/$(MACH64)/libnvidia-gtk2.so.$(COMPONENT_VERSION)
+link path=usr/lib/$(MACH64)/libnvidia-eglcore.so.1 \
+    target=../../X11/lib/NVIDIA/$(MACH64)/libnvidia-eglcore.so.1
+link path=usr/lib/$(MACH64)/libnvidia-glcore.so.1 \
+    target=../../X11/lib/NVIDIA/$(MACH64)/libnvidia-glcore.so.1
+link path=usr/lib/$(MACH64)/libnvidia-glsi.so.1 \
+    target=../../X11/lib/NVIDIA/$(MACH64)/libnvidia-glsi.so.1
+file path=usr/lib/$(MACH64)/libnvidia-gtk2.so.384.90
+link path=usr/lib/$(MACH64)/libnvidia-ml.so target=libnvidia-ml.so.1
 file path=usr/lib/$(MACH64)/libnvidia-ml.so.1
+link path=usr/lib/$(MACH64)/libnvidia-tls.so target=libnvidia-tls.so.1
+link path=usr/lib/$(MACH64)/libnvidia-tls.so.1 \
+    target=../../X11/lib/NVIDIA/$(MACH64)/libnvidia-tls.so.1
+link path=usr/lib/$(MACH64)/libvdpau_nvidia.so \
+    target=../../X11/lib/NVIDIA/$(MACH64)/libvdpau_nvidia.so.1
+link path=usr/lib/$(MACH64)/vdpau/libvdpau_nvidia.so.1 \
+    target=../../../X11/lib/NVIDIA/$(MACH64)/libvdpau_nvidia.so.1
+link path=usr/lib/libEGL.so target=libEGL.so.1
+link path=usr/lib/libEGL.so.1 target=../X11/lib/NVIDIA/libEGL.so.1
+link path=usr/lib/libGLESv1_CM.so target=libGLESv1_CM.so.1
+link path=usr/lib/libGLESv1_CM.so.1 target=../X11/lib/NVIDIA/libGLESv1_CM.so.1
+link path=usr/lib/libGLESv2.so target=libGLESv2.so.2
+link path=usr/lib/libGLESv2.so.2 target=../X11/lib/NVIDIA/libGLESv2.so.2
+link path=usr/lib/libnvidia-cfg.so target=libnvidia-cfg.so.1
 file path=usr/lib/libnvidia-cfg.so.1
-file path=usr/lib/libnvidia-gtk2.so.$(COMPONENT_VERSION)
+link path=usr/lib/libnvidia-eglcore.so.1 \
+    target=../X11/lib/NVIDIA/libnvidia-eglcore.so.1
+link path=usr/lib/libnvidia-glcore.so.1 \
+    target=../X11/lib/NVIDIA/libnvidia-glcore.so.1
+link path=usr/lib/libnvidia-glsi.so.1 \
+    target=../X11/lib/NVIDIA/libnvidia-glsi.so.1
+file path=usr/lib/libnvidia-gtk2.so.384.90
+link path=usr/lib/libnvidia-ml.so target=libnvidia-ml.so.1
 file path=usr/lib/libnvidia-ml.so.1
+link path=usr/lib/libnvidia-tls.so target=libnvidia-tls.so.1
+link path=usr/lib/libnvidia-tls.so.1 target=../X11/lib/NVIDIA/libnvidia-tls.so.1
+link path=usr/lib/libvdpau_nvidia.so \
+    target=../X11/lib/NVIDIA/libvdpau_nvidia.so.1
+link path=usr/lib/vdpau/libvdpau_nvidia.so.1 \
+    target=../../X11/lib/NVIDIA/libvdpau_nvidia.so.1
 file path=usr/share/applications/nvidia-settings.desktop
 file path=usr/share/control-center-2.0/capplets/nvidia-settings.s10.desktop
 file path=usr/share/doc/NVIDIA/README.txt
@@ -126,3 +198,17 @@ file path=usr/share/man/man1/nvidia-smi.1
 file path=usr/share/man/man1/nvidia-xconfig.1
 file path=usr/share/nvidia/nvidia-application-profiles-key-documentation
 file path=usr/share/nvidia/nvidia-application-profiles-rc
+legacy pkg=NVDAgraphics arch=i386 category=system,graphics \
+    desc="X and OpenGL Drivers for NVIDIA Quadro graphics" \
+    hotline="Please contact your local service provider" \
+    name="NVIDIA Graphics System Software" vendor="NVIDIA Corporation" \
+    version=384.90,REV=2017.09.19.20.03
+legacy pkg=NVDAgraphicsr arch=i386 category=system,graphics \
+    desc="Kernel Drivers for NVIDIA Quadro graphics" \
+    hotline="Please contact your local service provider" \
+    name="NVIDIA Graphics System Device Driver" \
+    pkg.send.convert.sunw-pkg-hollow=true vendor="NVIDIA Corporation" \
+    version=384.90,REV=2017.09.19.20.03
+license install/copyright license=NVDAgraphics.copyright
+license install/copyright license=NVDAgraphicsr.copyright \
+    pkg.send.convert.sunw-pkg-hollow=true
