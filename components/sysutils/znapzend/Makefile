@@ -49,6 +49,7 @@ CONFIGURE_OPTIONS +=	--enable-shared
 
 CONFIGURE_OPTIONS +=	--sysconfdir=/etc
 CONFIGURE_OPTIONS +=	--enable-svcinstall=/lib/svc/manifest/system
+CONFIGURE_OPTIONS +=	--with-svcname-smf=system/filesystem/zfs/znapzend
 
 # znapzend is a script, but it can pull some PERL modules and some may be ARCHed
 # TODO: package dependency modules as separate IPS requirements, and build 32-bit znapzend
