@@ -10,13 +10,13 @@
 #
 
 #
-# Copyright 2016 Jim Klimov
+# Copyright 2016-2018 Jim Klimov
 #
 
 include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME=	znapzend
-COMPONENT_VERSION=	0.15.7
+COMPONENT_VERSION=	0.18.0
 COMPONENT_SUMMARY=	zfs backup with remote capabilities and mbuffer integration
 COMPONENT_DESCRIPTION=	ZnapZend is a ZFS centric backup tool. It relies on snapshot,\
  send and receive todo its work. It has the built-in ability to manage both local\
@@ -25,7 +25,7 @@ COMPONENT_DESCRIPTION=	ZnapZend is a ZFS centric backup tool. It relies on snaps
 COMPONENT_SRC=	$(COMPONENT_NAME)-$(COMPONENT_VERSION)
 COMPONENT_ARCHIVE=	$(COMPONENT_SRC).tar.gz
 COMPONENT_ARCHIVE_HASH=	\
-  sha256:7d2cf9955e058f42a58c19e1cd4c36a972fb4a303a2eba8b23651117e5ec812e
+  sha256:7ef999106a6dd7120787f87ed6a2775b32b2c84af6284d573a71e2a5a4c63296
 COMPONENT_ARCHIVE_URL=	\
   https://github.com/oetiker/$(COMPONENT_NAME)/releases/download/v$(COMPONENT_VERSION)/$(COMPONENT_ARCHIVE)
 COMPONENT_PROJECT_URL=	https://github.com/chaos/powerman
@@ -34,7 +34,7 @@ COMPONENT_CLASSIFICATION=	Applications/System Utilities
 COMPONENT_LICENSE=	GPLv2+
 COMPONENT_LICENSE_FILE=	COPYING
 
-#https://github.com/oetiker/znapzend/releases/download/v0.15.7/znapzend-0.15.7.tar.gz
+#https://github.com/oetiker/znapzend/releases/download/v0.18.0/znapzend-0.18.0.tar.gz
 
 include $(WS_MAKE_RULES)/prep.mk
 include $(WS_MAKE_RULES)/configure.mk
@@ -52,7 +52,7 @@ CONFIGURE_OPTIONS +=	--sysconfdir=/etc
 CONFIGURE_OPTIONS +=	--enable-svcinstall=/lib/svc/manifest/system
 
 # znapzend is a script, but it can pull some PERL modules and some may be ARCHed
-# TODO: package dependency modules as seaprate IPS requirements, and build 32-bit znapzend
+# TODO: package dependency modules as separate IPS requirements, and build 32-bit znapzend
 build: $(BUILD_32_and_64)
 
 install: $(INSTALL_32_and_64)
