@@ -30,7 +30,8 @@ depend type=require fmri=network/ssh
 # True package contents: At least bin/*, man/*, SMF xml, and ZnapZend/*.pm
 # "Non-true" contents: dependency PERL modules of specific versions,
 # which should over time maybe become library/perl-5/* packages
-file path=lib/svc/manifest/system/znapzend.xml
+file path=lib/svc/manifest/system/znapzend.xml \
+     restart_fmri=svc:/system/manifest-import:default
 link path=usr/bin/$(MACH64)/znapzend \
     target=../../share/znapzend/$(MACH64)/bin/znapzend
 link path=usr/bin/$(MACH64)/znapzendzetup \
@@ -42,7 +43,8 @@ link path=usr/bin/znapzendzetup \
     target=../share/znapzend/$(MACH32)/bin/znapzendzetup
 link path=usr/bin/znapzendztats \
     target=../share/znapzend/$(MACH32)/bin/znapzendztats
-file path=usr/share/znapzend/$(MACH32)/bin/znapzend
+file path=usr/share/znapzend/$(MACH32)/bin/znapzend \
+     restart_fmri=svc:/system/filesystem/zfs/znapzend:default
 file path=usr/share/znapzend/$(MACH32)/bin/znapzendzetup
 file path=usr/share/znapzend/$(MACH32)/bin/znapzendztatz
 file path=usr/share/znapzend/$(MACH32)/lib/App/Prove.pm
@@ -285,7 +287,8 @@ file path=usr/share/znapzend/$(MACH32)/lib/ojo.pm
 file path=usr/share/znapzend/$(MACH32)/share/man/man1/znapzend.1
 file path=usr/share/znapzend/$(MACH32)/share/man/man1/znapzendzetup.1
 file path=usr/share/znapzend/$(MACH32)/share/man/man1/znapzendztatz.1
-file path=usr/share/znapzend/$(MACH64)/bin/znapzend
+file path=usr/share/znapzend/$(MACH64)/bin/znapzend \
+     restart_fmri=svc:/system/filesystem/zfs/znapzend:default
 file path=usr/share/znapzend/$(MACH64)/bin/znapzendzetup
 file path=usr/share/znapzend/$(MACH64)/bin/znapzendztatz
 file path=usr/share/znapzend/$(MACH64)/lib/App/Prove.pm
