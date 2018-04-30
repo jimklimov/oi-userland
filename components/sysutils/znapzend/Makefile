@@ -39,23 +39,38 @@ include $(WS_MAKE_RULES)/prep.mk
 include $(WS_MAKE_RULES)/configure.mk
 include $(WS_MAKE_RULES)/ips.mk
 
+COMPONENT_PREP_ACTION = ( cd $(SOURCE_DIR) && autoreconf --force --install --verbose --make )
 
 COMPONENT_PRE_CONFIGURE_ACTION =	( $(CLONEY) $(SOURCE_DIR) $(@D) )
 
-# TODO: Post-install - fix "${prefix}" in SMF xml
+# NOTE: Code below assumes that BINDIR64 is one layer under BINDIR32
+# Othewise might user GNU ln -rsf ...
+COMPONENT_POST_INSTALL_ACTION =	( $(MKDIR) $(PROTO_DIR)/$(CONFIGURE_BINDIR.$(BITS)) \
+        && case "$(BITS)" in \
+            32) ORIGDIR="../share/$(COMPONENT_NAME)/$(MACH32)/bin" ;; \
+            64) ORIGDIR="../../share/$(COMPONENT_NAME)/$(MACH64)/bin" ;; \
+            *) echo "Unsupported BITS value: $(BITS)" >&2 ; exit 1 ;; \
+        esac \
+        && for BINFILE in znapzend znapzendzetup znapzendztats ; do \
+            ln -sf "$$ORIGDIR/$$BINFILE" "$(PROTO_DIR)/$(CONFIGURE_BINDIR.$(BITS))/" || exit ; \
+        done )
 
-CONFIGURE_OPTIONS +=	--disable-static
-CONFIGURE_OPTIONS +=	--enable-shared
-
+# NOTE: znapzend is a script, but it can pull some PERL modules and some may be
+# ARCHed, and/or these may (package-)conflict with dependencies of other pkgs.
+# TODO: package dependency modules as separate IPS requirements, and build only
+# a 32-bit znapzend? For now we work around the mess by having it all in a
+# dedicated directory per ARCH, including the perl modules.
+CONFIGURE_OPTIONS  =	--prefix=$(CONFIGURE_PREFIX)/share/$(COMPONENT_NAME)/$(MACH$(BITS))
 CONFIGURE_OPTIONS +=	--sysconfdir=/etc
 CONFIGURE_OPTIONS +=	--enable-svcinstall=/lib/svc/manifest/system
 CONFIGURE_OPTIONS +=	--with-svcname-smf=system/filesystem/zfs/znapzend
 
-# znapzend is a script, but it can pull some PERL modules and some may be ARCHed
-# TODO: package dependency modules as separate IPS requirements, and build 32-bit znapzend
 build: $(BUILD_32_and_64)
 
 install: $(INSTALL_32_and_64)
 
 test: $(TEST_32_and_64)
 
+REQUIRED_PACKAGES += runtime/perl-522
+REQUIRED_PACKAGES += runtime/perl-524
+REQUIRED_PACKAGES += system/library
