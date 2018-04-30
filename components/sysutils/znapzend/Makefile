@@ -21,20 +21,19 @@ COMPONENT_SUMMARY=	zfs backup with remote capabilities and mbuffer integration
 COMPONENT_DESCRIPTION=	ZnapZend is a ZFS centric backup tool. It relies on snapshot,\
  send and receive todo its work. It has the built-in ability to manage both local\
  snapshots as well as remote copies by thining them out as time progresses.\
- The ZnapZend configuration is stored as properties in the ZFS filesystem itself.
+ The ZnapZend configuration is stored as properties in the ZFS filesystem itself,\
+ see znapzendzetup to get started.
 COMPONENT_SRC=	$(COMPONENT_NAME)-$(COMPONENT_VERSION)
 COMPONENT_ARCHIVE=	$(COMPONENT_SRC).tar.gz
 COMPONENT_ARCHIVE_HASH=	\
   sha256:7ef999106a6dd7120787f87ed6a2775b32b2c84af6284d573a71e2a5a4c63296
 COMPONENT_ARCHIVE_URL=	\
   https://github.com/oetiker/$(COMPONENT_NAME)/releases/download/v$(COMPONENT_VERSION)/$(COMPONENT_ARCHIVE)
-COMPONENT_PROJECT_URL=	https://github.com/chaos/powerman
+COMPONENT_PROJECT_URL=	https://github.com/oetiker/$(COMPONENT_NAME)
 COMPONENT_FMRI=	backup/$(COMPONENT_NAME)
 COMPONENT_CLASSIFICATION=	Applications/System Utilities
-COMPONENT_LICENSE=	GPLv2+
-COMPONENT_LICENSE_FILE=	COPYING
-
-#https://github.com/oetiker/znapzend/releases/download/v0.18.0/znapzend-0.18.0.tar.gz
+COMPONENT_LICENSE=	GPLv3
+COMPONENT_LICENSE_FILE=	LICENSE
 
 include $(WS_MAKE_RULES)/prep.mk
 include $(WS_MAKE_RULES)/configure.mk
