@@ -11,7 +11,7 @@
 
 #
 # Copyright 2017 Alexander Pyhalov
-# Copyright 2018 Jason Martin
+# Copyright 2019 Jason Martin
 #
 
 set name=pkg.fmri value=pkg:/$(COMPONENT_FMRI)@$(IPS_COMPONENT_VERSION),$(BUILD_VERSION)
@@ -147,6 +147,7 @@ file path=usr/share/vala-0.40/vapi/enchant.vapi
 file path=usr/share/vala-0.40/vapi/fuse.deps
 file path=usr/share/vala-0.40/vapi/fuse.vapi
 file path=usr/share/vala-0.40/vapi/gconf-2.0.vapi
+file path=usr/share/vala-0.40/vapi/gdesktopenums-3.0.vapi
 file path=usr/share/vala-0.40/vapi/gdk-2.0.deps
 file path=usr/share/vala-0.40/vapi/gdk-2.0.vapi
 file path=usr/share/vala-0.40/vapi/gdk-3.0.deps
@@ -180,6 +181,8 @@ file path=usr/share/vala-0.40/vapi/gnet-2.0.deps
 file path=usr/share/vala-0.40/vapi/gnet-2.0.vapi
 file path=usr/share/vala-0.40/vapi/gnome-desktop-2.0.deps
 file path=usr/share/vala-0.40/vapi/gnome-desktop-2.0.vapi
+file path=usr/share/vala-0.40/vapi/gnome-desktop-3.0.deps
+file path=usr/share/vala-0.40/vapi/gnome-desktop-3.0.vapi
 file path=usr/share/vala-0.40/vapi/gnome-vfs-2.0.vapi
 file path=usr/share/vala-0.40/vapi/gnutls.vapi
 file path=usr/share/vala-0.40/vapi/gobject-2.0.vapi
@@ -422,6 +425,7 @@ file path=usr/share/vala-0.40/vapi/webkit2gtk-4.0.vapi
 file path=usr/share/vala-0.40/vapi/webkit2gtk-web-extension-4.0.deps
 file path=usr/share/vala-0.40/vapi/webkit2gtk-web-extension-4.0.vapi
 file path=usr/share/vala-0.40/vapi/x11.vapi
+file path=usr/share/vala-0.40/vapi/xcb-icccm.deps
 file path=usr/share/vala-0.40/vapi/xcb-icccm.vapi
 file path=usr/share/vala-0.40/vapi/xcb.vapi
 file path=usr/share/vala-0.40/vapi/xtst.deps

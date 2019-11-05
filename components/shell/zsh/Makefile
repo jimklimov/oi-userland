@@ -28,20 +28,23 @@ include ../../../make-rules/shared-macros.mk
 include $(WS_MAKE_RULES)/shared-targets.mk
 
 COMPONENT_NAME=		zsh
-COMPONENT_VERSION=	5.5.1
-COMPONENT_REVISION=	2
+COMPONENT_VERSION=	5.7.1
 COMPONENT_PROJECT_URL=	http://www.zsh.org/
 COMPONENT_SRC=		$(COMPONENT_NAME)-$(COMPONENT_VERSION)
 COMPONENT_ARCHIVE=	$(COMPONENT_SRC).tar.xz
 COMPONENT_ARCHIVE_HASH=	\
-    sha256:e1c38808fcbe0cc1344d55c9a758349f7ba1e317325b154621ac37eddac4aa80
-COMPONENT_ARCHIVE_URL=	http://downloads.sourceforge.net/project/zsh/zsh/$(COMPONENT_VERSION)/$(COMPONENT_ARCHIVE)
+    sha256:7260292c2c1d483b2d50febfa5055176bd512b32a8833b116177bf5f01e77ee8
+COMPONENT_ARCHIVE_URL= \
+    http://downloads.sourceforge.net/project/zsh/zsh/$(COMPONENT_VERSION)/$(COMPONENT_ARCHIVE)
 COMPONENT_SIG_URL=	$(COMPONENT_ARCHIVE_URL).asc
 COMPONENT_FMRI=		shell/zsh
 
 include $(WS_MAKE_RULES)/prep.mk
 include $(WS_MAKE_RULES)/configure.mk
 include $(WS_MAKE_RULES)/ips.mk
+
+# Force help files regeneration
+COMPONENT_POST_UNPACK_ACTION = ($(RM) $(SOURCE_DIR)/Doc/help.txt)
 
 CONFIGURE_BINDIR.64= $(CONFIGURE_BINDIR.32)
 CONFIGURE_LIBDIR.64= $(CONFIGURE_LIBDIR.32)
@@ -61,7 +64,6 @@ CONFIGURE_OPTIONS += --with-tcsetpgrp
 CONFIGURE_OPTIONS += --disable-gdbm
 
 COMPONENT_POST_CONFIGURE_ACTION = (cd $(@D); ./config.status)
-
 
 COMPOVERRIDES = $(shell test -d Completion && find Completion -type f -print)
 

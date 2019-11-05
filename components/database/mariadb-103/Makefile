@@ -11,21 +11,22 @@
 #
 # Copyright 2011-2013, EveryCity Ltd. All rights reserved.
 # Copyright 2016-2017, Wiselabs Software Ltda - http://www.wiselabs.com.br . All rights reserved.
-# Copyright 2018, Michal Nowak
+# Copyright 2019, Michal Nowak
 #
 
-PREFERRED_BITS=64
+PREFERRED_BITS=		64
 
 include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME=		mariadb
 COMPONENT_MAJOR_VERSION=10.3
-COMPONENT_MINOR_VERSION=8
+COMPONENT_MINOR_VERSION=14
 COMPONENT_VERSION=	$(COMPONENT_MAJOR_VERSION).$(COMPONENT_MINOR_VERSION)
+COMPONENT_REVISION=	1
 COMPONENT_SRC=		$(COMPONENT_NAME)-$(COMPONENT_VERSION)
 COMPONENT_ARCHIVE=	$(COMPONENT_SRC).tar.gz
 COMPONENT_PROJECT_URL=	https://www.mariadb.org/
-COMPONENT_ARCHIVE_HASH=	sha256:30bec17514d12d811a05757be46bd41724df28002cdec550d5c757b0b3f31ab8
+COMPONENT_ARCHIVE_HASH=	sha256:ba1c94d92fc8ebdf9b8a1d1b93ed6aeeead33da507efbbd4afcf49f32023e054
 COMPONENT_ARCHIVE_URL=	https://downloads.mariadb.com/MariaDB/$(COMPONENT_SRC)/source/$(COMPONENT_ARCHIVE)
 COMPONENT_SIG_URL=	$(COMPONENT_ARCHIVE_URL).asc
 
@@ -34,6 +35,9 @@ include $(WS_MAKE_RULES)/cmake.mk
 include $(WS_MAKE_RULES)/ips.mk
 
 CPPFLAGS += -I/usr/include/pcre
+# Prevents "Text relocation remains referenced against symbol offset
+# in file ../../sql/mysqld_dtrace_all.o" error
+LDFLAGS += -Bsymbolic -mimpure-text -lrt
 
 CONFIGURE_PREFIX=/usr/mariadb/$(COMPONENT_MAJOR_VERSION)
 CONFDIR=/etc/mariadb/$(COMPONENT_MAJOR_VERSION)
@@ -109,7 +113,6 @@ build:		$(BUILD_32_and_64)
 install:	$(INSTALL_32_and_64)
 
 test:		$(TEST_32_and_64)
-
 
 # Auto-generated dependencies
 REQUIRED_PACKAGES += $(GCC_RUNTIME_PKG)

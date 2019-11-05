@@ -32,8 +32,8 @@ PARFAIT_BUILD=no
 include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME=         cmake
-COMPONENT_MAJOR_VERSION=3.11
-COMPONENT_VERSION=      $(COMPONENT_MAJOR_VERSION).3
+COMPONENT_MAJOR_VERSION=3.15
+COMPONENT_VERSION=      $(COMPONENT_MAJOR_VERSION).1
 COMPONENT_PROJECT_URL=  https://www.cmake.org/
 COMPONENT_FMRI=         developer/build/cmake
 COMPONENT_CLASSIFICATION=Development/Distribution Tools
@@ -47,7 +47,7 @@ workspaces that can be used in the compiler environment of your choice.
 COMPONENT_SRC=          $(COMPONENT_NAME)-$(COMPONENT_VERSION)
 COMPONENT_ARCHIVE=      $(COMPONENT_SRC).tar.gz
 COMPONENT_ARCHIVE_HASH=	\
-  sha256:287135b6beb7ffc1ccd02707271080bbf14c21d80c067ae2c0040e5f3508c39a
+  sha256:18dec548d8f8b04d53c60f9cedcebaa6762f8425339d1e2c889c383d3ccdd7f7
 COMPONENT_ARCHIVE_URL= \
   https://www.cmake.org/files/v$(COMPONENT_MAJOR_VERSION)/$(COMPONENT_ARCHIVE)
 COMPONENT_LICENSE=      BSD, MIT, GPLv2, Curl, PD
@@ -122,10 +122,10 @@ COMPONENT_TEST_MASTER = $(COMPONENT_TEST_RESULTS_DIR)/results-$(MACH).master
 #         39 - FortranOnly (Failed)
 #         40 - VSGNUFortran (Failed)
 #         83 - Module.CheckIPOSupported-Fortran (Failed)
-#        232 - Fortran (Failed)
-#        233 - FortranModules (Failed)
-#        262 - CMakeOnly.CompilerIdFortran (Failed)
-#        425 - RunCMake.CompilerLauncher (Failed)
+#        237 - Fortran (Failed)
+#        238 - FortranModules (Failed)
+#        267 - CMakeOnly.CompilerIdFortran (Failed)
+#        434 - RunCMake.CompilerLauncher (Failed)
 
 COMPONENT_TEST_TARGETS =	test
 

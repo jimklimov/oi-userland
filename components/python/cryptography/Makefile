@@ -21,43 +21,59 @@
 
 #
 # Copyright (c) 2014, 2018, Oracle and/or its affiliates. All rights reserved.
+# Copyright (c) 2019, Michal Nowak
 #
+
+# Component uses ABI3 naming.
+PYTHON3_SOABI=abi3
 
 include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME=		cryptography
-COMPONENT_VERSION=	2.1.4
-COMPONENT_REVISION=	1
+COMPONENT_VERSION=	2.6.1
 COMPONENT_SRC=		$(COMPONENT_NAME)-$(COMPONENT_VERSION)
 COMPONENT_ARCHIVE=	$(COMPONENT_SRC).tar.gz
 COMPONENT_ARCHIVE_HASH=	\
-    sha256:e4d967371c5b6b2e67855066471d844c5d52d210c36c28d49a8507b96e2c5291
+	sha256:26c821cbeb683facb966045e2064303029d572a87ee69ca5a1bf54bf55f93ca6
 COMPONENT_ARCHIVE_URL=	$(call pypi_url)
 COMPONENT_PROJECT_URL=	https://cryptography.io/
-COMPONENT_BUGDB=	python-mod/cryptography
-COMPONENT_ANITYA_ID=	5532
 
-PYTHON_VERSIONS = 2.7 3.4
+PYTHON_VERSIONS = 2.7 3.4 3.5
 
 include $(WS_MAKE_RULES)/prep.mk
 include $(WS_MAKE_RULES)/setup.py.mk
 include $(WS_MAKE_RULES)/ips.mk
 
-# common targets
 build:		$(BUILD_32_and_64)
 
 install:	$(INSTALL_32_and_64)
 
 #
-# tests require cryptography_vectors, iso8601, pretend, pytest>= 2.8.7,
-# hypothesis>=1.11.4 and pyasn1_modules, some of which have not yet integrated.
-# On a i386 kernel zone with the test dependencies installed, test results are:
-# Python2.7: 74000 passed, 6136 skipped
-# Python3.4: 74000 passed, 6136 skipped
-# Python3.5: 74000 passed, 6136 skipped
+# The test suite requires several PyPI packages not in our distribution.
+# Install them for all Pythons in $(PYTHON_VERSION) like this (replace
+# Makefile variables, where appropriate; X and Y stand for Python minor
+# and, respectively, major version):
 #
-test:		$(NO_TESTS)
+#   pipX.Y install --user cryptography-vectors==$(COMPONENT_VERSION) iso8601 pretend pytest hypothesis pyasn1-modules
+#
+# Results for Python 2.7.16, 3.4.9, and 3.5.6 for 32-bit and 64-bit:
+#
+#   96920 passed, 10057 skipped
+#
+COMPONENT_TEST_ENV +=   PYTHONPATH=$$HOME/.local/lib/python$(PYTHON_VERSION)/site-packages
+COMPONENT_TEST_DIR=	$(COMPONENT_SRC)
+COMPONENT_TEST_CMD=	$(PYTHON) setup.py test
+COMPONENT_TEST_ARGS=
 
+test:		$(TEST_32_and_64)
+
+REQUIRED_PACKAGES += library/python/pytest-27
+REQUIRED_PACKAGES += library/python/pytest-34
+REQUIRED_PACKAGES += library/python/pytest-35
 REQUIRED_PACKAGES += library/python/cffi
+REQUIRED_PACKAGES += runtime/python-34
+# Auto-generated dependencies
 REQUIRED_PACKAGES += library/security/openssl
+REQUIRED_PACKAGES += runtime/python-27
+REQUIRED_PACKAGES += runtime/python-35
 REQUIRED_PACKAGES += system/library

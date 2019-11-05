@@ -11,20 +11,20 @@
 #
 # Copyright 2011-2013, EveryCity Ltd. All rights reserved.
 # Copyright 2016-2017, Wiselabs Software Ltda - http://www.wiselabs.com.br . All rights reserved.
-# Copyright 2018, Michal Nowak
+# Copyright 2019, Michal Nowak
 #
 
 include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME=		mariadb
 COMPONENT_MAJOR_VERSION=10.1
-COMPONENT_MINOR_VERSION=34
+COMPONENT_MINOR_VERSION=40
 COMPONENT_VERSION=	$(COMPONENT_MAJOR_VERSION).$(COMPONENT_MINOR_VERSION)
 COMPONENT_REVISION=	1
 COMPONENT_SRC=		$(COMPONENT_NAME)-$(COMPONENT_VERSION)
 COMPONENT_ARCHIVE=	$(COMPONENT_SRC).tar.gz
 COMPONENT_PROJECT_URL=	https://www.mariadb.org/
-COMPONENT_ARCHIVE_HASH=	sha256:c7e0719fd08790c096585bf867fe87e084b310f2f3679e059e3b10b9fd6d5548
+COMPONENT_ARCHIVE_HASH=	sha256:91757a7e52b88b8ddbf150ac55746e9dd1978b06c03303f114e57980ed2a67a4
 COMPONENT_ARCHIVE_URL=	https://downloads.mariadb.com/MariaDB/$(COMPONENT_SRC)/source/$(COMPONENT_ARCHIVE)
 COMPONENT_SIG_URL=	$(COMPONENT_ARCHIVE_URL).asc
 
@@ -115,9 +115,9 @@ install:	$(INSTALL_32_and_64)
 
 test:		$(TEST_32_and_64)
 
-
 # Auto-generated dependencies
-REQUIRED_PACKAGES += SUNWcs
+REQUIRED_PACKAGES += $(GCC_RUNTIME_PKG)
+REQUIRED_PACKAGES += $(GXX_RUNTIME_PKG)
 REQUIRED_PACKAGES += compress/bzip2
 REQUIRED_PACKAGES += compress/xz
 REQUIRED_PACKAGES += database/mariadb-101/client
@@ -131,8 +131,7 @@ REQUIRED_PACKAGES += runtime/perl-522
 REQUIRED_PACKAGES += runtime/perl-524
 REQUIRED_PACKAGES += service/security/kerberos-5
 REQUIRED_PACKAGES += shell/bash
+REQUIRED_PACKAGES += SUNWcs
 REQUIRED_PACKAGES += system/library
-REQUIRED_PACKAGES += $(GXX_RUNTIME_PKG)
-REQUIRED_PACKAGES += $(GCC_RUNTIME_PKG)
 REQUIRED_PACKAGES += system/library/math
 REQUIRED_PACKAGES += system/library/security/gss
