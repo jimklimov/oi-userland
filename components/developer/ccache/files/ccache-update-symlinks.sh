@@ -7,9 +7,14 @@
 # This script can be used standalone, or as an SMF method script
 [ -s /lib/svc/share/smf_include.sh ] && . /lib/svc/share/smf_include.sh
 
+SMF_FMRI_BASE=""
+if [ -n "$SMF_FMRI" ]; then
+    SMF_FMRI_BASE="`echo "$SMF_FMRI" | sed 's|:[^:]*$||'`"
+fi
+
 getproparg() {
     [ -n "$SMF_FMRI" ] || return
-    val="`svcprop -p "$1" "$SMF_FMRI"`"
+    val="`svcprop -p "$1" "$SMF_FMRI" 2>/dev/null`" || val="`svcprop -p "$1" "$SMF_FMRI_BASE" 2>/dev/null`"
     [ -n "$val" ] && echo "$val"
 }
 
