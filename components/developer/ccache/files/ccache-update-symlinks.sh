@@ -84,7 +84,7 @@ LINKS="`ls -1 "$LINKDIR" | sort -n | uniq`"
 [ "$DEBUG" = yes ] && echo "=== LINKDIR:" && echo "$LINKS"
 
 if [ "$NAMES" = "$LINKS" ]; then
-    echo "CCACHE symlinks are up to date for current PATH='$PATH'" >&2
+    echo "CCACHE symlinks are already up to date for current PATH='$PATH'" >&2
     exit 0
 fi
 
@@ -100,3 +100,6 @@ for L in $LINKS ; do
     echo "$NAMES" | fgrep "$L" >/dev/null || \
     { echo "REMOVE LINK: $L" >&2; $DRYRUN rm -f "$LINKDIR/$L"; }
 done
+
+echo "CCACHE symlinks checked/rearranged to be up to date for current PATH='$PATH'" >&2
+exit 0
