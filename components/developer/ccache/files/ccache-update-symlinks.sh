@@ -26,6 +26,11 @@ cd "$LINKDIR" || exit
 # (/opt/gcc/4.4.4/bin/...) or other special compilers? It would help everyone
 # if that particular system's admin rather symlinked the custom compiler to
 # common /usr/bin/ instead.
+# TODO: Set value from SMF instance if present there
+[ "${ALLOW_DELETE-}" = true ] || { echo "Defaulting ALLOW_DELETE=false" >&2; ALLOW_DELETE=false; }
+
+# Begin work
+echo "Trawling PATH=$PATH" >&2
 
 NAMES=""
 for T in \
@@ -79,7 +84,8 @@ for N in $NAMES ; do
     { echo "ADDING LINK: $N" >&2; $DRYRUN ln -sf "$SYMLINK" "$LINKDIR/$N"; }
 done
 
-# Remove links to compilers that are not in PATH
+# (optionally) Remove links to compilers that are not in PATH
+$ALLOW_DELETE || DRYRUN="echo Would exec:"
 for L in $LINKS ; do
     echo "$NAMES" | fgrep "$L" >/dev/null || \
     { echo "REMOVE LINK: $L" >&2; $DRYRUN rm -f "$LINKDIR/$L"; }
