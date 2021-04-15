@@ -20,6 +20,18 @@
 LINKDIR="/usr/lib/ccache"
 SYMLINK="../../bin/ccache"
 
+# These are the filenames we manage symlinks for, either exact or suffixed
+# by a dash and number:
+TOOLS="
+    gcc g++ gcpp
+    clang clang++ clang-cpp
+    c++ cc cpp
+    i386-pc-solaris2.11-c++ i386-pc-solaris2.11-cpp i386-pc-solaris2.11-g++ i386-pc-solaris2.11-gcc
+"
+# TODO? Add values from SMF instance
+# Rearrange for easier parsing below
+TOOLS="`echo $TOOLS | tr ' ' '\n' | sort -n | uniq`"
+
 cd "$LINKDIR" || exit
 
 # TODO: Option in the SMF service to enable additions to PATH for gcc-4.4.4-il
@@ -30,15 +42,10 @@ cd "$LINKDIR" || exit
 [ "${ALLOW_DELETE-}" = true ] || { echo "Defaulting ALLOW_DELETE=false" >&2; ALLOW_DELETE=false; }
 
 # Begin work
-echo "Trawling PATH=$PATH" >&2
+echo "Trawling PATH='$PATH' for TOOLS:" $TOOLS >&2
 
 NAMES=""
-for T in \
-    gcc g++ gcpp \
-    clang clang++ clang-cpp \
-    c++ cc cpp \
-    i386-pc-solaris2.11-c++ i386-pc-solaris2.11-cpp i386-pc-solaris2.11-g++ i386-pc-solaris2.11-gcc \
-; do
+for T in $TOOLS ; do
     for P in `echo "\"$PATH\"" | sed 's,:," ",g'` ; do
         P="`echo "$P" | sed 's|^"\(.*\)"$|\1|'`"
         [ "$P" = "$LINKDIR" ] && continue
