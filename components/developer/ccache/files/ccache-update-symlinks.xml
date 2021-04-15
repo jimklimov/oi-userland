@@ -61,8 +61,31 @@
 
     <property_group name='ccache-update-symlinks' type='application'>
         <stability value='Evolving' />
+        <!-- By default the method script only adds symlinks, to avoid
+             surprises for developers on their systems customized manually
+             (and/or before this service was introduced). After they make
+             sure all symlinks are what they intend to have and nothing
+             unexpected is queued to be deleted (as can be seen in log)
+             then can toggle this flag to "true" in their deployment.
+             Probably customizing PATH_ADD and/or TOOLS_ADD will be
+             critical for those developers for whom it really matters.
+        -->
         <propval type='boolean' name='ALLOW_DELETE' value='false' />
+        <!-- The PATH_ADD contents are added to the PATH set by SMF, which
+             includes /usr/bin (with most of the packaged compilers) already.
+             Default PATH_ADD below can help find compilers in locations
+             typical for local customizations of OpenIndiana deployments.
+        -->
         <propval type='astring' name='PATH_ADD' value='' />
+        <!-- If a developer's system has further filenames for compilers
+             that ccache is compatible with, list the (version-less)
+             names here. For example, "icc" listed here would match
+             and symlink to ccache both "icc" and "icc-123" but neither
+             "icc-style" nor "icc-cpp" nor "icc++" if such names are
+             installed and in PATH (list all relevant prefixes for that
+             tool chain's C and C++ compilers, and CPP preprocessor,
+             separated by whitespaces).
+        -->
         <propval type='astring' name='TOOLS_ADD' value='' />
     </property_group>
 
