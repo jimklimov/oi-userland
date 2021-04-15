@@ -41,12 +41,12 @@ TOOLS="
     clang clang++ clang-cpp
     c++ cc cpp
     i386-pc-solaris2.11-c++ i386-pc-solaris2.11-cpp i386-pc-solaris2.11-g++ i386-pc-solaris2.11-gcc
-    `getproparg TOOLS_ADD`
+    `getproparg ccache-update-symlinks/TOOLS_ADD`
 "
 # Rearrange for easier parsing below
 TOOLS="`echo $TOOLS | tr ' ' '\n' | sort -n | uniq`"
 
-PATH_ADD="`getproparg PATH_ADD`"
+PATH_ADD="`getproparg ccache-update-symlinks/PATH_ADD`"
 if [ -n "$PATH_ADD" ]; then
     PATH="$PATH:$PATH_ADD"
 fi
@@ -58,7 +58,7 @@ cd "$LINKDIR" || exit
 # if that particular system's admin rather symlinked the custom compiler to
 # common /usr/bin/ instead.
 # Set value from SMF instance if present there
-[ -n "${ALLOW_DELETE-}" ] || ALLOW_DELETE="`getproparg ALLOW_DELETE`"
+[ -n "${ALLOW_DELETE-}" ] || ALLOW_DELETE="`getproparg ccache-update-symlinks/ALLOW_DELETE`"
 [ "${ALLOW_DELETE-}" = true -o "${ALLOW_DELETE-}" = false ] || { echo "Defaulting ALLOW_DELETE=false" >&2; ALLOW_DELETE=false; }
 
 # Begin work
