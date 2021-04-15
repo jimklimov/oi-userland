@@ -59,6 +59,13 @@
         <propval name='duration' type='astring' value='transient' />
     </property_group>
 
+    <property_group name='ccache-update-symlinks' type='application'>
+        <stability value='Evolving' />
+        <propval type='boolean' name='ALLOW_DELETE' value='false' />
+        <propval type='astring' name='PATH_ADD' value='' />
+        <propval type='astring' name='TOOLS_ADD' value='' />
+    </property_group>
+
     <stability value='Evolving' />
 
     <template>

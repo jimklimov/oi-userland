@@ -4,6 +4,15 @@
 # versions of compatible compilers
 # Copyright (C) 2021 by Jim Klimov
 
+# This script can be used standalone, or as an SMF method script
+[ -s /lib/svc/share/smf_include.sh ] && . /lib/svc/share/smf_include.sh
+
+getproparg() {
+    [ -n "$SMF_FMRI" ] || return
+    val="`svcprop -p "$1" "$SMF_FMRI"`"
+    [ -n "$val" ] && echo "$val"
+}
+
 # Caller may `export DEBUG=yes` to trace the decisions in the script
 # Caller may `export DRYRUN=echo` to avoid actual link manipulations
 
@@ -21,16 +30,21 @@ LINKDIR="/usr/lib/ccache"
 SYMLINK="../../bin/ccache"
 
 # These are the filenames we manage symlinks for, either exact or suffixed
-# by a dash and number:
+# by a dash and number, and optionally add values from SMF instance:
 TOOLS="
     gcc g++ gcpp
     clang clang++ clang-cpp
     c++ cc cpp
     i386-pc-solaris2.11-c++ i386-pc-solaris2.11-cpp i386-pc-solaris2.11-g++ i386-pc-solaris2.11-gcc
+    `getproparg TOOLS_ADD`
 "
-# TODO? Add values from SMF instance
 # Rearrange for easier parsing below
 TOOLS="`echo $TOOLS | tr ' ' '\n' | sort -n | uniq`"
+
+PATH_ADD="`getproparg PATH_ADD`"
+if [ -n "$PATH_ADD" ]; then
+    PATH="$PATH:$PATH_ADD"
+fi
 
 cd "$LINKDIR" || exit
 
@@ -38,8 +52,9 @@ cd "$LINKDIR" || exit
 # (/opt/gcc/4.4.4/bin/...) or other special compilers? It would help everyone
 # if that particular system's admin rather symlinked the custom compiler to
 # common /usr/bin/ instead.
-# TODO: Set value from SMF instance if present there
-[ "${ALLOW_DELETE-}" = true ] || { echo "Defaulting ALLOW_DELETE=false" >&2; ALLOW_DELETE=false; }
+# Set value from SMF instance if present there
+[ -n "${ALLOW_DELETE-}" ] || ALLOW_DELETE="`getproparg ALLOW_DELETE`"
+[ "${ALLOW_DELETE-}" = true -o "${ALLOW_DELETE-}" = false ] || { echo "Defaulting ALLOW_DELETE=false" >&2; ALLOW_DELETE=false; }
 
 # Begin work
 echo "Trawling PATH='$PATH' for TOOLS:" $TOOLS >&2
