@@ -76,7 +76,7 @@ for T in $TOOLS ; do
             B="`basename "$F"`"
             case "$B" in
                 ccache*) ;; # Quiet skip
-                "$T"|"$T"-{0,1,2,3,4,5,6,7,8,9}|"$T"-[0123456789]|"$T"-{0,1,2,3,4,5,6,7,8,9}*|"$T"-[0123456789]*)
+                "$T"|"$T"-[0123456789]*)
                     # We have either the default tool name, or one suffixed
                     # by the version number (may be dotted)
                     # Assumes no whitespace in compiler filenames
