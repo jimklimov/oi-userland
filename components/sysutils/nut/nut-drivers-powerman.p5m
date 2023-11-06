@@ -39,9 +39,6 @@ dir path=usr/lib/nut/bin group=bin
 depend fmri=$(COMPONENT_FMRI)/libs@$(IPS_COMPONENT_VERSION),$(BUILD_VERSION) type=require
 depend fmri=$(COMPONENT_FMRI)/server@$(IPS_COMPONENT_VERSION),$(BUILD_VERSION) type=require
 
-# TODO: Separate the below like in other OSes, to have package sets defined
-# by common dependencies for a group of drivers (USB, SNMP, Modbus...)
-
 # Actual drivers
 file path=usr/lib/nut/bin/powerman-pdu
 

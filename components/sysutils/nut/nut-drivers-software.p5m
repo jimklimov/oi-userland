@@ -52,5 +52,5 @@ file data/evolution500.seq \
 # Man pages
 file path=usr/share/man/man1m/apcupsd-ups.1m
 file path=usr/share/man/man1m/clone.1m
-# no clone-outlet.1m (not source .txt) as of nut-v2.8.1
+# no clone-outlet.1m (nor source .txt) as of nut-v2.8.1
 file path=usr/share/man/man1m/dummy-ups.1m
