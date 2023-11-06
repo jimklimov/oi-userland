@@ -34,15 +34,6 @@ COMPONENT_CLASSIFICATION=	System/Administration and Configuration
 COMPONENT_LICENSE=	GPLv2+
 COMPONENT_LICENSE_FILE=	COPYING
 
-# NUT-Monitor UI has two similar implementations, for py2gtk and py3qt5.
-# The PyNUT.py (general binding) module is written to work with both 2.x
-# and 3.x interpreters as the same source file (patched for shebang and
-# installed to different vendor/site locations several times in practice).
-# If for some reason you are interested in getting the python-2.7 variant
-# locally built and installed, please check commits parked in
-#   https://github.com/OpenIndiana/oi-userland/pull/14692
-# Current recipe aims for default Python version supported by OI du-jour
-# (assuming 3.x, eventually newer).
 include $(WS_MAKE_RULES)/common.mk
 
 CXXFLAGS += $(CXXFLAGS.$(BITS))
@@ -156,6 +147,10 @@ CONFIGURE_OPTIONS +=	--disable-cppcheck
 
 CONFIGURE_OPTIONS +=	$(CONFIGURE_OPTIONS.$(BITS))
 
+# NUT-Monitor UI has two similar implementations, for py2gtk and py3qt5.
+# The PyNUT.py (general binding) module is written to work with both 2.x
+# and 3.x interpreters as the same source file (patched for shebang and
+# installed to different vendor/site locations several times in practice).
 # Fiddle with packaging:
 # * move man1m pages to target directory (see also patches/07-man.patch)
 # * move python stuff to vendor-packages

@@ -33,10 +33,11 @@ license $(COMPONENT_LICENSE_FILE) license='$(COMPONENT_LICENSE)'
 dir path=usr/lib/nut/bin group=bin
 
 # The server package also includes some baseline tools, services
-# and configuration files for drivers
+# and configuration files for drivers. Third-party dependencies
+# for the actual drivers are guessed by package build from other
+# information in the recipe.
 depend fmri=$(COMPONENT_FMRI)/libs@$(IPS_COMPONENT_VERSION),$(BUILD_VERSION) type=require
 depend fmri=$(COMPONENT_FMRI)/server@$(IPS_COMPONENT_VERSION),$(BUILD_VERSION) type=require
-#depend type=require fmri=library/libmodbus
 
 # Actual drivers
 file path=usr/lib/nut/bin/adelsystem_cbi
