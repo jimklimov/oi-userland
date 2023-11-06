@@ -13,7 +13,7 @@
 # Copyright 2023 Jim Klimov
 #
 
-# This file should cover several versions of python (e.g. 2.7 and 3.x series)
+# This file should cover several versions of python
 
 set name=pkg.fmri value=pkg:/library/python/pynut-$(PYV)@$(IPS_COMPONENT_VERSION),$(BUILD_VERSION)
 set name=pkg.human-version value=$(HUMAN_VERSION)

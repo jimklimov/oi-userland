@@ -13,8 +13,6 @@
 # Copyright 2016-2023 Jim Klimov
 #
 
-BUILD_BITS= 64
-
 # NUT 2.8.0+ is diligently tested to benefit from parallel builds and succeed
 USE_PARALLEL_BUILD=	yes
 
@@ -41,9 +39,10 @@ COMPONENT_LICENSE_FILE=	COPYING
 # and 3.x interpreters as the same source file (patched for shebang and
 # installed to different vendor/site locations several times in practice).
 # If for some reason you are interested in getting the python-2.7 variant
-# installed, please check git history shortly before this recipe change
-# (Nov 2023) for details. Current recipe aims for default Python version
-# supported by OI du-jour (assuming 3.x, eventually newer).
+# locally built and installed, please check commits parked in
+#   https://github.com/OpenIndiana/oi-userland/pull/14692
+# Current recipe aims for default Python version supported by OI du-jour
+# (assuming 3.x, eventually newer).
 include $(WS_MAKE_RULES)/common.mk
 
 CXXFLAGS += $(CXXFLAGS.$(BITS))
@@ -187,17 +186,9 @@ COMPONENT_POST_INSTALL_ACTION += \
         esac ; \
     done;
 
-test: $(TEST_64)
-
 # Manually added dependencies:
 REQUIRED_PACKAGES += text/asciidoc
 REQUIRED_PACKAGES += library/augeas-tools
-
-### Variants for someone building on older platforms:
-# libusb-0.1 is still an option with NUT:
-#REQUIRED_PACKAGES += system/library/usb/libusb
-# Older openssl-1.x might be an option:
-#REQUIRED_PACKAGES += library/security/openssl
 
 # Auto-generated dependencies
 PYTHON_REQUIRED_PACKAGES += runtime/python
