@@ -15,9 +15,6 @@
 
 BUILD_BITS= 64
 
-# More details on python versions handled here are commented below
-SINGLE_PYTHON_VERSION=	no
-
 # NUT 2.8.0+ is diligently tested to benefit from parallel builds and succeed
 USE_PARALLEL_BUILD=	yes
 
@@ -39,45 +36,14 @@ COMPONENT_CLASSIFICATION=	System/Administration and Configuration
 COMPONENT_LICENSE=	GPLv2+
 COMPONENT_LICENSE_FILE=	COPYING
 
-# NUT-Monitor UI has two similar implementations, for py2gtk and py3qt5
+# NUT-Monitor UI has two similar implementations, for py2gtk and py3qt5.
 # The PyNUT.py (general binding) module is written to work with both 2.x
 # and 3.x interpreters as the same source file (patched for shebang and
 # installed to different vendor/site locations several times in practice).
-PYVER.2X =	2.7
-PYV.2X =	27
-
-ifeq (,$(strip $(filter 3.%,$(PYTHON_VERSIONS) $(PYTHON_VERSION))))
-# Something... current as of this writing
-PYVER.3X =	3.9
-else
-ifeq (,$(strip $(filter 3.%,$(PYTHON_VERSION))))
-PYVER.3X =	$(PYTHON_VERSION)
-else
-# Pick the first in the list
-PYVER.3X =	$(word 1,$(strip $(filter 3.%,$(PYTHON_VERSION))))
-endif
-endif
-#PYV.3X ::=	$(shell echo $(PYVER.3X) | tr -d .)
-PYV.3X ::=	$(subst .,,$(PYVER.3X))
-
-PYTHON_VERSIONS.NUTUI ::=	$(shell (echo '$(PYTHON_VERSION) $(PYTHON_VERSIONS) $(PYVER.2X) $(PYVER.3X)' | tr ' ' '\n' | sort | uniq))
-override PYTHON_VERSIONS =	$(PYTHON_VERSIONS.NUTUI)
-
-#PYV =	$(shell echo $(PYVER) | tr -d .)
-
-#PKG_MACROS +=	PYTHON_VERSION="$(PYTHON_VERSION)"
-PKG_MACROS +=	PYVER.2X="$(PYVER.2X)"
-PKG_MACROS +=	PYV.2X="$(PYV.2X)"
-PKG_MACROS +=	PYVER.3X="$(PYVER.3X)"
-PKG_MACROS +=	PYV.3X="$(PYV.3X)"
-
-#PKG_OPTIONS +=	-D PYTHON_VERSION="$(PYTHON_VERSION)"
-PKG_OPTIONS +=	-D PYVER.2X="$(PYVER.2X)"
-PKG_OPTIONS +=	-D PYV.2X="$(PYV.2X)"
-PKG_OPTIONS +=	-D PYVER.3X="$(PYVER.3X)"
-PKG_OPTIONS +=	-D PYV.3X="$(PYV.3X)"
-
-# Only include this (and ips.mk activity) after tuning PYTHON_VERSIONS!
+# If for some reason you are interested in getting the python-2.7 variant
+# installed, please check git history shortly before this recipe change
+# (Nov 2023) for details. Current recipe aims for default Python version
+# supported by OI du-jour (assuming 3.x, eventually newer).
 include $(WS_MAKE_RULES)/common.mk
 
 CXXFLAGS += $(CXXFLAGS.$(BITS))
@@ -173,8 +139,8 @@ CONFIGURE_OPTIONS +=	--with-doc="man=yes"
 # NUT-Monitor GUI client
 CONFIGURE_OPTIONS +=	--with-nut-monitor=yes
 CONFIGURE_OPTIONS +=	--with-pynut=yes
-CONFIGURE_OPTIONS +=	--with-python2=python$(PYVER.2X)
-CONFIGURE_OPTIONS +=	--with-python3=python$(PYVER.3X)
+CONFIGURE_OPTIONS +=	--with-python2=no
+CONFIGURE_OPTIONS +=	--with-python=python$(PYTHON_VERSION)
 
 # Be sure package is squeaky clean
 CONFIGURE_OPTIONS +=	--enable-Werror --enable-warnings --enable-Wcolor
@@ -205,21 +171,21 @@ COMPONENT_POST_INSTALL_ACTION += \
     $(MKDIR) $(PROTOUSRSHAREMANDIR)/man1m \
         && $(MV) $(PROTOUSRSHAREMANDIR)/man1/*.1m $(PROTOUSRSHAREMANDIR)/man1m/ \
         || { echo "FAILED to fix up man1m" >&2 ; exit 1; } ; \
-    for PYVER in $(PYTHON_VERSIONS.NUTUI) ; do \
+    for PYVER in $(PYTHON_VERSIONS) ; do \
         $(MKDIR) "$(PROTOUSRLIBDIR)/python$${PYVER}/vendor-packages" \
             && $(MV) "$(PROTOUSRLIBDIR)/python$${PYVER}/site-packages/"* "$(PROTOUSRLIBDIR)/python$${PYVER}/vendor-packages/" \
             && find "$(PROTOUSRLIBDIR)/python$${PYVER}/vendor-packages/" -name '*.py' | while read F ; do \
                 $(GSED) '/^\(\#\!.*\/python\)$$/ s/$$/'"$${PYVER}"'/' -i "$$F" || exit ; \
             done \
         && python$${PYVER} -m compileall "$(PROTOUSRLIBDIR)/python$${PYVER}/vendor-packages" || exit ; \
-    done; \
-    if [ -n "$(PYVER.2X)" ] ; then \
-        python$(PYVER.2X) -c "import pygtk;pygtk.require('2.0');import pynotify" >/dev/null || { \
-            echo "Neutering import of pynotify in NUT-Monitor-py2gtk2 for this build" >&2 ; \
-            $(GSED) -i "$(PROTOUSRSHAREDIR)/nut/nut-monitor/app/NUT-Monitor-py2gtk2" \
-                -e 's,\(\s\)\(import pynotify\),\1return; \#\#\#NOT_HERE_\2,' || exit ; \
-        } ; \
-    fi;
+        case "$${PYVER}" in \
+        2.*) python$${PYVER} -c "import pygtk;pygtk.require('2.0');import pynotify" >/dev/null || { \
+                echo "Neutering import of pynotify in NUT-Monitor-py2gtk2 for this build with python$${PYVER}" >&2 ; \
+                $(GSED) -i "$(PROTOUSRSHAREDIR)/nut/nut-monitor/app/NUT-Monitor-py2gtk2" \
+                    -e 's,\(\s\)\(import pynotify\),\1return; \#\#\#NOT_HERE_\2,' || exit ; \
+            } ; \
+        esac ; \
+    done;
 
 test: $(TEST_64)
 
@@ -233,27 +199,7 @@ REQUIRED_PACKAGES += library/augeas-tools
 # Older openssl-1.x might be an option:
 #REQUIRED_PACKAGES += library/security/openssl
 
-$(foreach PYVAR,$(PYTHON_VERSIONS.NUTUI),\
-    $(eval REQUIRED_PACKAGES += runtime/python-$(subst .,,$(PYVAR))))
-
-# Without both the "pygtk2" and "pygtk-27", pkgdepend failed
-# to find "gtk/__init__.py" and friends :\
-REQUIRED_PACKAGES += library/python/pygtk2
-REQUIRED_PACKAGES += library/python/pygtk2-$(PYV.2X)
-REQUIRED_PACKAGES += library/python/pygobject-$(PYV.2X)
-
-# Obsoleted since 2.7 (packaging at least) but present in
-# case of builds for earlier interpreter versions (2.6 anyone?)
-ifneq (,$(PYV.2X))
-ifneq (27,$(PYV.2X))
-REQUIRED_PACKAGES += library/python-2/python-notify-$(PYV.2X)
-endif
-endif
-
 # Auto-generated dependencies
-# These two are "discovered" but do not in fact exist for 3.x:
-#PYTHON_REQUIRED_PACKAGES += library/python/pygobject
-#PYTHON_REQUIRED_PACKAGES += library/python/pygtk2
 PYTHON_REQUIRED_PACKAGES += runtime/python
 REQUIRED_PACKAGES += $(GCC_RUNTIME_PKG)
 REQUIRED_PACKAGES += $(GXX_RUNTIME_PKG)

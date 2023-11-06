@@ -36,10 +36,8 @@ depend fmri=$(COMPONENT_FMRI)/cgi@$(IPS_COMPONENT_VERSION),$(BUILD_VERSION) type
 # If augtools are installed, then NUT packaging also requires its lenses to be installed
 depend fmri=$(COMPONENT_FMRI)/augeas@$(IPS_COMPONENT_VERSION),$(BUILD_VERSION) type=conditional predicate=library/augeas-tools
 
-# If python2+GTK and/or python3+QT5 are installed, then NUT packaging also
-# requires its GUI client to be installed; similar for binding libs (used
+# If python3+QT5 are installed, then NUT packaging also requires
+# its GUI client to be installed; similar for binding libs (used
 # by the GUI app, but standalone generally)
-depend fmri=library/python/pynut-$(PYV.2X)@$(IPS_COMPONENT_VERSION),$(BUILD_VERSION) type=conditional predicate=runtime/python-$(PYV.2X)
-depend fmri=library/python/pynut-$(PYV.3X)@$(IPS_COMPONENT_VERSION),$(BUILD_VERSION) type=conditional predicate=runtime/python-$(PYV.3X)
-depend fmri=$(COMPONENT_FMRI)/nut-monitor-gui-py2gtk@$(IPS_COMPONENT_VERSION),$(BUILD_VERSION) type=conditional predicate=library/python/pygtk2
+depend fmri=library/python/pynut-$(PYV)@$(IPS_COMPONENT_VERSION),$(BUILD_VERSION) type=conditional predicate=runtime/python-$(PYV)
 depend fmri=$(COMPONENT_FMRI)/nut-monitor-gui-py3qt5@$(IPS_COMPONENT_VERSION),$(BUILD_VERSION) type=conditional predicate=library/python/pyqt5

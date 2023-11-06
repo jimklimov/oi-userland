@@ -27,8 +27,8 @@ license $(COMPONENT_LICENSE_FILE) license='$(COMPONENT_LICENSE)'
 <transform dir path=usr/share/nut/nut-monitor/(.*) -> set group bin>
 
 ### NUT GUI clients, require python2+GTK or python3+QT5
-depend type=require-any fmri=library/python/pygtk2 fmri=library/python/pyqt5
-depend type=require-any fmri=runtime/python-$(PYV.2X) fmri=runtime/python-$(PYV.3X)
+depend type=require fmri=library/python/pyqt5
+depend type=require fmri=runtime/python-$(PYV)
 
 # The exposed binary is a dispatcher script which evaluates the
 # run-time enviroment and launches the suitable implementation
