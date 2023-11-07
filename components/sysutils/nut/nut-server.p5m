@@ -53,8 +53,8 @@ file path=usr/share/man/man1m/sockdebug.1m
 # to do so (for remote UPSes). This can be tuned in XML manifest by user.
 file path=usr/share/nut/solaris-smf/method/svc-nut-server
 file path=usr/share/nut/solaris-smf/manifest/nut-server.xml
-link path=var/svc/manifest/application/nut-server.xml \
-    target=../../../../usr/share/nut/solaris-smf/manifest/nut-server.xml \
+link path=var/svc/manifest/system/power/nut-server.xml \
+    target=../../../../../usr/share/nut/solaris-smf/manifest/nut-server.xml \
     restart_fmri=svc:/system/manifest-import:default
 
 file path=usr/share/man/man1m/upsd.1m
@@ -98,11 +98,11 @@ file path=usr/share/man/man1m/nut-driver-enumerator.1m
 
 file path=usr/share/nut/solaris-smf/manifest/nut-driver.xml
 file path=usr/share/nut/solaris-smf/manifest/nut-driver-enumerator.xml
-link path=var/svc/manifest/application/nut-driver.xml \
-    target=../../../../usr/share/nut/solaris-smf/manifest/nut-driver.xml \
+link path=var/svc/manifest/system/power/nut-driver.xml \
+    target=../../../../../usr/share/nut/solaris-smf/manifest/nut-driver.xml \
     restart_fmri=svc:/system/manifest-import:default
-link path=var/svc/manifest/application/nut-driver-enumerator.xml \
-    target=../../../../usr/share/nut/solaris-smf/manifest/nut-driver-enumerator.xml \
+link path=var/svc/manifest/system/power/nut-driver-enumerator.xml \
+    target=../../../../../usr/share/nut/solaris-smf/manifest/nut-driver-enumerator.xml \
     restart_fmri=svc:/system/manifest-import:default
 
 ### Shared by data server and drivers
