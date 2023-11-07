@@ -147,6 +147,23 @@ CONFIGURE_OPTIONS +=	--disable-cppcheck
 
 CONFIGURE_OPTIONS +=	$(CONFIGURE_OPTIONS.$(BITS))
 
+# TOTHINK? variant.opensolaris.zone=global
+$(BUILD_DIR)/nut-usb-driver.p5m.include: $(BUILD_DIR)/$(MACH64)/scripts/udev/nut-usbups.rules
+	(echo "# NUT USB VID:PID pairs supported by some USB-capable driver"; \
+	 echo "# Parsed from $< during package build"; \
+	 echo "driver name=ugen \\" ; \
+	 grep -E 'ATTR.*idVendor.*idProduct' < "$<" | \
+	 $(GSED) 's/^.*ATTR{idVendor}=="0*\([a-fA-F0-9][a-fA-F0-9]*\)".*ATTR{idProduct}=="0*\([a-fA-F0-9][a-fA-F0-9]*\)".*$$/    alias="usb\1,\2.*" \\/' ; \
+	 echo '    perms="* 0664 root nut"' ; \
+	) > "$@"
+
+# Inject into build chain, to patch .mogrified file used to create .mangled and beyond
+$(BUILD_DIR)/.injected.nut-usb-driver.p5m.include: $(BUILD_DIR)/manifest-$(MACH)-nut-drivers-usb.mogrified $(BUILD_DIR)/nut-usb-driver.p5m.include
+	cat "$(BUILD_DIR)/nut-usb-driver.p5m.include" >> "$(BUILD_DIR)/manifest-$(MACH)-nut-drivers-usb.mogrified"
+	touch "$@"
+
+$(BUILD_DIR)/manifest-$(MACH)-nut-drivers-usb.mangled: $(BUILD_DIR)/nut-usb-driver.p5m.include $(BUILD_DIR)/.injected.nut-usb-driver.p5m.include
+
 # NUT-Monitor UI has two similar implementations, for py2gtk and py3qt5.
 # The PyNUT.py (general binding) module is written to work with both 2.x
 # and 3.x interpreters as the same source file (patched for shebang and
