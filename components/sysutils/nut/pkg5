@@ -23,7 +23,7 @@
         "system/management/nut/augeas",
         "system/management/nut/cgi",
         "system/management/nut/clients",
-        "system/management/nut-common",
+        "system/management/nut/common",
         "system/management/nut/devtools",
         "system/management/nut/drivers/ipmi",
         "system/management/nut/drivers/modbus",
