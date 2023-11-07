@@ -42,7 +42,7 @@ user ftpuser=false gcos-field="Network UPS Tools Reserved UID" \
     password=NL username=nut uid=77
 
 # NUT service names are grouped as "system/power/nut*", hence the directory:
-dir group=sys owner=root mode=0755 var/svc/manifest/system/power
+dir group=sys owner=root mode=0755 path=lib/svc/manifest/system/power
 
 # These directories can hold some content generated or downloaded at runtime
 # and can become lost+found when you un/re-install the core packages (if these
@@ -62,7 +62,7 @@ file path=usr/share/nut/config.nut_report_feature.log
 # want it to issue killpower late in shutdown, but have network to be able
 # to do so (for remote UPSes). This can be tuned in XML manifest by user.
 file path=usr/share/nut/solaris-smf/manifest/nut.xml
-link path=var/svc/manifest/system/power/nut.xml \
+link path=lib/svc/manifest/system/power/nut.xml \
     target=../../../../../usr/share/nut/solaris-smf/manifest/nut.xml \
     restart_fmri=svc:/system/manifest-import:default
 

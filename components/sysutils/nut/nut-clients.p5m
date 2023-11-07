@@ -53,7 +53,7 @@ file path=usr/bin/upssched-cmd preserve=renamenew
 # and running on the same system as a data server and drivers).
 file path=usr/share/nut/solaris-smf/method/svc-nut-monitor
 file path=usr/share/nut/solaris-smf/manifest/nut-monitor.xml
-link path=var/svc/manifest/system/power/nut-monitor.xml \
+link path=lib/svc/manifest/system/power/nut-monitor.xml \
     target=../../../../../usr/share/nut/solaris-smf/manifest/nut-monitor.xml \
     restart_fmri=svc:/system/manifest-import:default
 
