@@ -31,7 +31,7 @@ license $(COMPONENT_LICENSE_FILE) license='$(COMPONENT_LICENSE)'
 
 dir path=usr/lib/nut/bin group=bin
 
-depend fmri=$(COMPONENT_FMRI)-common@$(IPS_COMPONENT_VERSION),$(BUILD_VERSION) type=require
+depend fmri=$(COMPONENT_FMRI)/common@$(IPS_COMPONENT_VERSION),$(BUILD_VERSION) type=require
 
 # NUT data server binaries, shared baseline for drivers, and other resources.
 # The upsd should be on the same system as drivers (talking over Unix sockets

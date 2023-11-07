@@ -31,7 +31,7 @@ license $(COMPONENT_LICENSE_FILE) license='$(COMPONENT_LICENSE)'
 
 dir path=usr/lib/nut/bin group=bin
 
-depend fmri=$(COMPONENT_FMRI)-common@$(IPS_COMPONENT_VERSION),$(BUILD_VERSION) type=require
+depend fmri=$(COMPONENT_FMRI)/common@$(IPS_COMPONENT_VERSION),$(BUILD_VERSION) type=require
 depend fmri=library/security/openssl-31 type=require
 
 ### NUT Command-line binaries and scripts (upsmon daemon, other clients)

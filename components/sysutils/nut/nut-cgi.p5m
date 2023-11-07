@@ -29,7 +29,7 @@ license $(COMPONENT_LICENSE_FILE) license='$(COMPONENT_LICENSE)'
 <transform file path=usr/share/man/man1/(.+) -> set action.hash usr/share/man/man1/%<1> >
 <transform file path=usr/share/man/man1m/(.+) -> set action.hash usr/share/man/man1m/%<1> >
 
-depend fmri=$(COMPONENT_FMRI)-common@$(IPS_COMPONENT_VERSION),$(BUILD_VERSION) type=require
+depend fmri=$(COMPONENT_FMRI)/common@$(IPS_COMPONENT_VERSION),$(BUILD_VERSION) type=require
 depend fmri=library/security/openssl-31 type=require
 
 ### NUT CGI clients, require libgd
